@@ -2,6 +2,8 @@ import 'reflect-metadata';
 import express from 'express';
 import { ApolloServer, gql } from 'apollo-server-express';
 
+import connectDB from './utils/connectDB';
+
 const typeDefs = gql`
   type Query {
     hello: String!
@@ -20,6 +22,7 @@ const resolvers = {
   },
 };
 
+connectDB();
 const server = new ApolloServer({ typeDefs, resolvers });
 const app = express();
 
