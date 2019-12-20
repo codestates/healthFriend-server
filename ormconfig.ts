@@ -11,6 +11,7 @@ module.exports = [
     database: process.env.DEV_DATABASE,
     synchronize: true,
     logging: true,
+    dropSchema: true,
     entities: ['src/entity/**/*.ts'],
     migrations: ['src/migration/**/*.ts'],
     subscribers: ['src/subscriber/**/*.ts'],
@@ -18,6 +19,9 @@ module.exports = [
       entitiesDir: 'src/entity',
       migrationsDir: 'src/migration',
       subscribersDir: 'src/subscriber',
+    },
+    extra: {
+      charset: 'utf8mb4_unicode_ci',
     },
   },
   {
