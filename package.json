@@ -20,6 +20,6 @@
       "typeorm": "^0.2.21"
    },
    "scripts": {
-      "start": "ts-node src/index.ts"
+      "dev": "NODE_ENV=development ts-node src/index.ts"
    }
 }
