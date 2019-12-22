@@ -7,3 +7,9 @@ temp/
 
 # dotenv
 .env
+
+# dist
+dist
+
+## ormconfig
+ormconfig.json
