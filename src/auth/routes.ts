@@ -1,7 +1,7 @@
 import express from 'express';
 import passport from 'passport';
 
-import createToken, { Result, UserInfo } from '../utils/createToken';
+import createToken, { UserInfo } from '../utils/createToken';
 
 const router = express.Router();
 
@@ -15,13 +15,12 @@ router.get(
   passport.authenticate('google', { session: false }),
   (req, res) => {
     const { id, email, nickname } = req.user as UserInfo;
-    const userInfo = {
-      id,
-      email,
-      nickname,
-    };
-    const result = createToken(userInfo) as Result;
-    return res.status(200).json({ result });
+    const accessToken = createToken({ id, email, nickname });
+    res.cookie('access-token', accessToken, {
+      httpOnly: true,
+      maxAge: 1000 * 60 * 15,
+    });
+    res.status(200).redirect('http://localhost:4000/graphql');
   },
 );
 
