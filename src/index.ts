@@ -27,6 +27,9 @@ const startServer = async () => {
     app.use(morgan('dev'));
     app.use(cookieParser());
     app.use('/auth', authRouter);
+    app.use('/health', (_, res) => {
+      res.status(200).send('health check');
+    });
     server.applyMiddleware({ app });
     app.listen({ port: 4000 }, () => {
       console.log(
