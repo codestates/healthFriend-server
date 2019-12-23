@@ -1,41 +1,30 @@
 import 'reflect-metadata';
 import express from 'express';
-import { ApolloServer, gql } from 'apollo-server-express';
+import { ApolloServer } from 'apollo-server-express';
 import passport from 'passport';
+import cookieParser from 'cookie-parser';
 
 import connectDB from './utils/connectDB';
 import authRouter from './auth/routes';
 import passportConfig from './auth';
+import schema from './schema';
 
 const startServer = async () => {
   try {
-    const typeDefs = gql`
-      type Query {
-        hello: String!
-      }
-      type Mutation {
-        helloUser(name: String): String!
-      }
-    `;
-
-    const resolvers = {
-      Query: {
-        hello: () => 'Hello World',
-      },
-      Mutation: {
-        helloUser: (_: any, { name }: any) => `Hello ${name || 'World'}`,
-      },
-    };
-
     await connectDB();
     passportConfig();
 
-    const server = new ApolloServer({ typeDefs, resolvers });
+    const server = new ApolloServer({
+      schema,
+      context: ({ req, res }: any) => ({ req, res }),
+      introspection: true,
+      playground: true,
+    });
     const app = express();
 
     app.use(passport.initialize());
+    app.use(cookieParser());
     app.use('/auth', authRouter);
-
     server.applyMiddleware({ app });
     app.listen({ port: 4000 }, () => {
       console.log(
