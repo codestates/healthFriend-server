@@ -3,6 +3,7 @@ import express from 'express';
 import { ApolloServer } from 'apollo-server-express';
 import passport from 'passport';
 import cookieParser from 'cookie-parser';
+import morgan from 'morgan';
 
 import connectDB from './utils/connectDB';
 import authRouter from './auth/routes';
@@ -23,6 +24,7 @@ const startServer = async () => {
     const app = express();
 
     app.use(passport.initialize());
+    app.use(morgan('dev'));
     app.use(cookieParser());
     app.use('/auth', authRouter);
     server.applyMiddleware({ app });
