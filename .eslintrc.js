@@ -40,6 +40,7 @@ module.exports = {
       props: true,
       ignorePropertyModificationsFor: ['req', 'request', 'session']
     }],
+    'implicit-arrow-linebreak': 0,
   },
   overrides: [
     {
