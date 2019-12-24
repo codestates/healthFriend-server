@@ -1,5 +1,10 @@
 import {
-  Entity, PrimaryGeneratedColumn, Column, BaseEntity,
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  BaseEntity,
+  CreateDateColumn,
+  UpdateDateColumn,
 } from 'typeorm';
 
 export enum Provider {
@@ -60,4 +65,10 @@ export class User extends BaseEntity {
     collation: 'utf8mb4_unicode_ci',
   })
   messageToFriend: string;
+
+  @CreateDateColumn()
+  createdAt: Date;
+
+  @UpdateDateColumn()
+  updatedAt: Date;
 }
