@@ -7,7 +7,7 @@ export interface UserInfo {
   nickname: string,
 }
 
-const createToken = (userInfo: UserInfo) => {
+export const createToken = (userInfo: UserInfo) => {
   const token = jwt.sign(
     userInfo,
     process.env.JWT_SECRET as string, {
@@ -18,4 +18,7 @@ const createToken = (userInfo: UserInfo) => {
   return token;
 };
 
-export default createToken;
+export const getUserInfoFromToken = (token: string) => {
+  const user = jwt.verify(token, process.env.JWT_SECRET as string) as UserInfo;
+  return user;
+};

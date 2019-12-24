@@ -6,7 +6,7 @@ const resolvers = {
   Query: {
     hello: () => 'Hello World',
     me: createMiddleware(middleware, (_: any, __: any, context: any) =>
-      getUserRepository().findByUserId(context.req.userId)),
+      getUserRepository().findByUserId(context.userInfo.id)),
   },
   Mutation: {
     helloUser: (_: any, { name }: any) => `Hello ${name || 'World'}`,

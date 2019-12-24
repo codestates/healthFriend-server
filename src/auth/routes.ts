@@ -1,7 +1,7 @@
 import express from 'express';
 import passport from 'passport';
 
-import createToken, { UserInfo } from '../utils/createToken';
+import { createToken, UserInfo } from '../utils/controllToken';
 
 const router = express.Router();
 

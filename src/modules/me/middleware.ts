@@ -1,5 +1,3 @@
-import jwt from 'jsonwebtoken';
-
 export default async (
   resolver: any,
   parent: any,
@@ -8,22 +6,11 @@ export default async (
   info: any,
 ) => {
   // middleware
-  const { req } = context;
-  if (!req && !req.cookies['access-token']) {
+  // console.log('Before check context: ', context);
+  if (!context.userInfo && !context.userInfo.id) {
     return null;
   }
-
-  interface User {
-    id: string,
-    email: string,
-    nickname: string
-  }
-
-  const user = jwt.verify(
-    req.cookies['access-token'],
-    process.env.JWT_SECRET as string,
-  ) as User;
-  req.userId = user.id as string;
+  // console.log('After check context: ', context);
 
   const result = await resolver(parent, args, context, info);
   // afterware
