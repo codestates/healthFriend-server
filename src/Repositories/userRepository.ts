@@ -13,7 +13,7 @@ export class UserRepository extends Repository<User> {
     userId: string,
     detailedUserInfo: DetailedUserInfo,
   ) {
-    const user = await this.findByUserId(userId) as User;
+    const user = new User();
     user.nickname = detailedUserInfo.nickname;
     user.openImageChoice = detailedUserInfo.openImageChoice;
     user.levelOf3Dae = detailedUserInfo.levelOf3Dae;
