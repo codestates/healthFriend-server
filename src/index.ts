@@ -9,6 +9,7 @@ import connectDB from './utils/connectDB';
 import authRouter from './auth/routes';
 import passportConfig from './auth';
 import schema from './schema';
+import { getUserInfoFromToken } from './utils/controllToken';
 
 const startServer = async () => {
   try {
@@ -17,7 +18,9 @@ const startServer = async () => {
 
     const server = new ApolloServer({
       schema,
-      context: ({ req, res }: any) => ({ req, res }),
+      context: ({ req }: any) => ({
+        userInfo: getUserInfoFromToken(req.cookies['access-token']),
+      }),
       introspection: true,
       playground: true,
     });
