@@ -36,7 +36,7 @@ const startServer = async () => {
 
     const cors = {
       credentials: true,
-      origin: '*',
+      origin: true,
     };
 
     server.applyMiddleware({ app, cors });
