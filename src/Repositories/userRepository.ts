@@ -9,6 +9,11 @@ export class UserRepository extends Repository<User> {
     return this.findOne({ id: userId });
   }
 
+  async getAllUser() {
+    const where = {};
+    return this.find(where);
+  }
+
   async updateUserInfo(
     userId: string,
     detailedUserInfo: DetailedUserInfo,
