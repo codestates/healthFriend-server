@@ -21,7 +21,7 @@ router.get(
       httpOnly: true,
       maxAge: 1000 * 60 * 60,
     });
-    res.status(200).redirect('http://localhost:4000/graphql');
+    res.status(200).redirect('http://localhost:3000');
   },
 );
 
