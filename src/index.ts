@@ -33,7 +33,13 @@ const startServer = async () => {
     app.use('/health', (_, res) => {
       res.status(200).send('health check');
     });
-    server.applyMiddleware({ app });
+
+    const cors = {
+      credentials: true,
+      origin: '*',
+    };
+
+    server.applyMiddleware({ app, cors });
     app.listen({ port: 4000 }, () => {
       console.log(
         `Server running at http://localhost:4000${server.graphqlPath}`,
