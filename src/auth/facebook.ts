@@ -1,21 +1,19 @@
 import passport from 'passport';
-import { Strategy as GoogleStrategy } from 'passport-google-oauth20';
-
 import { User, Provider } from '../entity/User';
+const FacebookStrategy = require('passport-facebook').Strategy;
 
 export default () => {
   passport.use(
-    new GoogleStrategy(
+    new FacebookStrategy(
       {
-        clientID: process.env.GOOGLE_CLIENT_ID as string,
-        clientSecret: process.env.GOOGLE_CLIENT_SECRET as string,
-        callbackURL:
-          process.env.NODE_ENV === 'production'
-            ? 'http://api.healthfriend.club/auth/google/callback'
-            : 'http://localhost:4000/auth/google/callback',
+        clientID: process.env.FACEBOOK_CLIENT_ID,
+        clientSecret: process.env.FACEBOOK_CLIENT_SECRET,
+        callbackURL: 'http://localhost:4000/auth/facebook/callback',
+        profileFields: ['id', 'emails', 'name'],
       },
-      async (_, __, profile, cb) => {
+      async (_: any, __: any, profile: any, cb: any) => {
         try {
+          console.log(profile);
           const { id, displayName, emails, provider } = profile;
           if (!emails) {
             return cb('Email not found');
@@ -29,7 +27,6 @@ export default () => {
             },
           });
           if (existingUser) {
-            // 이미 가입된 유저, 로그인 처리
             console.log('User Exist: ', existingUser);
             return cb(undefined, existingUser);
           }
@@ -37,7 +34,7 @@ export default () => {
           const newUser = await User.create({
             email,
             nickname: displayName,
-            provider: Provider.GOOGLE,
+            provider: Provider.FACEBOOK,
             snsId: id,
           }).save();
           console.log('User Create: ', newUser);

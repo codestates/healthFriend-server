@@ -2,6 +2,7 @@ import passport from 'passport';
 
 import { User } from '../entity/User';
 import GoogleStrategy from './google';
+import FacebookStrategy from './facebook';
 
 export default () => {
   passport.serializeUser((user: any, done: any) => done(null, user.id));
@@ -16,4 +17,5 @@ export default () => {
   });
 
   GoogleStrategy();
+  FacebookStrategy();
 };
