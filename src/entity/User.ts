@@ -5,7 +5,9 @@ import {
   BaseEntity,
   CreateDateColumn,
   UpdateDateColumn,
+  OneToMany,
 } from 'typeorm';
+import { Motivations } from './Motivations';
 
 export enum Provider {
   GOOGLE = 'google',
@@ -65,6 +67,12 @@ export class User extends BaseEntity {
     collation: 'utf8mb4_unicode_ci',
   })
   messageToFriend: string;
+
+  @OneToMany(
+    () => Motivations,
+    (motivations) => motivations.owner,
+  )
+  motivations: Motivations[];
 
   @CreateDateColumn()
   createdAt: Date;
