@@ -5,7 +5,7 @@ import passport from 'passport';
 import cookieParser from 'cookie-parser';
 import morgan from 'morgan';
 
-import connectDB from './utils/connectDB';
+import connectDB from './database';
 import authRouter from './auth/routes';
 import passportConfig from './auth';
 import schema from './schema';

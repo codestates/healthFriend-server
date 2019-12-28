@@ -1,4 +1,4 @@
-import { getMotivationRepository } from '../../utils/connectDB';
+import { getMotivationRepository } from '../../database';
 
 const resolvers = {
   MotivationEnum: {

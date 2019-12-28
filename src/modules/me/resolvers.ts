@@ -2,7 +2,7 @@ import { DetailedUserInfo } from '../../types/User.types';
 import {
   getUserRepository,
   // getMotivationRepository,
-} from '../../utils/connectDB';
+} from '../../database';
 import { createMiddleware } from '../../utils/createMiddleware';
 import middleware from './middleware';
 
@@ -28,6 +28,7 @@ const resolvers = {
 
   Query: {
     me: createMiddleware(middleware, (_: any, __: any, context: any) =>
+      // console.log(context);
       getUserRepository().findByUserId(context.userInfo.id)),
   },
 
@@ -39,7 +40,7 @@ const resolvers = {
           context.userInfo.id,
           args,
         );
-        console.log(user);
+        // console.log(user);
         return user;
       },
     ),

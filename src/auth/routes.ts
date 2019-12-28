@@ -15,11 +15,12 @@ router.get(
   '/google/callback',
   passport.authenticate('google', { session: false }),
   (req, res) => {
+    // console.log('REQ.USER: ', req.user);
     const { id, email, nickname } = req.user as SimpleUserInfo;
     const accessToken = createToken({ id, email, nickname });
     res.cookie('access-token', accessToken, {
-      httpOnly: true,
-      maxAge: 1000 * 60 * 60,
+      // httpOnly: true,
+      maxAge: 1000 * 60 * 60 * 24, // 1 day
     });
     const redirectUrl = process.env.NODE_ENV === 'production'
       ? 'http://healthfriend.club'
