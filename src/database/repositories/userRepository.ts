@@ -1,6 +1,6 @@
 import { EntityRepository, Repository } from 'typeorm';
 
-import { DetailedUserInfo } from '../types/User.types';
+import { DetailedUserInfo } from '../../types/User.types';
 import { User } from '../entity/User';
 
 @EntityRepository(User)

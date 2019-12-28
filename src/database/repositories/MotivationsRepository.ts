@@ -1,7 +1,7 @@
 import { EntityRepository, Repository } from 'typeorm';
 
 import { Motivations } from '../entity/Motivations';
-import { getUserRepository } from '../database';
+import { getUserRepository } from '..';
 import { User } from '../entity/User';
 
 @EntityRepository(Motivations)

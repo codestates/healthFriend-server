@@ -2,7 +2,7 @@ import passport from 'passport';
 import { Strategy as GoogleStrategy } from 'passport-google-oauth20';
 
 import { getUserRepository } from '../database';
-import { Provider } from '../entity/User';
+import { Provider } from '../database/entity/User';
 
 export default () => {
   passport.use(
