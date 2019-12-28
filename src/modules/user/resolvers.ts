@@ -1,6 +1,6 @@
-// import { DetailedUserInfo } from '../../types/User.types';
-import { getUserRepository } from '../../utils/connectDB';
-// import { createMiddleware } from '../../utils/createMiddleware';
+import {
+  getUserRepository, getMotivationRepository,
+} from '../../utils/connectDB';
 
 const resolvers = {
   Query: {
@@ -11,6 +11,13 @@ const resolvers = {
     users: async (_: any, args: any) => {
       console.log(args);
       return getUserRepository().getAllUser();
+    },
+  },
+
+  User: {
+    motivations: async (parent: any) => {
+      const result = await getMotivationRepository().findByUserId(parent.id);
+      return result;
     },
   },
 };

@@ -1,5 +1,8 @@
 import { DetailedUserInfo } from '../../types/User.types';
-import { getUserRepository } from '../../utils/connectDB';
+import {
+  getUserRepository,
+  // getMotivationRepository,
+} from '../../utils/connectDB';
 import { createMiddleware } from '../../utils/createMiddleware';
 import middleware from './middleware';
 
@@ -16,10 +19,18 @@ const resolvers = {
     L4: '4: 300 ~ 399',
     L5: '5: 400 ~ 499',
   },
+  MotivationEnum: {
+    WEIGHT_INCREASE: '최대 중량 증가',
+    WEIGHT_LOSS: '체중 감소',
+    FIND_FRIEND: '친구 찾기',
+    LONELINESS: '외로움',
+  },
+
   Query: {
     me: createMiddleware(middleware, (_: any, __: any, context: any) =>
       getUserRepository().findByUserId(context.userInfo.id)),
   },
+
   Mutation: {
     me: createMiddleware(
       middleware,
