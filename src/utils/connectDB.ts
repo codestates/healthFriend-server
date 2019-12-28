@@ -1,4 +1,7 @@
 import { getConnectionOptions, createConnection, Connection } from 'typeorm';
+import {
+  ExerciseAbleDaysRepository,
+} from '../Repositories/ExerciseAbleDaysRepository';
 import { MotivationsRepository } from '../Repositories/MotivationsRepository';
 import { UserRepository } from '../Repositories/userRepository';
 
@@ -16,8 +19,10 @@ const connectDB = async () => {
 export const getUserRepository = (): UserRepository =>
   connection.getCustomRepository(UserRepository);
 
-// eslint-disable-next-line max-len
 export const getMotivationRepository = (): MotivationsRepository =>
   connection.getCustomRepository(MotivationsRepository);
+
+export const getExerciseAbleDaysRepository = (): ExerciseAbleDaysRepository =>
+  connection.getCustomRepository(ExerciseAbleDaysRepository);
 
 export default connectDB;

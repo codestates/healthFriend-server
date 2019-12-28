@@ -7,6 +7,7 @@ import {
   OneToMany,
 } from 'typeorm';
 import { Motivations } from './Motivations';
+import { ExerciseAbleDays } from './ExerciseAbleDays';
 
 export enum Provider {
   GOOGLE = 'google',
@@ -72,6 +73,12 @@ export class User {
     (motivations) => motivations.owner,
   )
   motivations: Motivations[];
+
+  @OneToMany(
+    () => ExerciseAbleDays,
+    (exerciseAbleDays) => exerciseAbleDays.user,
+  )
+  ableDays: ExerciseAbleDays[];
 
   @CreateDateColumn()
   createdAt: Date;
