@@ -17,6 +17,9 @@ router.get(
   (req, res) => {
     // console.log('REQ.USER: ', req.user);
     const { id, email, nickname } = req.user as SimpleUserInfo;
+    if (!id || !email || !nickname) {
+      res.status(401).send('Login Error.');
+    }
     const accessToken = createToken({ id, email, nickname });
     res.cookie('access-token', accessToken, {
       // httpOnly: true,
