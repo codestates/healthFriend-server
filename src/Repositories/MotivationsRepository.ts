@@ -13,7 +13,7 @@ export class MotivationsRepository extends Repository<Motivations> {
   }
 
   async findByUserId(userId: string) {
-    const user = (await getUserRepository().findByUserId(userId)) as User;
+    const user = getUserRepository().create({ id: userId });
     const result = await this.findByUser(user);
     return result;
   }
@@ -33,11 +33,10 @@ export class MotivationsRepository extends Repository<Motivations> {
 
   async saveByUserId(userId: string, motivations: Array<string>) {
     try {
-      const user = (await getUserRepository().findByUserId(userId)) as User;
+      const user = getUserRepository().create({ id: userId });
       const objects = motivations.map((m) => ({ owner: user, motivation: m }));
       await this.deleteByUser(user);
-      await this.save(objects);
-      return (await this.findByUser(user)) as Array<Motivations>;
+      return await this.save(objects);
     } catch (error) {
       console.log(error);
       return error;

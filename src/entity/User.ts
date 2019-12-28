@@ -2,7 +2,6 @@ import {
   Entity,
   PrimaryGeneratedColumn,
   Column,
-  BaseEntity,
   CreateDateColumn,
   UpdateDateColumn,
   OneToMany,
@@ -29,7 +28,7 @@ export enum LevelOf3Dae {
 }
 
 @Entity()
-export class User extends BaseEntity {
+export class User {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 

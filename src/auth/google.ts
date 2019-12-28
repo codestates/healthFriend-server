@@ -1,7 +1,8 @@
 import passport from 'passport';
 import { Strategy as GoogleStrategy } from 'passport-google-oauth20';
 
-import { User, Provider } from '../entity/User';
+import { getUserRepository } from '../utils/connectDB';
+import { Provider } from '../entity/User';
 
 export default () => {
   passport.use(
@@ -23,7 +24,7 @@ export default () => {
           }
           const email = emails[0].value;
           console.log('Receive email: ', email);
-          const existingUser = await User.findOne({
+          const existingUser = await getUserRepository().find({
             where: {
               provider,
               email,
@@ -35,12 +36,20 @@ export default () => {
             return cb(undefined, existingUser);
           }
 
-          const newUser = await User.create({
+          // const newUser = await User.create({
+          //   email,
+          //   nickname: displayName,
+          //   provider: Provider.GOOGLE,
+          //   snsId: id,
+          // }).save();
+
+          const user = getUserRepository().create({
             email,
             nickname: displayName,
             provider: Provider.GOOGLE,
             snsId: id,
-          }).save();
+          });
+          const newUser = await getUserRepository().save(user);
           console.log('User Create: ', newUser);
           return cb(undefined, newUser);
         } catch (error) {

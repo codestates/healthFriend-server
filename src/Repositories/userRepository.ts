@@ -10,22 +10,23 @@ export class UserRepository extends Repository<User> {
       where: { id: userId },
       relations: ['motivations'],
     });
-    console.log(result);
+    // console.log(result);
     return result;
   }
 
   async getAllUser() {
-    const where = {};
-    return this.find(where);
+    return this.find({});
   }
 
   async updateUserInfo(userId: string, detailedUserInfo: DetailedUserInfo) {
-    const user = new User();
-    user.nickname = detailedUserInfo.nickname;
-    user.openImageChoice = detailedUserInfo.openImageChoice;
-    user.levelOf3Dae = detailedUserInfo.levelOf3Dae;
-    user.messageToFriend = detailedUserInfo.messageToFriend;
-    await this.manager.update(User, userId, user);
+    const user = this.create({
+      id: userId,
+      nickname: detailedUserInfo.nickname,
+      openImageChoice: detailedUserInfo.openImageChoice,
+      levelOf3Dae: detailedUserInfo.levelOf3Dae,
+      messageToFriend: detailedUserInfo.messageToFriend,
+    });
+    await this.save(user);
     const updatedUser = (await this.findByUserId(userId)) as User;
     return updatedUser;
   }
