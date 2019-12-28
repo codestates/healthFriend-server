@@ -20,6 +20,23 @@ const typeDefs = gql`
     L5
   }
 
+  enum MotivationEnum {
+    WEIGHT_INCREASE
+    WEIGHT_LOSS
+    FIND_FRIEND
+    LONELINESS
+  }
+
+  type Motivation {
+    id: ID!
+    motivation: String!
+    owner: User
+  }
+
+  input MotivationInput {
+    motivation: MotivationEnum
+  }
+
   type User {
     id: ID!
     email: String!
@@ -27,6 +44,36 @@ const typeDefs = gql`
     openImageChoice(choice: OpenImageChoice): String!
     levelOf3Dae: String!
     messageToFriend: String
+    motivations: [Motivation]
+  }
+
+  type Query {
+    user(userId: String): User
+    users: [User]!
+    me: User
+    # motivation(userId: String): Motivation
+    motivations: [Motivation]
+  }
+
+  type Mutation {
+    setMotivation(input: [MotivationEnum]): [Motivation]
+    me(
+      nickname: String!
+      openImageChoice: OpenImageChoice!
+      """
+      L1 = '1: 0 ~ 99'
+
+      L2 = '2: 100 ~ 199'
+
+      L3 = '3: 200 ~ 299'
+
+      L4 = '4: 300 ~ 399'
+
+      L5 = '5: 400 ~ 499'
+      """
+      levelOf3Dae: LevelOf3Dae!
+      messageToFriend: String
+    ): User!
   }
 `;
 
