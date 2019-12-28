@@ -1,7 +1,7 @@
 import { EntityRepository, Repository } from 'typeorm';
 
-import { ExerciseAbleDays } from '../../entity/ExerciseAbleDays';
-import { User } from '../../entity/User';
+import { ExerciseAbleDays } from '../entity/ExerciseAbleDays';
+import { User } from '../entity/User';
 
 @EntityRepository(ExerciseAbleDays)
 export class ExerciseAbleDaysRepository extends Repository<ExerciseAbleDays> {

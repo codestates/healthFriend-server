@@ -1,4 +1,4 @@
-import { OpenImageChoice, LevelOf3Dae } from '../entity/User';
+import { OpenImageChoice, LevelOf3Dae } from '../database/entity/User';
 
 export interface SimpleUserInfo {
   id: string,

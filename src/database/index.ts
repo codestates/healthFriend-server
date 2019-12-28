@@ -3,7 +3,7 @@ import {
   ExerciseAbleDaysRepository,
 } from './repositories/ExerciseAbleDaysRepository';
 import { MotivationsRepository } from './repositories/MotivationsRepository';
-import { UserRepository } from './repositories/userRepository';
+import { UserRepository } from './repositories/UserRepository';
 
 let connection: Connection;
 
