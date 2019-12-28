@@ -51,8 +51,7 @@ const typeDefs = gql`
     user(userId: String): User
     users: [User]!
     me: User
-    # motivation(userId: String): Motivation
-    motivations: [Motivation]
+    motivations(input: [MotivationEnum]): [Motivation]
   }
 
   type Mutation {

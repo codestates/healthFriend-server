@@ -11,7 +11,12 @@ const resolvers = {
   Query: {
     // motivation: async (_: any, args: any) =>
     //   getMotivationRepository().findByUserId(args.userId),
-    motivations: async () => getMotivationRepository().find(),
+    motivations: async (_: any, args: any) => {
+      if (!args.input) {
+        return getMotivationRepository().find();
+      }
+      return getMotivationRepository().findByMotivation(args.input);
+    },
   },
 
   Mutation: {

@@ -8,7 +8,7 @@ import { User } from '../entity/User';
 export class MotivationsRepository extends Repository<Motivations> {
   async findByUser(user: User) {
     const result = await this.find({ owner: user });
-    console.log('findByUser: ', result);
+    // console.log('findByUser: ', result);
     return result;
   }
 
@@ -23,7 +23,7 @@ export class MotivationsRepository extends Repository<Motivations> {
       where: { id: motivationId },
       relations: ['owner'],
     });
-    console.log(result?.owner);
+    // console.log(result?.owner);
     return result?.owner;
   }
 
@@ -37,7 +37,18 @@ export class MotivationsRepository extends Repository<Motivations> {
       const objects = motivations.map((m) => ({ owner: user, motivation: m }));
       await this.deleteByUser(user);
       await this.save(objects);
-      return await this.findByUser(user) as Array<Motivations>;
+      return (await this.findByUser(user)) as Array<Motivations>;
+    } catch (error) {
+      console.log(error);
+      return error;
+    }
+  }
+
+  async findByMotivation(motivation: string) {
+    try {
+      const results = await this.find({ motivation });
+      // console.log(results);
+      return results;
     } catch (error) {
       console.log(error);
       return error;
