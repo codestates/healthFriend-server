@@ -1,7 +1,7 @@
 import passport from 'passport';
 import { Strategy as GoogleStrategy } from 'passport-google-oauth20';
 
-import { getUserRepository } from '../utils/connectDB';
+import { getUserRepository } from '../database';
 import { Provider } from '../entity/User';
 
 export default () => {
@@ -23,8 +23,8 @@ export default () => {
             return cb('Email not found');
           }
           const email = emails[0].value;
-          console.log('Receive email: ', email);
-          const existingUser = await getUserRepository().find({
+          // console.log('Receive email: ', email);
+          const existingUser = await getUserRepository().findOne({
             where: {
               provider,
               email,
@@ -32,16 +32,9 @@ export default () => {
           });
           if (existingUser) {
             // 이미 가입된 유저, 로그인 처리
-            console.log('User Exist: ', existingUser);
+            // console.log('User Exist: ', existingUser);
             return cb(undefined, existingUser);
           }
-
-          // const newUser = await User.create({
-          //   email,
-          //   nickname: displayName,
-          //   provider: Provider.GOOGLE,
-          //   snsId: id,
-          // }).save();
 
           const user = getUserRepository().create({
             email,
@@ -50,7 +43,7 @@ export default () => {
             snsId: id,
           });
           const newUser = await getUserRepository().save(user);
-          console.log('User Create: ', newUser);
+          // console.log('User Create: ', newUser);
           return cb(undefined, newUser);
         } catch (error) {
           console.error(error);

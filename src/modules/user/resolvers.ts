@@ -1,6 +1,4 @@
-import {
-  getUserRepository, getMotivationRepository,
-} from '../../utils/connectDB';
+import { getUserRepository, getMotivationRepository } from '../../database';
 
 const resolvers = {
   Query: {
@@ -8,10 +6,7 @@ const resolvers = {
       const { userId } = args;
       return getUserRepository().findByUserId(userId);
     },
-    users: async (_: any, args: any) => {
-      console.log(args);
-      return getUserRepository().getAllUser();
-    },
+    users: async () => getUserRepository().getAllUser(),
   },
 
   User: {

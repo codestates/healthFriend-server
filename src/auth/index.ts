@@ -1,6 +1,6 @@
 import passport from 'passport';
 
-import { getUserRepository } from '../utils/connectDB';
+import { getUserRepository } from '../database';
 import GoogleStrategy from './google';
 
 export default () => {

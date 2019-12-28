@@ -3,6 +3,7 @@ import jwt from 'jsonwebtoken';
 import { SimpleUserInfo } from '../types/User.types';
 
 export const createToken = (userInfo: SimpleUserInfo) => {
+  // console.log('createToken: ', userInfo);
   const token = jwt.sign(userInfo, process.env.JWT_SECRET as string, {
     expiresIn: process.env.JWT_EXPIRATION_PERIOD,
     issuer: 'Health Friend',
@@ -15,5 +16,6 @@ export const getUserInfoFromToken = (token: string) => {
     token,
     process.env.JWT_SECRET as string,
   ) as SimpleUserInfo;
+  // console.log('getUserInfoFromToken: ', user);
   return user;
 };

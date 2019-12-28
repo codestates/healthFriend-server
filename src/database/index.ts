@@ -1,9 +1,9 @@
 import { getConnectionOptions, createConnection, Connection } from 'typeorm';
 import {
   ExerciseAbleDaysRepository,
-} from '../Repositories/ExerciseAbleDaysRepository';
-import { MotivationsRepository } from '../Repositories/MotivationsRepository';
-import { UserRepository } from '../Repositories/userRepository';
+} from '../repositories/ExerciseAbleDaysRepository';
+import { MotivationsRepository } from '../repositories/MotivationsRepository';
+import { UserRepository } from '../repositories/userRepository';
 
 let connection: Connection;
 
