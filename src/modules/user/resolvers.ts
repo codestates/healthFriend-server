@@ -1,4 +1,8 @@
-import { getUserRepository, getMotivationRepository } from '../../database';
+import {
+  getUserRepository,
+  getMotivationRepository,
+  getExerciseAbleDaysRepository,
+} from '../../database';
 
 const resolvers = {
   Query: {
@@ -12,6 +16,12 @@ const resolvers = {
   User: {
     motivations: async (parent: any) => {
       const result = await getMotivationRepository().findByUserId(parent.id);
+      return result;
+    },
+    weekdays: async (parent: any) => {
+      const result = await getExerciseAbleDaysRepository().findByUserId(
+        parent.id,
+      );
       return result;
     },
   },

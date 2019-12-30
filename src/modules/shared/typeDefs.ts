@@ -30,21 +30,34 @@ const typeDefs = gql`
   type Motivation {
     id: ID!
     motivation: String!
-    owner: User
+    owner: User!
   }
 
-  input MotivationInput {
-    motivation: MotivationEnum
+  enum WeekdayEnum {
+    MONDAY
+    TUESDAY
+    WEDNESDAY
+    THURSDAY
+    FRIDAY
+    SATURDAY
+    SUNDAY
+  }
+
+  type ExerciseAbleDay {
+    id: ID!
+    weekday: String!
+    user: User!
   }
 
   type User {
     id: ID!
     email: String!
     nickname: String!
-    openImageChoice(choice: OpenImageChoice): String!
+    openImageChoice: String!
     levelOf3Dae: String!
     messageToFriend: String
     motivations: [Motivation]
+    weekdays: [ExerciseAbleDay]
   }
 
   type Query {
@@ -52,10 +65,12 @@ const typeDefs = gql`
     users: [User]!
     me: User
     motivations(input: [MotivationEnum]): [Motivation]
+    exerciseAbleDays(input: [WeekdayEnum]): [ExerciseAbleDay]
   }
 
   type Mutation {
     setMotivation(input: [MotivationEnum]): [Motivation]
+    setExerciseAbleDay(input: [WeekdayEnum]): [ExerciseAbleDay]
     me(
       nickname: String!
       openImageChoice: OpenImageChoice!
