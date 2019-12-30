@@ -34,6 +34,7 @@ export class MotivationsRepository extends Repository<Motivations> {
   async saveByUserId(userId: string, motivations: Array<string>) {
     try {
       const user = getUserRepository().create({ id: userId });
+      // console.log('saveByUserId: ', motivations);
       const objects = motivations.map((m) => ({ owner: user, motivation: m }));
       await this.deleteByUser(user);
       return await this.save(objects);

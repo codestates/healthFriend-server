@@ -2,10 +2,10 @@ import { getMotivationRepository } from '../../database';
 
 const resolvers = {
   MotivationEnum: {
-    WEIGHT_INCREASE: '최대 중량 증가',
-    WEIGHT_LOSS: '체중 감소',
-    FIND_FRIEND: '친구 찾기',
-    LONELINESS: '외로움',
+    WEIGHT_INCREASE: 'WEIGHT_INCREASE',
+    WEIGHT_LOSS: 'WEIGHT_LOSS',
+    FIND_FRIEND: 'FIND_FRIEND',
+    LONELINESS: 'LONELINESS',
   },
 
   Query: {
