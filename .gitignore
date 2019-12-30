@@ -13,3 +13,6 @@ dist
 
 ## ormconfig
 ormconfig.json
+
+## pem
+*.pem
