@@ -10,22 +10,22 @@ import { Motivations } from './Motivations';
 import { ExerciseAbleDays } from './ExerciseAbleDays';
 
 export enum Provider {
-  GOOGLE = 'google',
-  FACEBOOK = 'facebook',
+  GOOGLE = 'GOOGLE',
+  FACEBOOK = 'FACEBOOK',
 }
 
 export enum OpenImageChoice {
-  OPEN = 'open',
-  FRIEND = 'friend',
-  CLOSE = 'close',
+  OPEN = 'OPEN',
+  FRIEND = 'FRIEND',
+  CLOSE = 'CLOSE',
 }
 
 export enum LevelOf3Dae {
-  L1 = '1: 0 ~ 99',
-  L2 = '2: 100 ~ 199',
-  L3 = '3: 200 ~ 299',
-  L4 = '4: 300 ~ 399',
-  L5 = '5: 400 ~ 499',
+  L1 = 'L1',
+  L2 = 'L2',
+  L3 = 'L3',
+  L4 = 'L4',
+  L5 = 'L5',
 }
 
 @Entity()
