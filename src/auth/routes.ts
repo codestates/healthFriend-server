@@ -26,7 +26,7 @@ router.get(
       maxAge: 1000 * 60 * 60 * 24, // 1 day
     });
     const redirectUrl = process.env.NODE_ENV === 'production'
-      ? 'http://healthfriend.club'
+      ? 'https://healthfriend.club'
       : 'http://localhost:3000';
     res.status(200).redirect(redirectUrl);
   },
