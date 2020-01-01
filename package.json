@@ -37,7 +37,6 @@
    "scripts": {
       "dev": "NODE_ENV=development nodemon --exec ts-node src/index.ts",
       "test": "NODE_ENV=test ts-node src/index.ts",
-      "preprod": "tsc",
-      "prod": "NODE_ENV=production node dist/index.js"
+      "prod": "NODE_ENV=production ts-node src/index.ts"
    }
 }
