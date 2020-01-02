@@ -49,6 +49,13 @@ const typeDefs = gql`
     user: User!
   }
 
+  type District {
+    idOfDong: ID!
+    nameOfDong: String!
+    idOfGu: Int!
+    nameOfGu: String!
+  }
+
   type User {
     id: ID!
     email: String!
@@ -66,6 +73,7 @@ const typeDefs = gql`
     me: User
     motivations(input: [MotivationEnum]): [Motivation]
     exerciseAbleDays(input: [WeekdayEnum]): [ExerciseAbleDay]
+    allDistricts: [District]!
   }
 
   type Mutation {
