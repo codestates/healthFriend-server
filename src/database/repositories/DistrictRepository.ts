@@ -1,14 +1,15 @@
 import { EntityRepository, Repository } from 'typeorm';
 
-import { District } from '../entity/District';
+import { Districts } from '../entity/Districts';
 
 interface DongInfo {
   nameOfDong: string;
   idOfGu: number;
   nameOfGu: string;
 }
-@EntityRepository(District)
-export class DistrictRepository extends Repository<District> {
+
+@EntityRepository(Districts)
+export class DistrictRepository extends Repository<Districts> {
   async saveDongInfos(dongInfos: Array<DongInfo>) {
     const objects = dongInfos.map((dong) =>
       this.create({

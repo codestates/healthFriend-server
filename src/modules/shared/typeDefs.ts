@@ -56,6 +56,12 @@ const typeDefs = gql`
     nameOfGu: String!
   }
 
+  type AbleDistrict {
+    id: ID!
+    district: District!
+    user: User!
+  }
+
   type User {
     id: ID!
     email: String!
@@ -65,6 +71,7 @@ const typeDefs = gql`
     messageToFriend: String
     motivations: [Motivation]
     weekdays: [ExerciseAbleDay]
+    ableDistricts: [AbleDistrict]
   }
 
   type Query {
@@ -73,12 +80,14 @@ const typeDefs = gql`
     me: User
     motivations(input: [MotivationEnum]): [Motivation]
     exerciseAbleDays(input: [WeekdayEnum]): [ExerciseAbleDay]
+    ableDistricts(dongIds: [String]): [AbleDistrict]
     allDistricts: [District]!
   }
 
   type Mutation {
     setMotivation(input: [MotivationEnum]): [Motivation]
     setExerciseAbleDay(input: [WeekdayEnum]): [ExerciseAbleDay]
+    setAbleDistrict(dongIds: [String]): [AbleDistrict]
     me(
       nickname: String!
       openImageChoice: OpenImageChoice!
