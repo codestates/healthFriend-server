@@ -1,7 +1,6 @@
 import { EntityRepository, Repository } from 'typeorm';
 
 import { District } from '../entity/District';
-import { getDistrictRepository } from '..';
 
 interface DongInfo {
   nameOfDong: string;
@@ -12,11 +11,16 @@ interface DongInfo {
 export class DistrictRepository extends Repository<District> {
   async saveDongInfos(dongInfos: Array<DongInfo>) {
     const objects = dongInfos.map((dong) =>
-      getDistrictRepository().create({
+      this.create({
         nameOfDong: dong.nameOfDong,
         idOfGu: dong.idOfGu,
         nameOfGu: dong.nameOfGu,
       }));
     return this.save(objects);
+  }
+
+  async getAllDistrict() {
+    const results = this.find();
+    return results;
   }
 }
