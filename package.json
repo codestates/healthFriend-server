@@ -40,6 +40,8 @@
       "test": "NODE_ENV=test ts-node src/index.ts",
       "prod": "ts-node src/index.ts",
       "doit": "NODE_ENV=doit pm2 start ts-node -- src/index.ts && pm2 monit",
-      "start": "NODE_ENV=production pm2 start ts-node -- src/index.ts && pm2 monit"
+      "start": "NODE_ENV=production pm2 start ts-node -- src/index.ts && pm2 monit",
+      "data": "NODE_ENV=development ts-node src/database/initialdata/District.ts"
+
    }
 }

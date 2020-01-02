@@ -4,6 +4,7 @@ import {
 } from './repositories/ExerciseAbleDaysRepository';
 import { MotivationsRepository } from './repositories/MotivationsRepository';
 import { UserRepository } from './repositories/UserRepository';
+import { DistrictRepository } from './repositories/DistrictRepository';
 
 let connection: Connection;
 
@@ -24,5 +25,8 @@ export const getMotivationRepository = (): MotivationsRepository =>
 
 export const getExerciseAbleDaysRepository = (): ExerciseAbleDaysRepository =>
   connection.getCustomRepository(ExerciseAbleDaysRepository);
+
+export const getDistrictRepository = (): DistrictRepository =>
+  connection.getCustomRepository(DistrictRepository);
 
 export default connectDB;

@@ -1,0 +1,26 @@
+const gangNamGu = [
+  { nameOfDong: '개포1동', idOfGu: 1, nameOfGu: '강남구' },
+  { nameOfDong: '개포2동', idOfGu: 1, nameOfGu: '강남구' },
+  { nameOfDong: '개포4동', idOfGu: 1, nameOfGu: '강남구' },
+  { nameOfDong: '논현1동', idOfGu: 1, nameOfGu: '강남구' },
+  { nameOfDong: '논현2동', idOfGu: 1, nameOfGu: '강남구' },
+  { nameOfDong: '대치1동', idOfGu: 1, nameOfGu: '강남구' },
+  { nameOfDong: '대치2동', idOfGu: 1, nameOfGu: '강남구' },
+  { nameOfDong: '대치4동', idOfGu: 1, nameOfGu: '강남구' },
+  { nameOfDong: '도곡1동', idOfGu: 1, nameOfGu: '강남구' },
+  { nameOfDong: '도곡2동', idOfGu: 1, nameOfGu: '강남구' },
+  { nameOfDong: '삼성1동', idOfGu: 1, nameOfGu: '강남구' },
+  { nameOfDong: '삼성2동', idOfGu: 1, nameOfGu: '강남구' },
+  { nameOfDong: '세곡동', idOfGu: 1, nameOfGu: '강남구' },
+  { nameOfDong: '수서동', idOfGu: 1, nameOfGu: '강남구' },
+  { nameOfDong: '신사동', idOfGu: 1, nameOfGu: '강남구' },
+  { nameOfDong: '압구정동', idOfGu: 1, nameOfGu: '강남구' },
+  { nameOfDong: '역삼1동', idOfGu: 1, nameOfGu: '강남구' },
+  { nameOfDong: '역삼2동', idOfGu: 1, nameOfGu: '강남구' },
+  { nameOfDong: '일원1동', idOfGu: 1, nameOfGu: '강남구' },
+  { nameOfDong: '일원2동', idOfGu: 1, nameOfGu: '강남구' },
+  { nameOfDong: '일원본동', idOfGu: 1, nameOfGu: '강남구' },
+  { nameOfDong: '청담동', idOfGu: 1, nameOfGu: '강남구' },
+];
+
+export default gangNamGu;
