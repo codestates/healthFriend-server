@@ -30,9 +30,12 @@ const startServer = async () => {
     const corsOption = {
       credentials: true,
       origin:
+        // eslint-disable-next-line no-nested-ternary
         process.env.NODE_ENV === 'production'
           ? 'https://healthfriend.club'
-          : true,
+          : process.env.NODE_ENV === 'doit'
+            ? 'https://hf.doitreviews.com'
+            : true,
     };
     app.use(passport.initialize());
     app.use(cors(corsOption));
