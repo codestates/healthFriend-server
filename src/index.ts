@@ -34,7 +34,7 @@ const startServer = async () => {
         process.env.NODE_ENV === 'production'
           ? 'https://healthfriend.club'
           : process.env.NODE_ENV === 'doit'
-            ? 'https://hf.doitreviews.com'
+            ? 'https://hf2.doitreviews.com'
             : true,
     };
     app.use(passport.initialize());
