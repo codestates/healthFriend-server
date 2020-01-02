@@ -2,6 +2,7 @@ import {
   getUserRepository,
   getMotivationRepository,
   getExerciseAbleDaysRepository,
+  getAbleDistrictsRepository,
 } from '../../database';
 
 const resolvers = {
@@ -20,6 +21,12 @@ const resolvers = {
     },
     weekdays: async (parent: any) => {
       const result = await getExerciseAbleDaysRepository().findByUserId(
+        parent.id,
+      );
+      return result;
+    },
+    ableDistricts: async (parent: any) => {
+      const result = await getAbleDistrictsRepository().findByUserId(
         parent.id,
       );
       return result;

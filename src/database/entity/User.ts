@@ -8,6 +8,7 @@ import {
 } from 'typeorm';
 import { Motivations } from './Motivations';
 import { ExerciseAbleDays } from './ExerciseAbleDays';
+import { AbleDistricts } from './AbleDistricts';
 
 export enum Provider {
   GOOGLE = 'GOOGLE',
@@ -79,6 +80,12 @@ export class User {
     (exerciseAbleDays) => exerciseAbleDays.user,
   )
   ableDays: ExerciseAbleDays[];
+
+  @OneToMany(
+    () => AbleDistricts,
+    (ableDistricts) => ableDistricts.user,
+  )
+  ableDistricts: AbleDistricts[];
 
   @CreateDateColumn()
   createdAt: Date;
