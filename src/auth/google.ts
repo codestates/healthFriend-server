@@ -10,9 +10,12 @@ export default () => {
       {
         clientID: process.env.GOOGLE_CLIENT_ID as string,
         clientSecret: process.env.GOOGLE_CLIENT_SECRET as string,
+        // eslint-disable-next-line no-nested-ternary
         callbackURL: process.env.NODE_ENV === 'production'
           ? 'https://api.healthfriend.club/auth/google/callback'
-          : 'http://localhost:4000/auth/google/callback',
+          : process.env.NODE_ENV === 'doit'
+            ? 'https://hfapi.doitreviews.com/auth/google/callback'
+            : 'http://localhost:4000/auth/google/callback',
       },
       async (_, __, profile, cb) => {
         try {

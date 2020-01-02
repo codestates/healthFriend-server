@@ -25,9 +25,12 @@ router.get(
       // httpOnly: true,
       maxAge: 1000 * 60 * 60 * 24, // 1 day
     });
+    // eslint-disable-next-line no-nested-ternary
     const redirectUrl = process.env.NODE_ENV === 'production'
       ? 'https://healthfriend.club'
-      : 'http://localhost:3000';
+      : process.env.NODE_ENV === 'doit'
+        ? 'https://hf2.doitreviews.com'
+        : 'http://localhost:3000';
     res.status(200).redirect(redirectUrl);
   },
 );
