@@ -31,12 +31,14 @@
       "mysql2": "^2.0.2",
       "passport": "^0.4.1",
       "passport-google-oauth20": "^2.0.0",
+      "pm2": "^4.2.1",
       "reflect-metadata": "^0.1.13",
       "typeorm": "^0.2.21"
    },
    "scripts": {
       "dev": "NODE_ENV=development nodemon --exec ts-node src/index.ts",
       "test": "NODE_ENV=test ts-node src/index.ts",
-      "prod": "NODE_ENV=production ts-node src/index.ts"
+      "prod": "NODE_ENV=production ts-node src/index.ts",
+      "start": "pm2 start ecosystem.config.js --env production"
    }
 }

@@ -29,7 +29,10 @@ const startServer = async () => {
 
     const corsOption = {
       credentials: true,
-      origin: 'https://healthfriend.club',
+      origin:
+        process.env.NODE_ENV === 'production'
+          ? 'https://healthfriend.club'
+          : true,
     };
     app.use(passport.initialize());
     app.use(cors(corsOption));
@@ -42,9 +45,7 @@ const startServer = async () => {
 
     server.applyMiddleware({ app, cors: false });
     app.listen({ port: 4000 }, () => {
-      console.log(
-        'Server running at 4000 port',
-      );
+      console.log('Server running at 4000 port');
     });
   } catch (error) {
     console.error(error);
