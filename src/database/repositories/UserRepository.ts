@@ -1,6 +1,6 @@
 import { EntityRepository, Repository } from 'typeorm';
 
-import { DetailedUserInfo } from '../../types/User.types';
+import { DetailedUserInfo, RegisterUserInfo } from '../../types/User.types';
 import { User } from '../entity/User';
 
 @EntityRepository(User)
@@ -29,5 +29,16 @@ export class UserRepository extends Repository<User> {
     await this.save(user);
     const updatedUser = (await this.findByUserId(userId)) as User;
     return updatedUser;
+  }
+
+  async saveUsersInfo(UsersInfo: Array<RegisterUserInfo>) {
+    const objects = UsersInfo.map((user) =>
+      this.create({
+        email: user.email,
+        nickname: user.nickname,
+        provider: user.provider,
+        snsId: user.snsId,
+      }));
+    return this.save(objects);
   }
 }
