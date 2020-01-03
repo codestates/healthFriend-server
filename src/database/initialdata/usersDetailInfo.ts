@@ -1,13 +1,6 @@
-import { Provider, OpenImageChoice, LevelOf3Dae } from '../entity/User';
-
-const users = [
+const usersDetailInfo = [
   {
     email: 'aaa@gmail.com',
-    nickname: 'aaa',
-    provider: Provider.GOOGLE,
-    snsId: '1',
-    openImageChoice: OpenImageChoice.OPEN,
-    levelOf3Dae: LevelOf3Dae.L1,
     motivations: [
       'WEIGHT_INCREASE',
       'WEIGHT_LOSS',
@@ -30,11 +23,6 @@ const users = [
   },
   {
     email: 'bbb@gmail.com',
-    nickname: 'bbb',
-    provider: Provider.GOOGLE,
-    snsId: '2',
-    openImageChoice: OpenImageChoice.OPEN,
-    levelOf3Dae: LevelOf3Dae.L1,
     motivations: [
       'WEIGHT_INCREASE',
       'WEIGHT_LOSS',
@@ -51,11 +39,6 @@ const users = [
   },
   {
     email: 'ccc@gmail.com',
-    nickname: 'ccc',
-    provider: Provider.GOOGLE,
-    snsId: '3',
-    openImageChoice: OpenImageChoice.OPEN,
-    levelOf3Dae: LevelOf3Dae.L1,
     motivations: [
       'WEIGHT_INCREASE',
       'WEIGHT_LOSS',
@@ -80,11 +63,6 @@ const users = [
   },
   {
     email: 'ddd@gmail.com',
-    nickname: 'ddd',
-    provider: Provider.GOOGLE,
-    snsId: '4',
-    openImageChoice: OpenImageChoice.OPEN,
-    levelOf3Dae: LevelOf3Dae.L2,
     motivations: ['WEIGHT_LOSS', 'FIND_FRIEND', 'LONELINESS'],
     ableDays: ['MONDAY', 'WEDNESDAY', 'FRIDAY'],
     districts: [
@@ -96,11 +74,6 @@ const users = [
   },
   {
     email: 'eee@gmail.com',
-    nickname: 'eee',
-    provider: Provider.GOOGLE,
-    snsId: '5',
-    openImageChoice: OpenImageChoice.OPEN,
-    levelOf3Dae: LevelOf3Dae.L2,
     motivations: ['WEIGHT_INCREASE', 'FIND_FRIEND', 'LONELINESS'],
     ableDays: ['MONDAY', 'WEDNESDAY', 'FRIDAY'],
     districts: [
@@ -110,11 +83,6 @@ const users = [
   },
   {
     email: 'fff@gmail.com',
-    nickname: 'fff',
-    provider: Provider.GOOGLE,
-    snsId: '6',
-    openImageChoice: OpenImageChoice.FRIEND,
-    levelOf3Dae: LevelOf3Dae.L2,
     motivations: ['WEIGHT_INCREASE', 'WEIGHT_LOSS', 'LONELINESS'],
     ableDays: ['MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY'],
     districts: [
@@ -124,11 +92,6 @@ const users = [
   },
   {
     email: 'ggg@gmail.com',
-    nickname: 'ggg',
-    provider: Provider.GOOGLE,
-    snsId: '7',
-    openImageChoice: OpenImageChoice.FRIEND,
-    levelOf3Dae: LevelOf3Dae.L3,
     motivations: ['WEIGHT_INCREASE', 'WEIGHT_LOSS', 'FIND_FRIEND'],
     ableDays: ['MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY'],
     districts: [
@@ -138,11 +101,6 @@ const users = [
   },
   {
     email: 'hhh@gmail.com',
-    nickname: 'hhh',
-    provider: Provider.GOOGLE,
-    snsId: '8',
-    openImageChoice: OpenImageChoice.FRIEND,
-    levelOf3Dae: LevelOf3Dae.L3,
     motivations: ['WEIGHT_INCREASE', 'FIND_FRIEND', 'LONELINESS'],
     ableDays: ['MONDAY', 'TUESDAY', 'THURSDAY', 'FRIDAY', 'SATURDAY', 'SUNDAY'],
     districts: [
@@ -153,11 +111,6 @@ const users = [
   },
   {
     email: 'iii@gmail.com',
-    nickname: 'iii',
-    provider: Provider.GOOGLE,
-    snsId: '9',
-    openImageChoice: OpenImageChoice.CLOSE,
-    levelOf3Dae: LevelOf3Dae.L4,
     motivations: ['WEIGHT_LOSS', 'FIND_FRIEND', 'LONELINESS'],
     ableDays: [
       'MONDAY',
@@ -175,11 +128,6 @@ const users = [
   },
   {
     email: 'jjj@gmail.com',
-    nickname: 'jjj',
-    provider: Provider.GOOGLE,
-    snsId: '10',
-    openImageChoice: OpenImageChoice.CLOSE,
-    levelOf3Dae: LevelOf3Dae.L4,
     motivations: ['WEIGHT_LOSS', 'FIND_FRIEND', 'LONELINESS'],
     ableDays: [
       'TUESDAY',
@@ -196,4 +144,4 @@ const users = [
   },
 ];
 
-export default users;
+export default usersDetailInfo;
