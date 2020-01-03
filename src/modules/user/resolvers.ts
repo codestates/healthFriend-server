@@ -1,3 +1,4 @@
+import { UserQueryCondition } from '../../types/User.types';
 import {
   getUserRepository,
   getMotivationRepository,
@@ -12,6 +13,17 @@ const resolvers = {
       return getUserRepository().findByUserId(userId);
     },
     users: async () => getUserRepository().getAllUser(),
+    filterUsers: async (_: any, args: any) => {
+      const whereObject: UserQueryCondition = {
+        openImageChoice: args.openImageChoice || null,
+        levelOf3Dae: args.levelOf3Dae || null,
+        motivations: args.motivations || [],
+        weekdays: args.weekdays || [],
+        districts: args.districts || [],
+      };
+      const results = getUserRepository().filterUsers(whereObject);
+      return results;
+    },
   },
 
   User: {

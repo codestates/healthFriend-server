@@ -7,13 +7,13 @@ import { createMiddleware } from '../../utils/createMiddleware';
 import middleware from './middleware';
 
 const resolvers = {
-  OpenImageChoice: {
+  OpenImageChoiceEnum: {
     OPEN: 'OPEN',
     FRIEND: 'FRIEND',
     CLOSE: 'CLOSE',
   },
 
-  LevelOf3Dae: {
+  LevelOf3DaeEnum: {
     L1: 'L1',
     L2: 'L2',
     L3: 'L3',

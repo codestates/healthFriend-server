@@ -1,13 +1,13 @@
 import { gql } from 'apollo-server-express';
 
 const typeDefs = gql`
-  enum OpenImageChoice {
+  enum OpenImageChoiceEnum {
     OPEN
     FRIEND
     CLOSE
   }
 
-  enum LevelOf3Dae {
+  enum LevelOf3DaeEnum {
     "L1 = '1: 0 ~ 99'"
     L1
     "L2 = '2: 100 ~ 199'"
@@ -82,6 +82,13 @@ const typeDefs = gql`
     exerciseAbleDays(input: [WeekdayEnum]): [ExerciseAbleDay]
     ableDistricts(dongIds: [String]): [AbleDistrict]
     allDistricts: [District]!
+    filterUsers(
+      openImageChoice: OpenImageChoiceEnum,
+      levelOf3Dae: LevelOf3DaeEnum,
+      motivations: [MotivationEnum]
+      weekdays: [WeekdayEnum]
+      districts: [String]
+    ): [User]
   }
 
   type Mutation {
@@ -90,7 +97,7 @@ const typeDefs = gql`
     setAbleDistrict(dongIds: [String]): [AbleDistrict]
     me(
       nickname: String!
-      openImageChoice: OpenImageChoice!
+      openImageChoice: OpenImageChoiceEnum!
       """
       L1 = '1: 0 ~ 99'
 
@@ -102,7 +109,7 @@ const typeDefs = gql`
 
       L5 = '5: 400 ~ 499'
       """
-      levelOf3Dae: LevelOf3Dae!
+      levelOf3Dae: LevelOf3DaeEnum!
       messageToFriend: String
     ): User!
   }
