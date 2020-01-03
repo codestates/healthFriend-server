@@ -1,6 +1,10 @@
 import { EntityRepository, Repository } from 'typeorm';
 
-import { DetailedUserInfo, RegisterUserInfo } from '../../types/User.types';
+import {
+  DetailedUserInfo,
+  RegisterUserInfo,
+  UserQueryCondition,
+} from '../../types/User.types';
 import { User } from '../entity/User';
 
 @EntityRepository(User)
@@ -40,5 +44,40 @@ export class UserRepository extends Repository<User> {
         snsId: user.snsId,
       }));
     return this.save(objects);
+  }
+
+  async filterUsers(whereObject: UserQueryCondition) {
+    const users = await this.createQueryBuilder('user')
+      .innerJoinAndSelect('user.motivations', 'motivation')
+      .innerJoinAndSelect('user.ableDays', 'ableDay')
+      .innerJoinAndSelect('user.ableDistricts', 'district')
+      .andWhere(
+        whereObject.openImageChoice
+          ? 'user.openImageChoice = :openImageChoice'
+          : '1=1',
+        { openImageChoice: whereObject.openImageChoice },
+      )
+      .andWhere(
+        whereObject.levelOf3Dae ? 'user.levelOf3Dae = :levelOf3Dae' : '1=1',
+        { levelOf3Dae: whereObject.levelOf3Dae },
+      )
+      .andWhere(
+        whereObject.motivations.length
+          ? 'motivation IN (:...motivations)'
+          : '1=1',
+        { motivations: whereObject.motivations },
+      )
+      .andWhere(
+        whereObject.weekdays.length ? 'weekday IN (:...weekdays)' : '1=1',
+        { weekdays: whereObject.weekdays },
+      )
+      .andWhere(
+        whereObject.districts.length
+          ? 'districtIdOfDong IN (:...districts)'
+          : '1=1',
+        { districts: whereObject.districts },
+      )
+      .getMany();
+    return users;
   }
 }

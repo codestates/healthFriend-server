@@ -23,3 +23,11 @@ export interface RegisterUserInfo {
   provider: Provider;
   snsId: string;
 }
+
+export interface UserQueryCondition {
+  openImageChoice: OpenImageChoice|null;
+  levelOf3Dae: LevelOf3Dae|null;
+  motivations: Array<string|null>;
+  weekdays: Array<string|null>;
+  districts: Array<string|null>;
+}
