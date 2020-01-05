@@ -12,14 +12,14 @@ export class UserRepository extends Repository<User> {
   async findByUserId(userId: string) {
     const result = await this.findOne({
       where: { id: userId },
-      relations: ['motivations'],
+      relations: ['following', 'followers'],
     });
     // console.log(result);
     return result;
   }
 
   async getAllUser() {
-    return this.find({});
+    return this.find({ relations: ['following', 'followers'] });
   }
 
   async updateUserInfo(userId: string, detailedUserInfo: DetailedUserInfo) {
@@ -88,5 +88,50 @@ export class UserRepository extends Repository<User> {
       )
       .getMany();
     return users;
+  }
+
+  async followingUser(meId: string, userId: string) {
+    if (meId === userId) {
+      return null;
+    }
+
+    const me = await this.findByUserId(meId);
+    if (!me) {
+      // console.log('FollowingUser - Not exist ME!!!');
+      return null;
+    }
+
+    const followingIds: Array<string> = me.following.map((f) => f.id);
+    if (followingIds.includes(userId)) {
+      // console.log('FollowingUser - alreay exist: ', me);
+      return me;
+    }
+
+    const user = await this.findOne({ id: userId });
+    if (user) {
+      me.following.push(user);
+      await this.save(me);
+    }
+    return me;
+  }
+
+  async deleteFollowing(meId: string, userId: string) {
+    const me = await this.findByUserId(meId);
+    if (!me) {
+      return null;
+    }
+    me.following = me.following.filter((f) => f.id !== userId);
+    this.save(me);
+    return me;
+  }
+
+  async deleteFollowers(meId: string, userId: string) {
+    const me = await this.findByUserId(meId);
+    if (!me) {
+      return null;
+    }
+    me.followers = me.followers.filter((f) => f.id !== userId);
+    this.save(me);
+    return me;
   }
 }

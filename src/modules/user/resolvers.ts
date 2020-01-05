@@ -39,10 +39,41 @@ const resolvers = {
       return result;
     },
     ableDistricts: async (parent: any) => {
-      const result = await getAbleDistrictsRepository().findByUserId(
-        parent.id,
-      );
+      const result = await getAbleDistrictsRepository().findByUserId(parent.id);
       return result;
+    },
+  },
+
+  Mutation: {
+    followingUser: async (_: any, args: any, context: any) => {
+      if (!context.userInfo && !context.userInfo.id) {
+        return null;
+      }
+      const user = await getUserRepository().followingUser(
+        context.userInfo.id,
+        args.userId,
+      );
+      return user;
+    },
+    deleteFollowing: async (_: any, args: any, context: any) => {
+      if (!context.userInfo && !context.userInfo.id) {
+        return null;
+      }
+      const user = await getUserRepository().deleteFollowing(
+        context.userInfo.id,
+        args.userId,
+      );
+      return user;
+    },
+    deleteFollowers: async (_: any, args: any, context: any) => {
+      if (!context.userInfo && !context.userInfo.id) {
+        return null;
+      }
+      const user = await getUserRepository().deleteFollowers(
+        context.userInfo.id,
+        args.userId,
+      );
+      return user;
     },
   },
 };

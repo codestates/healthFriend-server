@@ -63,14 +63,27 @@ const ableDistrictsInitialData = async () => {
       where: { email: m.email },
     })) as User;
 
-    const dongIds = await Promise.all(m.districts.map(async (d) => {
-      const result: Districts = await getDistrictRepository().findOne({
-        where: { nameOfDong: d.nameOfDong, idOfGu: d.idOfGu },
-      }) as Districts;
-      return result.idOfDong;
-    }));
+    const dongIds = await Promise.all(
+      m.districts.map(async (d) => {
+        const result: Districts = (await getDistrictRepository().findOne({
+          where: { nameOfDong: d.nameOfDong, idOfGu: d.idOfGu },
+        })) as Districts;
+        return result.idOfDong;
+      }),
+    );
 
     await getAbleDistrictsRepository().saveByDongId(user.id, dongIds);
+  });
+};
+
+const addFollowingRandomly = async () => {
+  const savedUsers = await getUserRepository().find();
+  savedUsers.forEach((u) => {
+    const followingNumbers = Array.from({ length: 3 }, () =>
+      Math.floor(Math.random() * savedUsers.length));
+    followingNumbers.forEach(async (n) => {
+      await getUserRepository().followingUser(u.id, savedUsers[n].id);
+    });
   });
 };
 
@@ -82,6 +95,7 @@ const run = async () => {
   await motivationInitialData();
   await exerciseAbleDaysInitialData();
   await ableDistrictsInitialData();
+  await addFollowingRandomly();
 };
 
 run();

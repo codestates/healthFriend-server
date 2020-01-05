@@ -73,6 +73,8 @@ const typeDefs = gql`
     motivations: [Motivation]
     weekdays: [ExerciseAbleDay]
     ableDistricts: [AbleDistrict]
+    following: [User]
+    followers: [User]
   }
 
   type Query {
@@ -83,6 +85,8 @@ const typeDefs = gql`
     exerciseAbleDays(input: [WeekdayEnum]): [ExerciseAbleDay]
     ableDistricts(dongIds: [String]): [AbleDistrict]
     allDistricts: [District]!
+    getFollowing: [User]!
+    getFollowers: [User]!
     filterUsers(
       openImageChoice: [OpenImageChoiceEnum],
       gender: [GenderEnum]
@@ -97,6 +101,9 @@ const typeDefs = gql`
     setMotivation(input: [MotivationEnum]): [Motivation]
     setExerciseAbleDay(input: [WeekdayEnum]): [ExerciseAbleDay]
     setAbleDistrict(dongIds: [String]): [AbleDistrict]
+    followingUser(userId: String!): User
+    deleteFollowing(userId: String!): User
+    deleteFollowers(userId: String!): User
     me(
       nickname: String!
       gender: GenderEnum!
