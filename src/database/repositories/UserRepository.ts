@@ -52,13 +52,15 @@ export class UserRepository extends Repository<User> {
       .innerJoinAndSelect('user.ableDays', 'ableDay')
       .innerJoinAndSelect('user.ableDistricts', 'district')
       .andWhere(
-        whereObject.openImageChoice
-          ? 'user.openImageChoice = :openImageChoice'
+        whereObject.openImageChoice.length
+          ? 'user.openImageChoice IN (:...openImageChoice)'
           : '1=1',
         { openImageChoice: whereObject.openImageChoice },
       )
       .andWhere(
-        whereObject.levelOf3Dae ? 'user.levelOf3Dae = :levelOf3Dae' : '1=1',
+        whereObject.levelOf3Dae.length
+          ? 'user.levelOf3Dae IN (:...levelOf3Dae)'
+          : '1=1',
         { levelOf3Dae: whereObject.levelOf3Dae },
       )
       .andWhere(

@@ -83,8 +83,8 @@ const typeDefs = gql`
     ableDistricts(dongIds: [String]): [AbleDistrict]
     allDistricts: [District]!
     filterUsers(
-      openImageChoice: OpenImageChoiceEnum,
-      levelOf3Dae: LevelOf3DaeEnum,
+      openImageChoice: [OpenImageChoiceEnum],
+      levelOf3Dae: [LevelOf3DaeEnum],
       motivations: [MotivationEnum]
       weekdays: [WeekdayEnum]
       districts: [String]
