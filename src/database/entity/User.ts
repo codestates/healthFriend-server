@@ -5,6 +5,8 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
   OneToMany,
+  ManyToMany,
+  JoinTable,
 } from 'typeorm';
 import { Motivations } from './Motivations';
 import { ExerciseAbleDays } from './ExerciseAbleDays';
@@ -94,6 +96,29 @@ export class User {
     (ableDistricts) => ableDistricts.user,
   )
   ableDistricts: AbleDistricts[];
+
+  @ManyToMany(
+    () => User,
+    (user) => user.following,
+  )
+  @JoinTable({
+    name: 'friend_request',
+    joinColumn: {
+      name: 'followers',
+      referencedColumnName: 'id',
+    },
+    inverseJoinColumn: {
+      name: 'following',
+      referencedColumnName: 'id',
+    },
+  })
+  followers: User[];
+
+  @ManyToMany(
+    () => User,
+    (user) => user.followers,
+  )
+  following: User[];
 
   @CreateDateColumn()
   createdAt: Date;
