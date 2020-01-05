@@ -25,8 +25,8 @@ export interface RegisterUserInfo {
 }
 
 export interface UserQueryCondition {
-  openImageChoice: OpenImageChoice|null;
-  levelOf3Dae: LevelOf3Dae|null;
+  openImageChoice: Array<OpenImageChoice|null>;
+  levelOf3Dae: Array<LevelOf3Dae|null>;
   motivations: Array<string|null>;
   weekdays: Array<string|null>;
   districts: Array<string|null>;
