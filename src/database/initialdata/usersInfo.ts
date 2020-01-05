@@ -1,9 +1,12 @@
-import { Provider, OpenImageChoice, LevelOf3Dae } from '../entity/User';
+import {
+  Provider, OpenImageChoice, LevelOf3Dae, Gender,
+} from '../entity/User';
 
 const users = [
   {
     email: 'aaa@gmail.com',
     nickname: 'aaa',
+    gender: Gender.MALE,
     provider: Provider.GOOGLE,
     snsId: '1',
     openImageChoice: OpenImageChoice.OPEN,
@@ -31,6 +34,7 @@ const users = [
   {
     email: 'bbb@gmail.com',
     nickname: 'bbb',
+    gender: Gender.MALE,
     provider: Provider.GOOGLE,
     snsId: '2',
     openImageChoice: OpenImageChoice.OPEN,
@@ -52,6 +56,7 @@ const users = [
   {
     email: 'ccc@gmail.com',
     nickname: 'ccc',
+    gender: Gender.MALE,
     provider: Provider.GOOGLE,
     snsId: '3',
     openImageChoice: OpenImageChoice.OPEN,
@@ -81,6 +86,7 @@ const users = [
   {
     email: 'ddd@gmail.com',
     nickname: 'ddd',
+    gender: Gender.MALE,
     provider: Provider.GOOGLE,
     snsId: '4',
     openImageChoice: OpenImageChoice.OPEN,
@@ -97,6 +103,7 @@ const users = [
   {
     email: 'eee@gmail.com',
     nickname: 'eee',
+    gender: Gender.MALE,
     provider: Provider.GOOGLE,
     snsId: '5',
     openImageChoice: OpenImageChoice.OPEN,
@@ -111,6 +118,7 @@ const users = [
   {
     email: 'fff@gmail.com',
     nickname: 'fff',
+    gender: Gender.MALE,
     provider: Provider.GOOGLE,
     snsId: '6',
     openImageChoice: OpenImageChoice.FRIEND,
@@ -125,6 +133,7 @@ const users = [
   {
     email: 'ggg@gmail.com',
     nickname: 'ggg',
+    gender: Gender.MALE,
     provider: Provider.GOOGLE,
     snsId: '7',
     openImageChoice: OpenImageChoice.FRIEND,
@@ -139,6 +148,7 @@ const users = [
   {
     email: 'hhh@gmail.com',
     nickname: 'hhh',
+    gender: Gender.MALE,
     provider: Provider.GOOGLE,
     snsId: '8',
     openImageChoice: OpenImageChoice.FRIEND,
@@ -154,6 +164,7 @@ const users = [
   {
     email: 'iii@gmail.com',
     nickname: 'iii',
+    gender: Gender.MALE,
     provider: Provider.GOOGLE,
     snsId: '9',
     openImageChoice: OpenImageChoice.CLOSE,
@@ -176,6 +187,7 @@ const users = [
   {
     email: 'jjj@gmail.com',
     nickname: 'jjj',
+    gender: Gender.MALE,
     provider: Provider.GOOGLE,
     snsId: '10',
     openImageChoice: OpenImageChoice.CLOSE,
@@ -197,6 +209,7 @@ const users = [
   {
     email: 'kkk@gmail.com',
     nickname: 'kkk',
+    gender: Gender.MALE,
     provider: Provider.GOOGLE,
     snsId: '11',
     openImageChoice: OpenImageChoice.OPEN,
@@ -222,6 +235,7 @@ const users = [
   {
     email: 'lll@gmail.com',
     nickname: 'lll',
+    gender: Gender.MALE,
     provider: Provider.GOOGLE,
     snsId: '12',
     openImageChoice: OpenImageChoice.FRIEND,
@@ -249,6 +263,7 @@ const users = [
   {
     email: 'mmm@gmail.com',
     nickname: 'mmm',
+    gender: Gender.MALE,
     provider: Provider.GOOGLE,
     snsId: '13',
     openImageChoice: OpenImageChoice.CLOSE,
@@ -276,6 +291,7 @@ const users = [
   {
     email: 'nnn@gmail.com',
     nickname: 'nnn',
+    gender: Gender.MALE,
     provider: Provider.GOOGLE,
     snsId: '14',
     openImageChoice: OpenImageChoice.OPEN,
@@ -303,6 +319,7 @@ const users = [
   {
     email: 'ooo@gmail.com',
     nickname: 'ooo',
+    gender: Gender.MALE,
     provider: Provider.GOOGLE,
     snsId: '15',
     openImageChoice: OpenImageChoice.FRIEND,
@@ -328,6 +345,7 @@ const users = [
   {
     email: 'ppp@gmail.com',
     nickname: 'ppp',
+    gender: Gender.MALE,
     provider: Provider.GOOGLE,
     snsId: '16',
     openImageChoice: OpenImageChoice.CLOSE,
@@ -351,6 +369,7 @@ const users = [
   {
     email: 'qqq@gmail.com',
     nickname: 'qqq',
+    gender: Gender.MALE,
     provider: Provider.GOOGLE,
     snsId: '17',
     openImageChoice: OpenImageChoice.OPEN,
@@ -374,6 +393,7 @@ const users = [
   {
     email: 'rrr@gmail.com',
     nickname: 'rrr',
+    gender: Gender.MALE,
     provider: Provider.GOOGLE,
     snsId: '18',
     openImageChoice: OpenImageChoice.FRIEND,
@@ -398,6 +418,7 @@ const users = [
   {
     email: 'sss@gmail.com',
     nickname: 'sss',
+    gender: Gender.MALE,
     provider: Provider.GOOGLE,
     snsId: '19',
     openImageChoice: OpenImageChoice.CLOSE,
@@ -423,6 +444,7 @@ const users = [
   {
     email: 'ttt@gmail.com',
     nickname: 'ttt',
+    gender: Gender.FEMALE,
     provider: Provider.GOOGLE,
     snsId: '20',
     openImageChoice: OpenImageChoice.OPEN,
@@ -446,6 +468,7 @@ const users = [
   {
     email: 'uuu@gmail.com',
     nickname: 'uuu',
+    gender: Gender.FEMALE,
     provider: Provider.GOOGLE,
     snsId: '21',
     openImageChoice: OpenImageChoice.FRIEND,
@@ -468,6 +491,7 @@ const users = [
   {
     email: 'vvv@gmail.com',
     nickname: 'vvv',
+    gender: Gender.FEMALE,
     provider: Provider.GOOGLE,
     snsId: '22',
     openImageChoice: OpenImageChoice.CLOSE,
@@ -490,6 +514,7 @@ const users = [
   {
     email: 'www@gmail.com',
     nickname: 'www',
+    gender: Gender.FEMALE,
     provider: Provider.GOOGLE,
     snsId: '23',
     openImageChoice: OpenImageChoice.OPEN,
@@ -512,6 +537,7 @@ const users = [
   {
     email: 'xxx@gmail.com',
     nickname: 'xxx',
+    gender: Gender.FEMALE,
     provider: Provider.GOOGLE,
     snsId: '24',
     openImageChoice: OpenImageChoice.CLOSE,
@@ -533,6 +559,7 @@ const users = [
   {
     email: 'yyy@gmail.com',
     nickname: 'yyy',
+    gender: Gender.FEMALE,
     provider: Provider.GOOGLE,
     snsId: '25',
     openImageChoice: OpenImageChoice.FRIEND,
@@ -554,6 +581,7 @@ const users = [
   {
     email: 'zzz@gmail.com',
     nickname: 'zzz',
+    gender: Gender.FEMALE,
     provider: Provider.GOOGLE,
     snsId: '26',
     openImageChoice: OpenImageChoice.FRIEND,

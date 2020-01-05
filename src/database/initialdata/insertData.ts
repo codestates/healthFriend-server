@@ -30,6 +30,7 @@ const updateUserInfo = async () => {
     })) as User;
     const detailedUserInfo = {
       nickname: m.nickname,
+      gender: m.gender,
       openImageChoice: m.openImageChoice,
       levelOf3Dae: m.levelOf3Dae,
       messageToFriend: '',

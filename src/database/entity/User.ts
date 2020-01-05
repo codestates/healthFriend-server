@@ -15,6 +15,11 @@ export enum Provider {
   FACEBOOK = 'FACEBOOK',
 }
 
+export enum Gender {
+  MALE = 'MALE',
+  FEMALE = 'FEMALE',
+}
+
 export enum OpenImageChoice {
   OPEN = 'OPEN',
   FRIEND = 'FRIEND',
@@ -50,6 +55,9 @@ export class User {
 
   @Column({ type: 'varchar', length: 255 })
   snsId: string;
+
+  @Column({ type: 'enum', enum: Gender })
+  gender: Gender;
 
   @Column({
     type: 'enum',

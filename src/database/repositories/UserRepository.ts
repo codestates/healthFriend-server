@@ -26,6 +26,7 @@ export class UserRepository extends Repository<User> {
     const user = this.create({
       id: userId,
       nickname: detailedUserInfo.nickname,
+      gender: detailedUserInfo.gender,
       openImageChoice: detailedUserInfo.openImageChoice,
       levelOf3Dae: detailedUserInfo.levelOf3Dae,
       messageToFriend: detailedUserInfo.messageToFriend,
@@ -51,6 +52,12 @@ export class UserRepository extends Repository<User> {
       .innerJoinAndSelect('user.motivations', 'motivation')
       .innerJoinAndSelect('user.ableDays', 'ableDay')
       .innerJoinAndSelect('user.ableDistricts', 'district')
+      .andWhere(
+        whereObject.gender.length
+          ? 'user.gender IN (:...gender)'
+          : '1=1',
+        { gender: whereObject.gender },
+      )
       .andWhere(
         whereObject.openImageChoice.length
           ? 'user.openImageChoice IN (:...openImageChoice)'

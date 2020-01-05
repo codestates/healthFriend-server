@@ -15,6 +15,7 @@ const resolvers = {
     users: async () => getUserRepository().getAllUser(),
     filterUsers: async (_: any, args: any) => {
       const whereObject: UserQueryCondition = {
+        gender: args.gender || [],
         openImageChoice: args.openImageChoice || [],
         levelOf3Dae: args.levelOf3Dae || [],
         motivations: args.motivations || [],
