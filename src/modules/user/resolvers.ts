@@ -4,6 +4,7 @@ import {
   getMotivationRepository,
   getExerciseAbleDaysRepository,
   getAbleDistrictsRepository,
+  getFriendsRepository,
 } from '../../database';
 
 const resolvers = {
@@ -42,6 +43,10 @@ const resolvers = {
       const result = await getAbleDistrictsRepository().findByUserId(parent.id);
       return result;
     },
+    friends: async (parent: any) => {
+      const result = await getFriendsRepository().findByUserId(parent.id);
+      return result;
+    },
   },
 
   Mutation: {
@@ -70,6 +75,26 @@ const resolvers = {
         return null;
       }
       const user = await getUserRepository().deleteFollowers(
+        context.userInfo.id,
+        args.userId,
+      );
+      return user;
+    },
+    addFriend: async (_: any, args: any, context: any) => {
+      if (!context.userInfo && !context.userInfo.id) {
+        return null;
+      }
+      const user = await getFriendsRepository().addFriend(
+        context.userInfo.id,
+        args.userId,
+      );
+      return user;
+    },
+    deleteFriend: async (_: any, args: any, context: any) => {
+      if (!context.userInfo && !context.userInfo.id) {
+        return null;
+      }
+      const user = await getFriendsRepository().deleteFriend(
         context.userInfo.id,
         args.userId,
       );
