@@ -66,6 +66,7 @@ const typeDefs = gql`
     id: ID!
     email: String!
     nickname: String!
+    provider: String!
     gender: String!
     openImageChoice: String!
     levelOf3Dae: String!
