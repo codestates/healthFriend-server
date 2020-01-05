@@ -11,6 +11,7 @@ import {
 import { Motivations } from './Motivations';
 import { ExerciseAbleDays } from './ExerciseAbleDays';
 import { AbleDistricts } from './AbleDistricts';
+import { Friends } from './Friends';
 
 export enum Provider {
   GOOGLE = 'GOOGLE',
@@ -119,6 +120,9 @@ export class User {
     (user) => user.followers,
   )
   following: User[];
+
+  @OneToMany(() => Friends, (friends) => friends.me)
+  friends: Friends[];
 
   @CreateDateColumn()
   createdAt: Date;

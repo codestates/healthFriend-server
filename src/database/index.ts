@@ -6,6 +6,7 @@ import { UserRepository } from './repositories/UserRepository';
 import { DistrictRepository } from './repositories/DistrictRepository';
 // eslint-disable-next-line max-len
 import { AbleDistrictsRepository } from './repositories/AbleDistrictsRepository';
+import { FriendsRepository } from './repositories/FriendsRepository';
 
 let connection: Connection;
 
@@ -33,4 +34,6 @@ export const getDistrictRepository = (): DistrictRepository =>
 export const getAbleDistrictsRepository = (): AbleDistrictsRepository =>
   connection.getCustomRepository(AbleDistrictsRepository);
 
+export const getFriendsRepository = (): FriendsRepository =>
+  connection.getCustomRepository(FriendsRepository);
 export default connectDB;

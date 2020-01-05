@@ -12,14 +12,14 @@ export class UserRepository extends Repository<User> {
   async findByUserId(userId: string) {
     const result = await this.findOne({
       where: { id: userId },
-      relations: ['following', 'followers'],
+      relations: ['following', 'followers', 'friends'],
     });
     // console.log(result);
     return result;
   }
 
   async getAllUser() {
-    return this.find({ relations: ['following', 'followers'] });
+    return this.find({ relations: ['following', 'followers', 'friends'] });
   }
 
   async updateUserInfo(userId: string, detailedUserInfo: DetailedUserInfo) {

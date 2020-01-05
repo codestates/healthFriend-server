@@ -76,6 +76,7 @@ const typeDefs = gql`
     ableDistricts: [AbleDistrict]
     following: [User]
     followers: [User]
+    friends: [User]
   }
 
   type Query {
@@ -105,6 +106,8 @@ const typeDefs = gql`
     followingUser(userId: String!): User
     deleteFollowing(userId: String!): User
     deleteFollowers(userId: String!): User
+    addFriend(userId: String!): User
+    deleteFriend(userId: String!): User
     me(
       nickname: String!
       gender: GenderEnum!
