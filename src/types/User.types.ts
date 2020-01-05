@@ -2,6 +2,7 @@ import {
   OpenImageChoice,
   LevelOf3Dae,
   Provider,
+  Gender,
 } from '../database/entity/User';
 
 export interface SimpleUserInfo {
@@ -12,6 +13,7 @@ export interface SimpleUserInfo {
 
 export interface DetailedUserInfo {
   nickname: string;
+  gender: Gender;
   openImageChoice: OpenImageChoice;
   levelOf3Dae: LevelOf3Dae;
   messageToFriend: string;
@@ -25,6 +27,7 @@ export interface RegisterUserInfo {
 }
 
 export interface UserQueryCondition {
+  gender: Array<Gender|null>;
   openImageChoice: Array<OpenImageChoice|null>;
   levelOf3Dae: Array<LevelOf3Dae|null>;
   motivations: Array<string|null>;

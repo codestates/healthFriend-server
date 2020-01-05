@@ -1,6 +1,11 @@
 import { gql } from 'apollo-server-express';
 
 const typeDefs = gql`
+  enum GenderEnum {
+    MALE
+    FEMALE
+  }
+
   enum OpenImageChoiceEnum {
     OPEN
     FRIEND
@@ -8,15 +13,10 @@ const typeDefs = gql`
   }
 
   enum LevelOf3DaeEnum {
-    "L1 = '1: 0 ~ 99'"
     L1
-    "L2 = '2: 100 ~ 199'"
     L2
-    "L3 = '3: 200 ~ 299'"
     L3
-    "L4 = '4: 300 ~ 399'"
     L4
-    "L5 = '5: 400 ~ 499'"
     L5
   }
 
@@ -66,6 +66,7 @@ const typeDefs = gql`
     id: ID!
     email: String!
     nickname: String!
+    gender: String!
     openImageChoice: String!
     levelOf3Dae: String!
     messageToFriend: String
@@ -84,6 +85,7 @@ const typeDefs = gql`
     allDistricts: [District]!
     filterUsers(
       openImageChoice: [OpenImageChoiceEnum],
+      gender: [GenderEnum]
       levelOf3Dae: [LevelOf3DaeEnum],
       motivations: [MotivationEnum]
       weekdays: [WeekdayEnum]
@@ -97,18 +99,8 @@ const typeDefs = gql`
     setAbleDistrict(dongIds: [String]): [AbleDistrict]
     me(
       nickname: String!
+      gender: GenderEnum!
       openImageChoice: OpenImageChoiceEnum!
-      """
-      L1 = '1: 0 ~ 99'
-
-      L2 = '2: 100 ~ 199'
-
-      L3 = '3: 200 ~ 299'
-
-      L4 = '4: 300 ~ 399'
-
-      L5 = '5: 400 ~ 499'
-      """
       levelOf3Dae: LevelOf3DaeEnum!
       messageToFriend: String
     ): User!

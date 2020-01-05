@@ -7,6 +7,11 @@ import { createMiddleware } from '../../utils/createMiddleware';
 import middleware from './middleware';
 
 const resolvers = {
+  GenderEnum: {
+    MALE: 'MALE',
+    FEMALE: 'FEMALE',
+  },
+
   OpenImageChoiceEnum: {
     OPEN: 'OPEN',
     FRIEND: 'FRIEND',
