@@ -5,6 +5,7 @@
    "devDependencies": {
       "@types/cookie-parser": "^1.4.2",
       "@types/dotenv": "^8.2.0",
+      "@types/jest": "^24.0.25",
       "@types/jsonwebtoken": "^8.3.5",
       "@types/morgan": "^1.7.37",
       "@types/node": "^12.12.21",
@@ -15,7 +16,10 @@
       "eslint": "^6.7.2",
       "eslint-config-airbnb-base": "^14.0.0",
       "eslint-plugin-import": "^2.19.1",
+      "graphql-request": "^1.8.2",
+      "jest": "^24.9.0",
       "nodemon": "^2.0.2",
+      "ts-jest": "^24.2.0",
       "ts-node": "^8.5.4",
       "typescript": "^3.7.3"
    },
@@ -37,11 +41,10 @@
    },
    "scripts": {
       "dev": "NODE_ENV=development nodemon --exec ts-node src/index.ts",
-      "test": "NODE_ENV=test ts-node src/index.ts",
+      "test": "NODE_ENV=test jest",
       "prod": "ts-node src/index.ts",
       "doit": "NODE_ENV=doit pm2 start ts-node -- src/index.ts && pm2 monit",
       "start": "NODE_ENV=production pm2 start ts-node -- src/index.ts && pm2 monit",
       "data": "NODE_ENV=development ts-node src/database/initialdata/insertData.ts"
-
    }
 }

@@ -48,6 +48,16 @@ module.exports = {
       rules: {
         '@typescript-eslint/no-unused-vars': [2, { args: 'none' }]
       }
+    },
+    {
+      "files": [
+        "**/*.spec.js",
+        "**/*.spec.jsx",
+        "**/*.test.ts",
+      ],
+      "env": {
+        "jest": true
+      }
     }
   ]
 };
