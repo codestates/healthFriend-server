@@ -87,8 +87,6 @@ const typeDefs = gql`
     exerciseAbleDays(input: [WeekdayEnum]): [ExerciseAbleDay]
     ableDistricts(dongIds: [String]): [AbleDistrict]
     allDistricts: [District]!
-    getFollowing: [User]!
-    getFollowers: [User]!
     filterUsers(
       openImageChoice: [OpenImageChoiceEnum],
       gender: [GenderEnum]
