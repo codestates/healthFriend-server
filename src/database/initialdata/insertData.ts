@@ -4,6 +4,7 @@ import connectDB, {
   getMotivationRepository,
   getExerciseAbleDaysRepository,
   getAbleDistrictsRepository,
+  getFriendsRepository,
 } from '..';
 
 import gangnamgu from './districtGangnamgu';
@@ -87,6 +88,27 @@ const addFollowingRandomly = async () => {
   });
 };
 
+const addfriendToYgKwon = async () => {
+  const me = await getUserRepository().findOne({
+    where: {
+      email: 'bfsudong@gmail.com',
+    },
+  });
+
+  if (!me) return;
+
+  const friends = await getUserRepository().find({
+    where: [
+      { email: 'aaa@gmail.com' },
+      { email: 'bbb@gmail.com' },
+      { email: 'ccc@gmail.com' },
+    ],
+  });
+  console.log(friends);
+  friends.forEach(async (f) =>
+    getFriendsRepository().testAddFriend(me.id, f.id));
+};
+
 const run = async () => {
   await connectDB();
   await districtInitialData();
@@ -96,6 +118,7 @@ const run = async () => {
   await exerciseAbleDaysInitialData();
   await ableDistrictsInitialData();
   await addFollowingRandomly();
+  await addfriendToYgKwon();
 };
 
 run();

@@ -601,6 +601,34 @@ const users = [
       { nameOfDong: '대치2동', idOfGu: 1, nameOfGu: '강남구' },
     ],
   },
+  {
+    email: 'bfsudong@gmail.com',
+    nickname: 'yg kwon',
+    gender: Gender.MALE,
+    provider: Provider.GOOGLE,
+    snsId: '112259972247432337684',
+    openImageChoice: OpenImageChoice.OPEN,
+    levelOf3Dae: LevelOf3Dae.L1,
+    motivations: [
+      'WEIGHT_INCREASE',
+      'WEIGHT_LOSS',
+      'FIND_FRIEND',
+      'LONELINESS',
+    ],
+    ableDays: [
+      'MONDAY',
+      'TUESDAY',
+      'WEDNESDAY',
+      'THURSDAY',
+      'FRIDAY',
+      'SATURDAY',
+      'SUNDAY',
+    ],
+    districts: [
+      { nameOfDong: '대치1동', idOfGu: 1, nameOfGu: '강남구' },
+      { nameOfDong: '대치2동', idOfGu: 1, nameOfGu: '강남구' },
+    ],
+  },
 ];
 
 export default users;
