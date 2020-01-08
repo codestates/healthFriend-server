@@ -82,6 +82,10 @@ const typeDefs = gql`
     createdAt: DateTime!
   }
 
+  type AuthPayload {
+    token: String
+  }
+
   type Query {
     user(userId: String): User
     users: [User]!
@@ -109,6 +113,7 @@ const typeDefs = gql`
     deleteFollowers(userId: String!): User
     addFriend(userId: String!): User
     deleteFriend(userId: String!): User
+    registerForTest(email: String!): AuthPayload!
     me(
       nickname: String!
       gender: GenderEnum!
