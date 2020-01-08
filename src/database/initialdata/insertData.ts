@@ -11,6 +11,7 @@ import gangnamgu from './districtGangnamgu';
 import yongsangu from './districtYongsangu';
 import songpagu from './districtSongpagu';
 import users from './usersInfo';
+import admin from './adminInfo';
 import { User } from '../entity/User';
 import { Districts } from '../entity/Districts';
 
@@ -109,6 +110,11 @@ const addfriendToYgKwon = async () => {
     getFriendsRepository().testAddFriend(me.id, f.id));
 };
 
+const adminInitialData = async () => {
+  await getUserRepository().saveUsersInfo(admin);
+};
+
+
 const run = async () => {
   await connectDB();
   await districtInitialData();
@@ -119,6 +125,7 @@ const run = async () => {
   await ableDistrictsInitialData();
   await addFollowingRandomly();
   await addfriendToYgKwon();
+  await adminInitialData();
 };
 
 run();
