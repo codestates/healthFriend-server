@@ -1,10 +1,9 @@
+import { AuthenticationError } from 'apollo-server-express';
 import { DetailedUserInfo } from '../../types/User.types';
 import {
   getUserRepository,
   // getMotivationRepository,
 } from '../../database';
-import { createMiddleware } from '../../utils/createMiddleware';
-import middleware from './middleware';
 
 const resolvers = {
   GenderEnum: {
@@ -34,23 +33,22 @@ const resolvers = {
   },
 
   Query: {
-    me: createMiddleware(middleware, (_: any, __: any, context: any) =>
-      // console.log(context);
-      getUserRepository().findByUserId(context.userInfo.id)),
+    me: async (_: any, __: any, { userInfo }: any) => {
+      if (!userInfo) throw new AuthenticationError('not authenticated');
+      return getUserRepository().findByUserId(userInfo.id);
+    },
   },
 
   Mutation: {
-    me: createMiddleware(
-      middleware,
-      async (_: any, args: DetailedUserInfo, context: any) => {
-        const user = await getUserRepository().updateUserInfo(
-          context.userInfo.id,
-          args,
-        );
+    me: async (_: any, args: DetailedUserInfo, { userInfo }: any) => {
+      if (!userInfo) throw new AuthenticationError('not authenticated');
+      const user = await getUserRepository().updateUserInfo(
+        userInfo.id,
+        args,
+      );
         // console.log(user);
-        return user;
-      },
-    ),
+      return user;
+    },
   },
 };
 

@@ -11,6 +11,7 @@ import authRouter from './auth/routes';
 import passportConfig from './auth';
 import schema from './schema';
 import { getUserInfoFromToken } from './utils/controllToken';
+import { SimpleUserInfo } from './types/User.types';
 
 export const startServer = async () => {
   try {
@@ -19,9 +20,23 @@ export const startServer = async () => {
 
     const server = new ApolloServer({
       schema,
-      context: ({ req }: any) => ({
-        userInfo: getUserInfoFromToken(req.cookies['access-token']),
-      }),
+      context: ({ req }: any) => {
+        if (!req.cookies['access-token'] && !req.headers.authorization) {
+          return { userInfo: null };
+        }
+        let token: string;
+        let userInfo: SimpleUserInfo;
+        if (req.headers.authorization) {
+          token = req.headers.authorization;
+          userInfo = getUserInfoFromToken(token.substr(7));
+        } else {
+          token = req.cookies['access-token'];
+          userInfo = getUserInfoFromToken(token);
+        }
+        // const token: string = req.headers.authorization ;
+        // const userInfo = getUserInfoFromToken(token.substr(7));
+        return { userInfo };
+      },
       introspection: true,
       playground: true,
     });
