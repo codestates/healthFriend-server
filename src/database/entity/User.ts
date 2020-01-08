@@ -13,6 +13,11 @@ import { ExerciseAbleDays } from './ExerciseAbleDays';
 import { AbleDistricts } from './AbleDistricts';
 import { Friends } from './Friends';
 
+export enum Role {
+  USER = 'USER',
+  ADMIN = 'ADMIN',
+}
+
 export enum Provider {
   GOOGLE = 'GOOGLE',
   FACEBOOK = 'FACEBOOK',
@@ -41,6 +46,9 @@ export enum LevelOf3Dae {
 export class User {
   @PrimaryGeneratedColumn('uuid')
   id: string;
+
+  @Column({ type: 'enum', enum: Role, default: Role.USER })
+  role: Role;
 
   @Column({ type: 'varchar', length: 255, unique: true })
   email: string;

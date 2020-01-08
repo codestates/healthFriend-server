@@ -3,12 +3,14 @@ import {
   LevelOf3Dae,
   Provider,
   Gender,
+  Role,
 } from '../database/entity/User';
 
-export interface SimpleUserInfo {
+export interface TokenUserInfo {
   id: string;
   email: string;
   nickname: string;
+  role: Role;
 }
 
 export interface DetailedUserInfo {
@@ -20,6 +22,7 @@ export interface DetailedUserInfo {
 }
 
 export interface RegisterUserInfo {
+  role: Role;
   email: string;
   nickname: string;
   provider: Provider;

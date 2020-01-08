@@ -1,9 +1,8 @@
 import { createToken } from '../../utils/controllToken';
 import { getUserRepository } from '../../database';
-import { Provider, User } from '../../database/entity/User';
+import { Provider, User, Role } from '../../database/entity/User';
 import {
   RegisterUserInfo,
-  SimpleUserInfo,
   LoginInfo,
 } from '../../types/User.types';
 
@@ -11,17 +10,15 @@ const resolvers = {
   Mutation: {
     registerForTest: async (_: any, args: LoginInfo) => {
       const userInfo: RegisterUserInfo = {
+        role: Role.USER,
         email: args.email,
         nickname: args.email,
         provider: Provider.GOOGLE,
         snsId: args.password,
       };
       const user: User = await getUserRepository().saveUserInfo(userInfo);
-      const { id, email, nickname } = user as SimpleUserInfo;
-      if (!id || !email || !nickname) {
-        return null;
-      }
-      const accessToken = createToken({ id, email, nickname });
+      // console.log('registerForTest: ', user);
+      const accessToken = createToken(user);
       return { token: accessToken };
     },
   },

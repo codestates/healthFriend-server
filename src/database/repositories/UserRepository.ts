@@ -6,7 +6,6 @@ import {
   RegisterUserInfo,
   UserQueryCondition,
   LoginInfo,
-  SimpleUserInfo,
 } from '../../types/User.types';
 import { User } from '../entity/User';
 
@@ -42,6 +41,7 @@ export class UserRepository extends Repository<User> {
   async saveUsersInfo(UsersInfo: Array<RegisterUserInfo>) {
     const objects = UsersInfo.map((user) =>
       this.create({
+        role: user.role,
         email: user.email,
         nickname: user.nickname,
         provider: user.provider,
@@ -155,11 +155,8 @@ export class UserRepository extends Repository<User> {
     if (user.snsId !== loginInfo.password) {
       return null;
     }
-    const { id, email, nickname } = user as SimpleUserInfo;
-    if (!id || !email || !nickname) {
-      return null;
-    }
-    const token = createToken({ id, email, nickname });
+    // console.log('LOGIN: ', user);
+    const token = createToken(user);
     return { token };
   }
 }

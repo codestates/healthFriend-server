@@ -1,9 +1,10 @@
 import {
-  Provider, OpenImageChoice, LevelOf3Dae, Gender,
+  Provider, OpenImageChoice, LevelOf3Dae, Gender, Role,
 } from '../entity/User';
 
 const users = [
   {
+    role: Role.USER,
     email: 'aaa@gmail.com',
     nickname: 'aaa',
     gender: Gender.MALE,
@@ -32,6 +33,7 @@ const users = [
     ],
   },
   {
+    role: Role.USER,
     email: 'bbb@gmail.com',
     nickname: 'bbb',
     gender: Gender.MALE,
@@ -54,6 +56,7 @@ const users = [
     ],
   },
   {
+    role: Role.USER,
     email: 'ccc@gmail.com',
     nickname: 'ccc',
     gender: Gender.MALE,
@@ -84,6 +87,7 @@ const users = [
     ],
   },
   {
+    role: Role.USER,
     email: 'ddd@gmail.com',
     nickname: 'ddd',
     gender: Gender.MALE,
@@ -101,6 +105,7 @@ const users = [
     ],
   },
   {
+    role: Role.USER,
     email: 'eee@gmail.com',
     nickname: 'eee',
     gender: Gender.MALE,
@@ -116,6 +121,7 @@ const users = [
     ],
   },
   {
+    role: Role.USER,
     email: 'fff@gmail.com',
     nickname: 'fff',
     gender: Gender.MALE,
@@ -131,6 +137,7 @@ const users = [
     ],
   },
   {
+    role: Role.USER,
     email: 'ggg@gmail.com',
     nickname: 'ggg',
     gender: Gender.MALE,
@@ -146,6 +153,7 @@ const users = [
     ],
   },
   {
+    role: Role.USER,
     email: 'hhh@gmail.com',
     nickname: 'hhh',
     gender: Gender.MALE,
@@ -162,6 +170,7 @@ const users = [
     ],
   },
   {
+    role: Role.USER,
     email: 'iii@gmail.com',
     nickname: 'iii',
     gender: Gender.MALE,
@@ -185,6 +194,7 @@ const users = [
     ],
   },
   {
+    role: Role.USER,
     email: 'jjj@gmail.com',
     nickname: 'jjj',
     gender: Gender.MALE,
@@ -207,6 +217,7 @@ const users = [
     ],
   },
   {
+    role: Role.USER,
     email: 'kkk@gmail.com',
     nickname: 'kkk',
     gender: Gender.MALE,
@@ -233,6 +244,7 @@ const users = [
     ],
   },
   {
+    role: Role.USER,
     email: 'lll@gmail.com',
     nickname: 'lll',
     gender: Gender.MALE,
@@ -261,6 +273,7 @@ const users = [
     ],
   },
   {
+    role: Role.USER,
     email: 'mmm@gmail.com',
     nickname: 'mmm',
     gender: Gender.MALE,
@@ -289,6 +302,7 @@ const users = [
     ],
   },
   {
+    role: Role.USER,
     email: 'nnn@gmail.com',
     nickname: 'nnn',
     gender: Gender.MALE,
@@ -317,6 +331,7 @@ const users = [
     ],
   },
   {
+    role: Role.USER,
     email: 'ooo@gmail.com',
     nickname: 'ooo',
     gender: Gender.MALE,
@@ -343,6 +358,7 @@ const users = [
     ],
   },
   {
+    role: Role.USER,
     email: 'ppp@gmail.com',
     nickname: 'ppp',
     gender: Gender.MALE,
@@ -367,6 +383,7 @@ const users = [
     ],
   },
   {
+    role: Role.USER,
     email: 'qqq@gmail.com',
     nickname: 'qqq',
     gender: Gender.MALE,
@@ -391,6 +408,7 @@ const users = [
     ],
   },
   {
+    role: Role.USER,
     email: 'rrr@gmail.com',
     nickname: 'rrr',
     gender: Gender.MALE,
@@ -416,6 +434,7 @@ const users = [
     ],
   },
   {
+    role: Role.USER,
     email: 'sss@gmail.com',
     nickname: 'sss',
     gender: Gender.MALE,
@@ -442,6 +461,7 @@ const users = [
     ],
   },
   {
+    role: Role.USER,
     email: 'ttt@gmail.com',
     nickname: 'ttt',
     gender: Gender.FEMALE,
@@ -466,6 +486,7 @@ const users = [
     ],
   },
   {
+    role: Role.USER,
     email: 'uuu@gmail.com',
     nickname: 'uuu',
     gender: Gender.FEMALE,
@@ -489,6 +510,7 @@ const users = [
     ],
   },
   {
+    role: Role.USER,
     email: 'vvv@gmail.com',
     nickname: 'vvv',
     gender: Gender.FEMALE,
@@ -512,6 +534,7 @@ const users = [
     ],
   },
   {
+    role: Role.USER,
     email: 'www@gmail.com',
     nickname: 'www',
     gender: Gender.FEMALE,
@@ -535,6 +558,7 @@ const users = [
     ],
   },
   {
+    role: Role.USER,
     email: 'xxx@gmail.com',
     nickname: 'xxx',
     gender: Gender.FEMALE,
@@ -557,6 +581,7 @@ const users = [
     ],
   },
   {
+    role: Role.USER,
     email: 'yyy@gmail.com',
     nickname: 'yyy',
     gender: Gender.FEMALE,
@@ -579,6 +604,7 @@ const users = [
     ],
   },
   {
+    role: Role.USER,
     email: 'zzz@gmail.com',
     nickname: 'zzz',
     gender: Gender.FEMALE,
@@ -602,6 +628,7 @@ const users = [
     ],
   },
   {
+    role: Role.USER,
     email: 'bfsudong@gmail.com',
     nickname: 'yg kwon',
     gender: Gender.MALE,

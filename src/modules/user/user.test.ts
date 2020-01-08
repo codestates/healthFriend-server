@@ -25,6 +25,7 @@ describe('login Query', () => {
       process.env.TEST_HOST as string,
       loginQuery(email, password),
     );
+    // console.log(response);
     const userInfo = getUserInfoFromToken(response.login.token);
     expect(userInfo.email).toEqual(email);
   });

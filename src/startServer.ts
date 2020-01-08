@@ -11,7 +11,7 @@ import authRouter from './auth/routes';
 import passportConfig from './auth';
 import schema from './schema';
 import { getUserInfoFromToken } from './utils/controllToken';
-import { SimpleUserInfo } from './types/User.types';
+import { TokenUserInfo } from './types/User.types';
 
 export const startServer = async () => {
   try {
@@ -25,7 +25,7 @@ export const startServer = async () => {
           return { userInfo: null };
         }
         let token: string;
-        let userInfo: SimpleUserInfo;
+        let userInfo: TokenUserInfo;
         if (req.headers.authorization) {
           token = req.headers.authorization;
           userInfo = getUserInfoFromToken(token.substr(7));
