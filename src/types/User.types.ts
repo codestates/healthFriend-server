@@ -34,3 +34,8 @@ export interface UserQueryCondition {
   weekdays: Array<string|null>;
   districts: Array<string|null>;
 }
+
+export interface LoginInfo {
+  email: string;
+  password: string;
+}

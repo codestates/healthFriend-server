@@ -1,4 +1,4 @@
-import { UserQueryCondition } from '../../types/User.types';
+import { UserQueryCondition, LoginInfo } from '../../types/User.types';
 import {
   getUserRepository,
   getMotivationRepository,
@@ -26,6 +26,7 @@ const resolvers = {
       const results = getUserRepository().filterUsers(whereObject);
       return results;
     },
+    login: async (_:any, args: LoginInfo) => getUserRepository().login(args),
   },
 
   User: {

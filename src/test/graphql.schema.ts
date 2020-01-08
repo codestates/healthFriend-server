@@ -1,8 +1,8 @@
 import { DetailedUserInfo } from '../types/User.types';
 
-export const registerMutation = (email: string) => `
+export const registerMutation = (email: string, password: string) => `
 mutation {
-  registerForTest(email: "${email}") {
+  registerForTest(email: "${email}", password: "${password}") {
     token
   }
 }
@@ -33,6 +33,14 @@ mutation {
     openImageChoice
     levelOf3Dae
     messageToFriend
+  }
+}
+`;
+
+export const loginQuery = (email: string, password: string) => `
+{
+  login (email: "${email}", password: "${password}") {
+    token
   }
 }
 `;
