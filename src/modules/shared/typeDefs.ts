@@ -62,6 +62,8 @@ const typeDefs = gql`
     user: User!
   }
 
+  scalar DateTime
+
   type User {
     id: ID!
     email: String!
@@ -77,6 +79,7 @@ const typeDefs = gql`
     following: [User]
     followers: [User]
     friends: [User]
+    createdAt: DateTime!
   }
 
   type Query {
@@ -88,9 +91,9 @@ const typeDefs = gql`
     ableDistricts(dongIds: [String]): [AbleDistrict]
     allDistricts: [District]!
     filterUsers(
-      openImageChoice: [OpenImageChoiceEnum],
+      openImageChoice: [OpenImageChoiceEnum]
       gender: [GenderEnum]
-      levelOf3Dae: [LevelOf3DaeEnum],
+      levelOf3Dae: [LevelOf3DaeEnum]
       motivations: [MotivationEnum]
       weekdays: [WeekdayEnum]
       districts: [String]
