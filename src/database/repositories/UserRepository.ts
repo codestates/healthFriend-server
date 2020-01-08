@@ -138,4 +138,9 @@ export class UserRepository extends Repository<User> {
   async saveUserInfo(UserInfo: RegisterUserInfo) {
     return this.save(UserInfo);
   }
+
+  async deleteUserByEmail(email: string) {
+    const user = this.create({ email });
+    await this.delete(user);
+  }
 }

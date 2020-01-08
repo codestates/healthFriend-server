@@ -15,8 +15,7 @@ afterAll(async () => {
 describe('register Mutation', () => {
   it('must return a token', async () => {
     const email = 'abcd@gmail.com';
-    const user = getUserRepository().create({ email });
-    await getUserRepository().delete(user);
+    getUserRepository().deleteUserByEmail(email);
     const response = await request(
       process.env.TEST_HOST as string,
       registerMutation(email),
