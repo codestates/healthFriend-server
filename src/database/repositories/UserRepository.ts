@@ -134,4 +134,8 @@ export class UserRepository extends Repository<User> {
     this.save(me);
     return me;
   }
+
+  async saveUserInfo(UserInfo: RegisterUserInfo) {
+    return this.save(UserInfo);
+  }
 }
