@@ -1,9 +1,12 @@
 import { EntityRepository, Repository } from 'typeorm';
 
+import { createToken } from '../../utils/controllToken';
 import {
   DetailedUserInfo,
   RegisterUserInfo,
   UserQueryCondition,
+  LoginInfo,
+  SimpleUserInfo,
 } from '../../types/User.types';
 import { User } from '../entity/User';
 
@@ -142,5 +145,21 @@ export class UserRepository extends Repository<User> {
   async deleteUserByEmail(email: string) {
     const user = this.create({ email });
     await this.delete(user);
+  }
+
+  async login(loginInfo: LoginInfo) {
+    const user = await this.findOne({ where: { email: loginInfo.email } });
+    if (!user) {
+      return null;
+    }
+    if (user.snsId !== loginInfo.password) {
+      return null;
+    }
+    const { id, email, nickname } = user as SimpleUserInfo;
+    if (!id || !email || !nickname) {
+      return null;
+    }
+    const token = createToken({ id, email, nickname });
+    return { token };
   }
 }

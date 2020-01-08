@@ -94,6 +94,7 @@ const typeDefs = gql`
     exerciseAbleDays(input: [WeekdayEnum]): [ExerciseAbleDay]
     ableDistricts(dongIds: [String]): [AbleDistrict]
     allDistricts: [District]!
+    login(email: String, password: String): AuthPayload
     filterUsers(
       openImageChoice: [OpenImageChoiceEnum]
       gender: [GenderEnum]
@@ -113,7 +114,7 @@ const typeDefs = gql`
     deleteFollowers(userId: String!): User
     addFriend(userId: String!): User
     deleteFriend(userId: String!): User
-    registerForTest(email: String!): AuthPayload!
+    registerForTest(email: String!, password: String!): AuthPayload!
     me(
       nickname: String!
       gender: GenderEnum!

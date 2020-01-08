@@ -25,6 +25,7 @@ afterAll(async () => {
 
 const host = process.env.TEST_HOST as string;
 const user1 = 'abc@gmail.com';
+const password = 'abc';
 
 describe('me Query', () => {
   it('no token', async () => {
@@ -33,7 +34,7 @@ describe('me Query', () => {
   });
   it('has token', async () => {
     await getUserRepository().deleteUserByEmail(user1);
-    const response = await request(host, registerMutation(user1));
+    const response = await request(host, registerMutation(user1, password));
     const { token } = response.registerForTest;
     // console.log('RESPONSE', token);
     const result = await axios.post(
@@ -67,7 +68,7 @@ describe('me Mutation', () => {
       messageToFriend: 'Hello',
     };
     await getUserRepository().deleteUserByEmail(user1);
-    const user1Add = await request(host, registerMutation(user1));
+    const user1Add = await request(host, registerMutation(user1, password));
     const { token } = user1Add.registerForTest;
     // console.log(token);
 
