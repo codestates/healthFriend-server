@@ -5,15 +5,16 @@ import connectDB, {
   getExerciseAbleDaysRepository,
   getAbleDistrictsRepository,
   getFriendsRepository,
-} from '..';
+} from '../../database';
 
 import gangnamgu from './districtGangnamgu';
 import yongsangu from './districtYongsangu';
 import songpagu from './districtSongpagu';
-import users from './usersInfo';
+import usersInfo from './usersInfo';
 import admin from './adminInfo';
-import { User } from '../entity/User';
-import { Districts } from '../entity/Districts';
+import { User } from '../../database/entity/User';
+import { Districts } from '../../database/entity/Districts';
+import { RegisterUserInfo } from '../../types/User.types';
 
 const districtInitialData = async () => {
   await getDistrictRepository().saveDongInfos(gangnamgu);
@@ -21,12 +22,12 @@ const districtInitialData = async () => {
   await getDistrictRepository().saveDongInfos(songpagu);
 };
 
-const userInitialData = async () => {
+const userInitialData = async (users: Array<RegisterUserInfo>) => {
   await getUserRepository().saveUsersInfo(users);
 };
 
-const updateUserInfo = async () => {
-  users.forEach(async (m) => {
+const updateUserInfo = async (users: any) => {
+  users.forEach(async (m: any) => {
     const user = (await getUserRepository().findOne({
       where: { email: m.email },
     })) as User;
@@ -41,8 +42,8 @@ const updateUserInfo = async () => {
   });
 };
 
-const motivationInitialData = async () => {
-  users.forEach(async (m) => {
+const motivationInitialData = async (users: any) => {
+  users.forEach(async (m: any) => {
     const user = (await getUserRepository().findOne({
       where: { email: m.email },
     })) as User;
@@ -50,8 +51,8 @@ const motivationInitialData = async () => {
   });
 };
 
-const exerciseAbleDaysInitialData = async () => {
-  users.forEach(async (m) => {
+const exerciseAbleDaysInitialData = async (users: any) => {
+  users.forEach(async (m: any) => {
     const user = (await getUserRepository().findOne({
       where: { email: m.email },
     })) as User;
@@ -59,15 +60,15 @@ const exerciseAbleDaysInitialData = async () => {
   });
 };
 
-const ableDistrictsInitialData = async () => {
-  users.forEach(async (m) => {
+const ableDistrictsInitialData = async (users: any) => {
+  users.forEach(async (m: any) => {
     const user = (await getUserRepository().findOne({
       where: { email: m.email },
     })) as User;
 
-    const dongIds = await Promise.all(
-      m.districts.map(async (d) => {
-        const result: Districts = (await getDistrictRepository().findOne({
+    const dongIds: Array<string> = await Promise.all(
+      m.districts.map(async (d: any) => {
+        const result = (await getDistrictRepository().findOne({
           where: { nameOfDong: d.nameOfDong, idOfGu: d.idOfGu },
         })) as Districts;
         return result.idOfDong;
@@ -114,18 +115,17 @@ const adminInitialData = async () => {
   await getUserRepository().saveUsersInfo(admin);
 };
 
-
-const run = async () => {
+export const run = async (users: any) => {
   await connectDB();
   await districtInitialData();
-  await userInitialData();
-  await updateUserInfo();
-  await motivationInitialData();
-  await exerciseAbleDaysInitialData();
-  await ableDistrictsInitialData();
+  await userInitialData(users);
+  await updateUserInfo(users);
+  await motivationInitialData(users);
+  await exerciseAbleDaysInitialData(users);
+  await ableDistrictsInitialData(users);
   await addFollowingRandomly();
   await addfriendToYgKwon();
   await adminInitialData();
 };
 
-run();
+run(usersInfo);

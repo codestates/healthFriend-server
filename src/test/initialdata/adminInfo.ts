@@ -4,7 +4,7 @@ import {
   OpenImageChoice,
   LevelOf3Dae,
   Role,
-} from '../entity/User';
+} from '../../database/entity/User';
 
 const admin = [
   {

@@ -17,6 +17,31 @@ export const meQuery = `
 }
 `;
 
+export const userQuery = (userId: string) => `
+{
+  user(userId: "${userId}") {
+    id
+    email
+    nickname
+    gender
+    openImageChoice
+    levelOf3Dae
+    messageToFriend
+    motivations {
+      motivation
+    }
+    weekdays {
+      weekday
+    }
+    ableDistricts {
+      district {
+        nameOfDong
+      }
+    }
+  }
+}
+`;
+
 export const meMutation = (arg: DetailedUserInfo) => `
 mutation {
   me(
