@@ -19,7 +19,7 @@ const resolvers = {
       const user: User = await getUserRepository().saveUserInfo(userInfo);
       // console.log('registerForTest: ', user);
       const accessToken = createToken(user);
-      return { token: accessToken };
+      return { token: accessToken, user };
     },
   },
 };

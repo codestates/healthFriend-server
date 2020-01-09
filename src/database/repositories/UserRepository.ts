@@ -157,6 +157,6 @@ export class UserRepository extends Repository<User> {
     }
     // console.log('LOGIN: ', user);
     const token = createToken(user);
-    return { token };
+    return { token, user };
   }
 }

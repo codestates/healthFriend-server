@@ -62,6 +62,11 @@ const typeDefs = gql`
     user: User!
   }
 
+  type AuthPayload {
+    user: User
+    token: String
+  }
+
   scalar DateTime
 
   type User {
@@ -80,10 +85,6 @@ const typeDefs = gql`
     followers: [User]
     friends: [User]
     createdAt: DateTime!
-  }
-
-  type AuthPayload {
-    token: String
   }
 
   type Query {
