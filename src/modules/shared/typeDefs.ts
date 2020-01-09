@@ -88,6 +88,7 @@ const typeDefs = gql`
   }
 
   type Query {
+    test: User
     user(userId: String): User
     users: [User]!
     me: User
