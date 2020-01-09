@@ -1,6 +1,6 @@
 import 'reflect-metadata';
 import express from 'express';
-import { ApolloServer } from 'apollo-server-express';
+import { ApolloServer, ApolloError } from 'apollo-server-express';
 import passport from 'passport';
 import cookieParser from 'cookie-parser';
 import morgan from 'morgan';
@@ -22,7 +22,8 @@ export const startServer = async () => {
       schema,
       context: ({ req }: any) => {
         if (!req.cookies['access-token'] && !req.headers.authorization) {
-          return { userInfo: null };
+          // return { userInfo: null };
+          throw new ApolloError('Token is required.', 'NO_TOKEN');
         }
         let token: string;
         let userInfo: TokenUserInfo;
