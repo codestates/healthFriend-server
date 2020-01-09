@@ -9,6 +9,7 @@ import {
 
 const resolvers = {
   Query: {
+    test: async () => getUserRepository().test(),
     user: async (_: any, args: any) => {
       const { userId } = args;
       return getUserRepository().findByUserId(userId);
