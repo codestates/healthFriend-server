@@ -46,12 +46,9 @@ export const startServer = async () => {
     const corsOption = {
       credentials: true,
       origin:
-        // eslint-disable-next-line no-nested-ternary
         process.env.NODE_ENV === 'production'
-          ? 'https://healthfriend.club'
-          : process.env.NODE_ENV === 'doit'
-            ? 'https://hf2.doitreviews.com'
-            : true,
+          ? ['https://healthfriend.club', 'http://www.healthfriend.club']
+          : true,
     };
     app.use(passport.initialize());
     app.use(cors(corsOption));
