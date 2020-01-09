@@ -2,7 +2,7 @@ import {
   Provider, OpenImageChoice, LevelOf3Dae, Gender, Role,
 } from '../entity/User';
 
-const users = [
+const usersInfo = [
   {
     role: Role.USER,
     email: 'aaa@gmail.com',
@@ -658,4 +658,4 @@ const users = [
   },
 ];
 
-export default users;
+export default usersInfo;
