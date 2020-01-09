@@ -139,7 +139,7 @@ export class UserRepository extends Repository<User> {
       const user = await this.findOne({ id: userId });
       if (user) {
         me.following.push(user);
-        await this.save(me);
+        return await this.save(me);
       }
       return me;
     } catch (error) {
@@ -154,8 +154,7 @@ export class UserRepository extends Repository<User> {
         return null;
       }
       me.following = me.following.filter((f) => f.id !== userId);
-      this.save(me);
-      return me;
+      return await this.save(me);
     } catch (error) {
       throw new ApolloError('Following delete error.', 'SERVER_ERROR');
     }
@@ -177,7 +176,7 @@ export class UserRepository extends Repository<User> {
 
   async saveUserInfo(UserInfo: RegisterUserInfo) {
     try {
-      return this.save(UserInfo);
+      return await this.save(UserInfo);
     } catch (error) {
       throw new ApolloError('User save error.', 'SERVER_ERROR');
     }

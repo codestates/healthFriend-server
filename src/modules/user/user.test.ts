@@ -44,7 +44,9 @@ describe('user Query', () => {
     // await saveDistrict();
     await getUserRepository().deleteUserByEmail(usersInfo[1].email);
     const user = await getUserRepository().saveUserInfo(usersInfo[1]);
-    const expectData = await getUserRepository().findByUserId(user.id) as User;
+    const expectData = (await getUserRepository().findByUserId(
+      user.id,
+    )) as User;
     const response = await request(
       process.env.TEST_HOST as string,
       userQuery(user.id),
@@ -68,5 +70,78 @@ describe('user Query', () => {
         'ableDistricts',
       ]),
     );
+  });
+});
+
+describe('following/followres test', () => {
+  const aaa = usersInfo[0];
+  const bbb = usersInfo[1];
+  const ccc = usersInfo[2];
+
+  it('aaa가 bbb를 following하면 bbb에 aaa가 follower가 된다.', async () => {
+    const userAaa = await getUserRepository().saveUserInfo(aaa);
+    const userBbb = await getUserRepository().saveUserInfo(bbb);
+    const userCcc = await getUserRepository().saveUserInfo(ccc);
+
+    const userAaa1 = (await getUserRepository().followingUser(
+      userAaa.id,
+      userBbb.id,
+    )) as User;
+    // console.log('USER-AAA: ', userAaa);
+    // console.log('USER-AAA1: ', userAaa1);
+    expect(userAaa1.following).toHaveLength(1);
+    expect(userAaa1.following[0].email).toEqual('bbb@gmail.com');
+    const userAaa2 = (await getUserRepository().followingUser(
+      userAaa.id,
+      userCcc.id,
+    )) as User;
+    // console.log('USER-AAA2: ', userAaa2);
+    expect(userAaa2.following).toHaveLength(2);
+    expect(userAaa2.following.map((f) => f.email)).toEqual([
+      'bbb@gmail.com',
+      'ccc@gmail.com',
+    ]);
+    const userBbb1 = (await getUserRepository().findByUserId(
+      userBbb.id,
+    )) as User;
+    expect(userBbb1.followers[0].email).toEqual('aaa@gmail.com');
+    const userCcc1 = (await getUserRepository().findByUserId(
+      userCcc.id,
+    )) as User;
+    expect(userCcc1.followers[0].email).toEqual('aaa@gmail.com');
+  });
+
+  it('deleteFollowing test', async () => {
+    // deleteFollowing test
+    const userAaa = await getUserRepository().saveUserInfo(aaa);
+    const userBbb = await getUserRepository().saveUserInfo(bbb);
+    const userCcc = await getUserRepository().saveUserInfo(ccc);
+
+    await getUserRepository().followingUser(userAaa.id, userBbb.id);
+    await getUserRepository().followingUser(userAaa.id, userCcc.id);
+    // console.log(userAaa2);
+    const result = (await getUserRepository().deleteFollowing(
+      userAaa.id,
+      userCcc.id,
+    )) as User;
+    // console.log('USER-AAA3: ', result);
+    expect(result.following).toHaveLength(1);
+    expect(result.following[0].email).toEqual('bbb@gmail.com');
+
+    const result2 = (await getUserRepository().deleteFollowing(
+      userAaa.id,
+      userBbb.id,
+    )) as User;
+    // console.log('USER-AAA4: ', result2);
+    expect(result2.following).toHaveLength(0);
+
+    const userBbb1 = (await getUserRepository().findByUserId(
+      userBbb.id,
+    )) as User;
+    expect(userBbb1.followers).toHaveLength(0);
+    const userCcc1 = (await getUserRepository().findByUserId(
+      userCcc.id,
+    )) as User;
+    expect(userCcc1.followers).toHaveLength(0);
   });
 });
