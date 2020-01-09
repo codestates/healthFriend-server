@@ -45,6 +45,6 @@
       "prod": "ts-node src/index.ts",
       "doit": "NODE_ENV=doit pm2 start ts-node -- src/index.ts && pm2 monit",
       "start": "NODE_ENV=production pm2 start ts-node -- src/index.ts && pm2 monit",
-      "data": "NODE_ENV=development ts-node src/database/initialdata/insertData.ts"
+      "data": "NODE_ENV=development ts-node src/test/initialdata/insertData.ts"
    }
 }

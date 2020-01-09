@@ -5,15 +5,15 @@ import connectDB, {
   getExerciseAbleDaysRepository,
   getAbleDistrictsRepository,
   getFriendsRepository,
-} from '..';
+} from '../../database';
 
 import gangnamgu from './districtGangnamgu';
 import yongsangu from './districtYongsangu';
 import songpagu from './districtSongpagu';
 import usersInfo from './usersInfo';
 import admin from './adminInfo';
-import { User } from '../entity/User';
-import { Districts } from '../entity/Districts';
+import { User } from '../../database/entity/User';
+import { Districts } from '../../database/entity/Districts';
 import { RegisterUserInfo } from '../../types/User.types';
 
 const districtInitialData = async () => {

@@ -1,6 +1,6 @@
 import {
   Provider, OpenImageChoice, LevelOf3Dae, Gender, Role,
-} from '../entity/User';
+} from '../../database/entity/User';
 
 const usersInfo = [
   {
