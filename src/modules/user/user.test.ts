@@ -58,7 +58,7 @@ describe('user Query', () => {
     // console.log('EXPECT: ', expectData);
 
     const loginResponse = await request(
-      process.env.TEST_HOST as string,
+      host,
       loginQuery(usersInfo[1].email, usersInfo[1].snsId),
     );
     const { token } = loginResponse.login;

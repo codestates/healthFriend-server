@@ -1,16 +1,38 @@
 import { AuthenticationError } from 'apollo-server-express';
+import Dataloader from 'dataloader';
+
 import { UserQueryCondition, LoginInfo } from '../../types/User.types';
 import {
   getUserRepository,
-  getMotivationRepository,
   getExerciseAbleDaysRepository,
   getAbleDistrictsRepository,
   getFriendsRepository,
 } from '../../database';
+import { Motivations } from '../../database/entity/Motivations';
 
 interface UserId {
   userId: string;
 }
+
+type BatchMotivations = (
+  userIds: readonly string[],
+) => Promise<Motivations[][]>;
+
+const batchMotivations: BatchMotivations = async (
+  userIds: readonly string[],
+) => {
+  const users = await getUserRepository()
+    .createQueryBuilder('user')
+    .leftJoinAndSelect('user.motivations', 'motivations')
+    .where('user.id IN (:...userIds)', { userIds })
+    .getMany();
+  // console.log(users);
+  return users.map((u) => u.motivations);
+};
+
+const motivationLoader = new Dataloader<string, Motivations[]>(
+  batchMotivations,
+);
 
 const resolvers = {
   Query: {
@@ -43,8 +65,7 @@ const resolvers = {
   },
 
   User: {
-    motivations: async (parent: any) =>
-      getMotivationRepository().findByUserId(parent.id),
+    motivations: async (user: any) => motivationLoader.load(user.id),
 
     weekdays: async (parent: any) =>
       getExerciseAbleDaysRepository().findByUserId(parent.id),
