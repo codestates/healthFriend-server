@@ -21,6 +21,7 @@ export const userQuery = (userId: string) => `
 {
   user(userId: "${userId}") {
     id
+    role
     email
     nickname
     gender
