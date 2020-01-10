@@ -22,16 +22,16 @@ yarn
 
 ### 3. TypeORM config 수정
 
-파일명 변경: ormconfig-sample.json -> ormconfig.json
-ormconfig.json의 FIXME를 환경에 맞게 적절히 수정
-development, test, production의 database는 각각 다른 이름을 설정하는 것을 권장함
-**수동으로 DB에 접속하여 각 database를 생성해야 함**
-테이블은 자동 생성됨
+- 파일명 변경: ormconfig-sample.json -> ormconfig.json
+- ormconfig.json의 FIXME를 환경에 맞게 적절히 수정
+- development, test, production의 database는 각각 다른 이름을 설정하는 것을 권장함
+- **수동으로 DB에 접속하여 각 database를 생성해야 함**
+- 테이블은 자동 생성됨
 
 ### 4. dotenv 파일 수정
 
-파일명 변경: dotenv-sample -> .env
-.env의 내용을 적절히 수정
+- 파일명 변경: dotenv-sample -> .env
+- .env의 내용을 적절히 수정
 
 ### 5. 실행
 
@@ -45,7 +45,7 @@ yarn start
 yarn data
 ```
 
-development database에 저장됨
+- development database에 저장됨
 
 ### test
 
@@ -53,7 +53,7 @@ development database에 저장됨
 yarn test
 ```
 
-test database에서 동작함
+- test database에서 동작함
 
 ## tech stack
 
