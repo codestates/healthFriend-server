@@ -1,5 +1,8 @@
 import { request } from 'graphql-request';
 import { Connection } from 'typeorm';
+import { AuthenticationError } from 'apollo-server-express';
+import axios from 'axios';
+
 import { User } from '../../database/entity/User';
 import connectDB, { getUserRepository } from '../../database';
 import { getUserInfoFromToken } from '../../utils/controllToken';
@@ -9,8 +12,6 @@ import {
   userQuery,
 } from '../../test/graphql.schema';
 import usersInfo from '../../test/initialdata/usersInfo';
-// import { TestUser, saveDistrict } from '../../test/initialdata/insertData';
-// import { saveDistrict } from '../../test/initialdata/insertData';
 
 let conn: Connection;
 beforeAll(async () => {
@@ -20,19 +21,15 @@ afterAll(async () => {
   await conn.close();
 });
 
+const host = process.env.TEST_HOST as string;
+
 describe('login Query', () => {
   it('must return a token', async () => {
     const email = 'abcd@gmail.com';
     const password = 'abcd';
-    getUserRepository().deleteUserByEmail(email);
-    await request(
-      process.env.TEST_HOST as string,
-      registerMutation(email, password),
-    );
-    const response = await request(
-      process.env.TEST_HOST as string,
-      loginQuery(email, password),
-    );
+    await getUserRepository().deleteUserByEmail(email);
+    await request(host, registerMutation(email, password));
+    const response = await request(host, loginQuery(email, password));
     // console.log(response);
     const userInfo = getUserInfoFromToken(response.login.token);
     expect(userInfo.email).toEqual(email);
@@ -40,25 +37,46 @@ describe('login Query', () => {
 });
 
 describe('user Query', () => {
-  it('return a user info', async () => {
-    // await saveDistrict();
+  it('토큰이 없으면 인증 에러 발생', async () => {
+    const email = 'abcd@gmail.com';
+    const password = 'abcd';
+    await getUserRepository().deleteUserByEmail(email);
+    await request(host, registerMutation(email, password));
+    const user = (await getUserRepository().findOne({ email })) as User;
+    expect(async () =>
+      (await request(host, userQuery(user.id))).toThrow(AuthenticationError));
+  });
+
+  it('token이 있다면 user info 리턴', async () => {
     await getUserRepository().deleteUserByEmail(usersInfo[1].email);
     const user = await getUserRepository().saveUserInfo(usersInfo[1]);
+    // console.log('USER: ', user);
+
     const expectData = (await getUserRepository().findByUserId(
       user.id,
     )) as User;
-    const response = await request(
+    // console.log('EXPECT: ', expectData);
+
+    const loginResponse = await request(
       process.env.TEST_HOST as string,
-      userQuery(user.id),
+      loginQuery(usersInfo[1].email, usersInfo[1].snsId),
     );
-    // console.log(expectData);
-    // console.log('RESPONSE: ', response);
-    expect(response.user.email).toEqual(expectData.email);
-    expect(response.user.nickname).toEqual(expectData.nickname);
-    expect(response.user.gender).toEqual(expectData.gender);
-    expect(Object.keys(response.user)).toEqual(
+    const { token } = loginResponse.login;
+
+    const userResponse = await axios.post(
+      host,
+      { query: userQuery(user.id) },
+      { headers: { Authorization: `Bearer ${token}` } },
+    );
+    // console.log('RESULT : ', userResponse.data.data.user);
+    const result = userResponse.data.data.user;
+    expect(result.email).toEqual(expectData.email);
+    expect(result.nickname).toEqual(expectData.nickname);
+    expect(result.gender).toEqual(expectData.gender);
+    expect(Object.keys(result)).toEqual(
       expect.arrayContaining([
         'id',
+        'role',
         'email',
         'nickname',
         'gender',
