@@ -15,10 +15,20 @@ interface UserId {
 const resolvers = {
   Query: {
     test: async () => getUserRepository().test(),
-    user: async (_: any, args: UserId) =>
-      getUserRepository().findByUserId(args.userId),
-    users: async () => getUserRepository().getAllUser(),
-    filterUsers: async (_: any, args: any) => {
+    user: async (_: any, args: UserId, { userInfo }: any) => {
+      if (!userInfo) throw new AuthenticationError('Not authenticated.');
+      return getUserRepository().findByUserId(args.userId);
+    },
+    users: async (_: any, __: any, { userInfo }: any) => {
+      if (!userInfo) throw new AuthenticationError('Not authenticated.');
+      return getUserRepository().getAllUser();
+    },
+    filterUsers: async (
+      _: any,
+      args: UserQueryCondition,
+      { userInfo }: any,
+    ) => {
+      if (!userInfo) throw new AuthenticationError('Not authenticated.');
       const whereObject: UserQueryCondition = {
         gender: args.gender || [],
         openImageChoice: args.openImageChoice || [],
@@ -49,38 +59,23 @@ const resolvers = {
   Mutation: {
     followingUser: async (_: any, args: UserId, { userInfo }: any) => {
       if (!userInfo) throw new AuthenticationError('Not authenticated.');
-      return getUserRepository().followingUser(
-        userInfo.id,
-        args.userId,
-      );
+      return getUserRepository().followingUser(userInfo.id, args.userId);
     },
     deleteFollowing: async (_: any, args: UserId, { userInfo }: any) => {
       if (!userInfo) throw new AuthenticationError('Not authenticated.');
-      return getUserRepository().deleteFollowing(
-        userInfo.id,
-        args.userId,
-      );
+      return getUserRepository().deleteFollowing(userInfo.id, args.userId);
     },
     deleteFollowers: async (_: any, args: UserId, { userInfo }: any) => {
       if (!userInfo) throw new AuthenticationError('Not authenticated.');
-      return getUserRepository().deleteFollowers(
-        userInfo.id,
-        args.userId,
-      );
+      return getUserRepository().deleteFollowers(userInfo.id, args.userId);
     },
     addFriend: async (_: any, args: UserId, { userInfo }: any) => {
       if (!userInfo) throw new AuthenticationError('Not authenticated.');
-      return getFriendsRepository().addFriend(
-        userInfo.id,
-        args.userId,
-      );
+      return getFriendsRepository().addFriend(userInfo.id, args.userId);
     },
     deleteFriend: async (_: any, args: UserId, { userInfo }: any) => {
       if (!userInfo) throw new AuthenticationError('Not authenticated.');
-      return getFriendsRepository().deleteFriend(
-        userInfo.id,
-        args.userId,
-      );
+      return getFriendsRepository().deleteFriend(userInfo.id, args.userId);
     },
   },
 };

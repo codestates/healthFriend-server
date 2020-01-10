@@ -1,3 +1,4 @@
+import { AuthenticationError } from 'apollo-server-express';
 import { getMotivationRepository } from '../../database';
 
 const resolvers = {
@@ -9,9 +10,8 @@ const resolvers = {
   },
 
   Query: {
-    // motivation: async (_: any, args: any) =>
-    //   getMotivationRepository().findByUserId(args.userId),
-    motivations: async (_: any, args: any) => {
+    motivations: async (_: any, args: any, { userInfo }: any) => {
+      if (!userInfo) throw new AuthenticationError('Not authenticated.');
       if (!args.input) {
         return getMotivationRepository().find();
       }
@@ -20,12 +20,10 @@ const resolvers = {
   },
 
   Mutation: {
-    setMotivation: async (_: any, args: any, context: any) => {
-      if (!context.userInfo && !context.userInfo.id) {
-        return null;
-      }
+    setMotivation: async (_: any, args: any, { userInfo }: any) => {
+      if (!userInfo) throw new AuthenticationError('Not authenticated.');
       const motivations = await getMotivationRepository().saveByUserId(
-        context.userInfo.id,
+        userInfo.id,
         args.input,
       );
       return motivations;
