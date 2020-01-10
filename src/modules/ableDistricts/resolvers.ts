@@ -1,10 +1,12 @@
+import { AuthenticationError } from 'apollo-server-express';
 import {
   getAbleDistrictsRepository,
 } from '../../database';
 
 const resolvers = {
   Query: {
-    ableDistricts: async (_: any, args: any) => {
+    ableDistricts: async (_: any, args: any, { userInfo }: any) => {
+      if (!userInfo) throw new AuthenticationError('Not authenticated.');
       if (!args.dongIds) {
         return getAbleDistrictsRepository().find();
       }
@@ -21,12 +23,10 @@ const resolvers = {
   },
 
   Mutation: {
-    setAbleDistrict: async (_: any, args: any, context:any) => {
-      if (!context.userInfo && !context.userInfo.id) {
-        return null;
-      }
+    setAbleDistrict: async (_: any, args: any, { userInfo }: any) => {
+      if (!userInfo) throw new AuthenticationError('Not authenticated.');
       const ableDistricts = await getAbleDistrictsRepository().saveByDongId(
-        context.userInfo.id,
+        userInfo.id,
         args.dongIds,
       );
       return ableDistricts;
