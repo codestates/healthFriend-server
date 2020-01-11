@@ -4,11 +4,11 @@ import Dataloader from 'dataloader';
 import { UserQueryCondition, LoginInfo } from '../../types/User.types';
 import {
   getUserRepository,
-  getExerciseAbleDaysRepository,
   getAbleDistrictsRepository,
   getFriendsRepository,
 } from '../../database';
 import { Motivations } from '../../database/entity/Motivations';
+import { ExerciseAbleDays } from '../../database/entity/ExerciseAbleDays';
 
 interface UserId {
   userId: string;
@@ -16,6 +16,11 @@ interface UserId {
 
 const motivationLoader = new Dataloader<string, Motivations[]>(
   (userIds: readonly string[]) => getUserRepository().batchMotivations(userIds),
+);
+
+const weekdaysLoader = new Dataloader<string, ExerciseAbleDays[]>(
+  (userIds: readonly string[]) =>
+    getUserRepository().batchExerciseAbleDays(userIds),
 );
 
 const resolvers = {
@@ -50,9 +55,10 @@ const resolvers = {
 
   User: {
     motivations: async (user: any) => motivationLoader.load(user.id),
+    // getMotivationRepository().findByUserId(user.id),
 
-    weekdays: async (parent: any) =>
-      getExerciseAbleDaysRepository().findByUserId(parent.id),
+    weekdays: async (user: any) => weekdaysLoader.load(user.id),
+    // getExerciseAbleDaysRepository().findByUserId(user.id),
 
     ableDistricts: async (parent: any) =>
       getAbleDistrictsRepository().findByUserId(parent.id),

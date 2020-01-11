@@ -9,6 +9,8 @@ import {
   LoginInfo,
 } from '../../types/User.types';
 import { User } from '../entity/User';
+import { Motivations } from '../entity/Motivations';
+import { ExerciseAbleDays } from '../entity/ExerciseAbleDays';
 
 @EntityRepository(User)
 export class UserRepository extends Repository<User> {
@@ -212,7 +214,23 @@ export class UserRepository extends Repository<User> {
       .leftJoinAndSelect('user.motivations', 'motivations')
       .where('user.id IN (:...userIds)', { userIds })
       .getMany();
-    // console.log(users);
-    return users.map((u) => u.motivations);
+    const userMap: { [key: string]: Motivations[] } = {};
+    users.forEach((u) => {
+      userMap[u.id] = u.motivations;
+    });
+    const result = userIds.map((id) => userMap[id]);
+    return result;
+  }
+
+  async batchExerciseAbleDays(userIds: readonly string[]) {
+    const users = await this.createQueryBuilder('user')
+      .leftJoinAndSelect('user.ableDays', 'ableDays')
+      .where('user.id IN (:...userIds)', { userIds })
+      .getMany();
+    const userMap: { [key: string]: ExerciseAbleDays[] } = {};
+    users.forEach((u) => {
+      userMap[u.id] = u.ableDays;
+    });
+    return userIds.map((id) => userMap[id]);
   }
 }
