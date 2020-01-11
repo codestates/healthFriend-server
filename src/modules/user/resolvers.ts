@@ -14,24 +14,8 @@ interface UserId {
   userId: string;
 }
 
-type BatchMotivations = (
-  userIds: readonly string[],
-) => Promise<Motivations[][]>;
-
-const batchMotivations: BatchMotivations = async (
-  userIds: readonly string[],
-) => {
-  const users = await getUserRepository()
-    .createQueryBuilder('user')
-    .leftJoinAndSelect('user.motivations', 'motivations')
-    .where('user.id IN (:...userIds)', { userIds })
-    .getMany();
-  // console.log(users);
-  return users.map((u) => u.motivations);
-};
-
 const motivationLoader = new Dataloader<string, Motivations[]>(
-  batchMotivations,
+  (userIds: readonly string[]) => getUserRepository().batchMotivations(userIds),
 );
 
 const resolvers = {
