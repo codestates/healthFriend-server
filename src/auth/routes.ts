@@ -20,7 +20,7 @@ router.get(
     const accessToken = createToken(user as TokenUserInfo);
     if (!accessToken) return res.status(401).send('Login Error.');
 
-    const client = new StreamChat('', '{{ chat_api_secret }}');
+    const client = new StreamChat('', process.env.STREAM_CHAT_SECRET);
     const streamChatToken = client.createToken(user.id);
 
     res.cookie('access-token', accessToken, {
