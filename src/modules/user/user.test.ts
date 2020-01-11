@@ -4,12 +4,16 @@ import { AuthenticationError } from 'apollo-server-express';
 import axios from 'axios';
 
 import { User } from '../../database/entity/User';
-import connectDB, { getUserRepository } from '../../database';
+import connectDB, {
+  getUserRepository,
+  // getMotivationRepository,
+} from '../../database';
 import { getUserInfoFromToken } from '../../utils/controllToken';
 import {
   registerMutation,
   loginQuery,
   userQuery,
+  motivationMutation,
 } from '../../test/graphql.schema';
 import usersInfo from '../../test/initialdata/usersInfo';
 
@@ -161,5 +165,31 @@ describe('following/followres test', () => {
       userCcc.id,
     )) as User;
     expect(userCcc1.followers).toHaveLength(0);
+  });
+});
+
+describe('user - motivations test', () => {
+  it('motivations를 저장 후 user query로 조회할 수 있다.', async () => {
+    await getUserRepository().deleteUserByEmail(usersInfo[2].email);
+    const user = (await getUserRepository().saveUserInfo(usersInfo[2])) as User;
+    const loginResponse = await request(
+      host,
+      loginQuery(usersInfo[2].email, usersInfo[2].snsId),
+    );
+    const { token } = loginResponse.login;
+    await axios.post(
+      host,
+      { query: motivationMutation(usersInfo[2].motivations) },
+      { headers: { Authorization: `Bearer ${token}` } },
+    );
+    const userResponse = await axios.post(
+      host,
+      { query: userQuery(user.id) },
+      { headers: { Authorization: `Bearer ${token}` } },
+    );
+    const result = userResponse.data.data.user.motivations.map(
+      (m: any) => m.motivation,
+    );
+    expect(result.sort()).toEqual(usersInfo[2].motivations.sort());
   });
 });

@@ -70,3 +70,15 @@ export const loginQuery = (email: string, password: string) => `
   }
 }
 `;
+
+export const motivationMutation = (motivations: string[]) => `
+mutation {
+  setMotivation(input: [${motivations}]) {
+    id
+    motivation
+    owner {
+      nickname
+    }
+  }
+}
+`;

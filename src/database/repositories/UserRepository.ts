@@ -78,9 +78,7 @@ export class UserRepository extends Repository<User> {
         .innerJoinAndSelect('user.ableDays', 'ableDay')
         .innerJoinAndSelect('user.ableDistricts', 'district')
         .andWhere(
-          whereObject.gender.length
-            ? 'user.gender IN (:...gender)'
-            : '1=1',
+          whereObject.gender.length ? 'user.gender IN (:...gender)' : '1=1',
           { gender: whereObject.gender },
         )
         .andWhere(
@@ -126,13 +124,13 @@ export class UserRepository extends Repository<User> {
 
       const me = await this.findByUserId(meId);
       if (!me) {
-      // console.log('FollowingUser - Not exist ME!!!');
+        // console.log('FollowingUser - Not exist ME!!!');
         return null;
       }
 
       const followingIds: Array<string> = me.following.map((f) => f.id);
       if (followingIds.includes(userId)) {
-      // console.log('FollowingUser - alreay exist: ', me);
+        // console.log('FollowingUser - alreay exist: ', me);
         return me;
       }
 
@@ -207,5 +205,14 @@ export class UserRepository extends Repository<User> {
     } catch (error) {
       throw new ApolloError('User login error.', 'SERVER_ERROR');
     }
+  }
+
+  async batchMotivations(userIds: readonly string[]) {
+    const users = await this.createQueryBuilder('user')
+      .leftJoinAndSelect('user.motivations', 'motivations')
+      .where('user.id IN (:...userIds)', { userIds })
+      .getMany();
+    // console.log(users);
+    return users.map((u) => u.motivations);
   }
 }
