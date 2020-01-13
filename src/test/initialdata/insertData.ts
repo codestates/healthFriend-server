@@ -80,13 +80,17 @@ const ableDistrictsInitialData = async (users: any) => {
 };
 
 const addFollowingRandomly = async () => {
-  const savedUsers = await getUserRepository().find();
-  savedUsers.forEach((u) => {
+  const savedUsers = await getUserRepository().find(
+    { relations: ['following', 'followers'] },
+  );
+  savedUsers.forEach(async (u) => {
     const followingNumbers = Array.from({ length: 3 }, () =>
       Math.floor(Math.random() * savedUsers.length));
-    followingNumbers.forEach(async (n) => {
-      await getUserRepository().followingUser(u.id, savedUsers[n].id);
-    });
+    const following = followingNumbers.map((f) => savedUsers[f]);
+    const filtered = following.filter((f) => u.id !== f.id);
+    // eslint-disable-next-line no-param-reassign
+    u.following = filtered;
+    await getUserRepository().save(u);
   });
 };
 
