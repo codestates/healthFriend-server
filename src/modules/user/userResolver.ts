@@ -23,7 +23,7 @@ const weekdaysLoader = new Dataloader<string, ExerciseAbleDays[]>(
     getUserRepository().batchExerciseAbleDays(userIds),
 );
 
-const resolvers = {
+const userResolver = {
   Query: {
     test: async () => getUserRepository().test(),
     user: async (_: any, args: UserId, { userInfo }: any) => {
@@ -91,4 +91,4 @@ const resolvers = {
   },
 };
 
-export default resolvers;
+export { userResolver };

@@ -1,0 +1,1 @@
+export { registerResolver } from './registerResolver';

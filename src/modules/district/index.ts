@@ -1,0 +1,1 @@
+export { districtResolver } from './districtResolver';

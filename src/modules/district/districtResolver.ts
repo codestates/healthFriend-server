@@ -1,7 +1,7 @@
 import { AuthenticationError } from 'apollo-server-express';
 import { getDistrictRepository } from '../../database';
 
-const resolvers = {
+const districtResolver = {
   Query: {
     allDistricts: async (_: any, __: any, { userInfo }: any) => {
       if (!userInfo) throw new AuthenticationError('Not authenticated.');
@@ -10,4 +10,4 @@ const resolvers = {
   },
 };
 
-export default resolvers;
+export { districtResolver };

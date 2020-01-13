@@ -1,7 +1,7 @@
 import { AuthenticationError } from 'apollo-server-express';
 import { getMotivationRepository } from '../../database';
 
-const resolvers = {
+const motivationResolver = {
   MotivationEnum: {
     WEIGHT_INCREASE: 'WEIGHT_INCREASE',
     WEIGHT_LOSS: 'WEIGHT_LOSS',
@@ -36,4 +36,4 @@ const resolvers = {
   },
 };
 
-export default resolvers;
+export { motivationResolver };

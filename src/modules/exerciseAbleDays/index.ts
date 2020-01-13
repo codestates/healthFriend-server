@@ -1,0 +1,1 @@
+export { exerciseAbleDaysResolver } from './exerciseAbleDaysResolver';
