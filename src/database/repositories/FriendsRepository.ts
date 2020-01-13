@@ -47,9 +47,7 @@ export class FriendsRepository extends Repository<Friends> {
     // follow, following에서 삭제
     await this.save({ me, friend });
     await this.save({ me: friend, friend: me });
-    await getUserRepository().deleteFollowers(meId, friendId);
-    const newMe = getUserRepository().findByUserId(meId);
-    return newMe;
+    return getUserRepository().deleteFollowers(meId, friendId);
   }
 
   async deleteFriend(meId: string, friendId: string) {
