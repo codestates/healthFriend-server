@@ -111,8 +111,14 @@ const addfriendToYgKwon = async () => {
     ],
   });
   console.log(friends);
-  friends.forEach(async (f) =>
-    getFriendsRepository().testAddFriend(me.id, f.id));
+  // friends.forEach(async (f) =>
+  //   getFriendsRepository().addFriend(me.id, f.id));
+  await getUserRepository().followingUser(friends[0].id, me.id);
+  await getUserRepository().followingUser(friends[1].id, me.id);
+  await getUserRepository().followingUser(friends[2].id, me.id);
+  await getFriendsRepository().addFriend(me.id, friends[0].id);
+  await getFriendsRepository().addFriend(me.id, friends[1].id);
+  await getFriendsRepository().addFriend(me.id, friends[2].id);
 };
 
 const adminInitialData = async () => {
