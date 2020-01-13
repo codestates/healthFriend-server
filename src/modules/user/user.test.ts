@@ -6,6 +6,7 @@ import axios from 'axios';
 import { User } from '../../database/entity/User';
 import connectDB, {
   getUserRepository,
+  getFriendsRepository,
   // getMotivationRepository,
 } from '../../database';
 import { getUserInfoFromToken } from '../../utils/controllToken';
@@ -191,5 +192,61 @@ describe('user - motivations test', () => {
       (m: any) => m.motivation,
     );
     expect(result.sort()).toEqual(usersInfo[2].motivations.sort());
+  });
+});
+
+describe('addFriend test', () => {
+  const aaa = usersInfo[6];
+  const bbb = usersInfo[7];
+  const ccc = usersInfo[8];
+  // const ddd = usersInfo[3];
+  // const eee = usersInfo[4];
+
+  it('aaa가 bbb를 following하면 bbb에 aaa가 addFriend한다.', async () => {
+    const userAaa = await getUserRepository().saveUserInfo(aaa);
+    const userBbb = await getUserRepository().saveUserInfo(bbb);
+    const userCcc = await getUserRepository().saveUserInfo(ccc);
+
+    // following 1개
+    const userAaa1 = (await getUserRepository().followingUser(
+      userAaa.id,
+      userBbb.id,
+    )) as User;
+    expect(userAaa1.following).toHaveLength(1);
+    expect(userAaa1.following[0].email).toEqual(userBbb.email);
+
+    // following 2개
+    const userAaa2 = (await getUserRepository().followingUser(
+      userAaa.id,
+      userCcc.id,
+    )) as User;
+    // console.log('USER-AAA2: ', userAaa2);
+    expect(userAaa2.following).toHaveLength(2);
+    expect(userAaa2.following.map((f) => f.email)).toEqual([
+      userBbb.email,
+      userCcc.email,
+    ]);
+
+    // userBbb가 userAaa를 친구 추가
+    const userBbb1 = await getFriendsRepository().addFriend(
+      userBbb.id,
+      userAaa.id,
+    ) as User;
+    const friends = await getFriendsRepository().findByUserId(userBbb.id);
+    console.log(friends);
+    expect(friends.map((f) => f.id)).toEqual([userAaa.id]);
+
+    // 친구 추가가 성공하면 follower에서 userAaa는 삭제된다.
+    console.log(userBbb1);
+    expect(userBbb1.followers.map((f) => f.id)).not.toEqual(
+      expect.arrayContaining([userAaa.id]),
+    );
+
+    // const userAaa3 = await getUserRepository().findByUserId(userAaa.id);
+    // console.log(userAaa3);
+    // const userCcc1 = (await getUserRepository().findByUserId(
+    //   userCcc.id,
+    // )) as User;
+    // expect(userCcc1.followers[0].email).toEqual('aaa@gmail.com');
   });
 });
