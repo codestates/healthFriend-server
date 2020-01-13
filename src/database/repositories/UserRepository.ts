@@ -167,8 +167,7 @@ export class UserRepository extends Repository<User> {
         return null;
       }
       me.followers = me.followers.filter((f) => f.id !== userId);
-      this.save(me);
-      return me;
+      return await this.save(me);
     } catch (error) {
       throw new ApolloError('Follow delete error.', 'SERVER_ERROR');
     }
