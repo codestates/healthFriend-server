@@ -5,11 +5,14 @@ import passport from 'passport';
 import cookieParser from 'cookie-parser';
 import morgan from 'morgan';
 import cors from 'cors';
+import { GraphQLSchema } from 'graphql';
+import { mergeSchemas } from 'graphql-tools';
 
+import schemas from './schema';
+import resolvers from './resolvers';
 import connectDB from './database';
 import authRouter from './auth/routes';
 import passportConfig from './auth';
-import schema from './schema';
 import { getUserInfoFromToken } from './utils/controllToken';
 import { TokenUserInfo } from './types/User.types';
 
@@ -17,6 +20,11 @@ export const startServer = async () => {
   try {
     await connectDB();
     passportConfig();
+
+    const schema: GraphQLSchema = mergeSchemas({
+      schemas,
+      resolvers,
+    });
 
     const server = new ApolloServer({
       schema,

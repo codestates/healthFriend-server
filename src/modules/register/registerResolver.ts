@@ -6,7 +6,7 @@ import {
   LoginInfo,
 } from '../../types/User.types';
 
-const resolvers = {
+const registerResolver = {
   Mutation: {
     registerForTest: async (_: any, args: LoginInfo) => {
       const userInfo: RegisterUserInfo = {
@@ -24,4 +24,4 @@ const resolvers = {
   },
 };
 
-export default resolvers;
+export { registerResolver };

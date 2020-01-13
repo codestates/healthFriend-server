@@ -1,4 +1,8 @@
-import { gql } from 'apollo-server-express';
+import {
+  gql,
+  makeExecutableSchema,
+} from 'apollo-server-express';
+import { GraphQLSchema } from 'graphql';
 
 const typeDefs = gql`
   enum GenderEnum {
@@ -128,4 +132,6 @@ const typeDefs = gql`
   }
 `;
 
-export default typeDefs;
+export const schema: GraphQLSchema = makeExecutableSchema({
+  typeDefs: [typeDefs],
+});

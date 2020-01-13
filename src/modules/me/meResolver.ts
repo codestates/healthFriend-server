@@ -5,7 +5,7 @@ import {
   // getMotivationRepository,
 } from '../../database';
 
-const resolvers = {
+const meResolver = {
   GenderEnum: {
     MALE: 'MALE',
     FEMALE: 'FEMALE',
@@ -52,4 +52,4 @@ const resolvers = {
   },
 };
 
-export default resolvers;
+export { meResolver };

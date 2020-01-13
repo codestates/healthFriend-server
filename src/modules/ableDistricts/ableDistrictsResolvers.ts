@@ -3,7 +3,7 @@ import {
   getAbleDistrictsRepository,
 } from '../../database';
 
-const resolvers = {
+const ableDistrictsResolvers = {
   Query: {
     ableDistricts: async (_: any, args: any, { userInfo }: any) => {
       if (!userInfo) throw new AuthenticationError('Not authenticated.');
@@ -34,4 +34,4 @@ const resolvers = {
   },
 };
 
-export default resolvers;
+export { ableDistrictsResolvers };

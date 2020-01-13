@@ -1,7 +1,7 @@
 import { AuthenticationError } from 'apollo-server-express';
 import { getExerciseAbleDaysRepository } from '../../database';
 
-const resolvers = {
+const exerciseAbleDaysResolver = {
   WeekdayEnum: {
     MONDAY: 'MONDAY',
     TUESDAY: 'TUESDAY',
@@ -39,4 +39,4 @@ const resolvers = {
   },
 };
 
-export default resolvers;
+export { exerciseAbleDaysResolver };
