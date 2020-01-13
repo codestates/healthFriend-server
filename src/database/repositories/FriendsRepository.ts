@@ -58,21 +58,4 @@ export class FriendsRepository extends Repository<Friends> {
     const newMe = getUserRepository().findByUserId(meId);
     return newMe;
   }
-
-  async testAddFriend(meId: string, friendId: string) {
-    const me = await getUserRepository().findByUserId(meId);
-    if (!me) {
-      return null;
-    }
-    if (await this.isFriend(meId, friendId)) {
-      // console.log('Add friend - aleady exist: ', me);
-      return me;
-    }
-    const friend = await getUserRepository().findOne({ id: friendId });
-    await this.save({ me, friend });
-    await this.save({ me: friend, friend: me });
-    await getUserRepository().deleteFollowers(meId, friendId);
-    const newMe = getUserRepository().findByUserId(meId);
-    return newMe;
-  }
 }
