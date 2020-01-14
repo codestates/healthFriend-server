@@ -13,9 +13,7 @@ export default () => {
         // eslint-disable-next-line no-nested-ternary
         callbackURL: process.env.NODE_ENV === 'production'
           ? 'https://api.healthfriend.club/auth/google/callback'
-          : process.env.NODE_ENV === 'doit'
-            ? 'https://hfapi.doitreviews.com/auth/google/callback'
-            : 'http://localhost:4000/auth/google/callback',
+          : 'http://localhost:4000/auth/google/callback',
       },
       async (_, __, profile, cb) => {
         try {
