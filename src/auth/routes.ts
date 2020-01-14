@@ -34,9 +34,7 @@ router.get(
     // eslint-disable-next-line no-nested-ternary
     const redirectUrl = process.env.NODE_ENV === 'production'
       ? 'https://healthfriend.club'
-      : process.env.NODE_ENV === 'doit'
-        ? 'https://hf2.doitreviews.com'
-        : 'http://localhost:3000';
+      : 'http://localhost:3000';
     return res.status(200).redirect(redirectUrl);
   },
 );
