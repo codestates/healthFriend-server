@@ -54,7 +54,7 @@ export const startServer = async () => {
       credentials: true,
       origin:
         process.env.NODE_ENV === 'production'
-          ? ['https://healthfriend.club', 'http://www.adminhealthfriend.club']
+          ? ['https://healthfriend.club', 'https://www.adminhealthfriend.club']
           : true,
     };
     app.use(passport.initialize());
