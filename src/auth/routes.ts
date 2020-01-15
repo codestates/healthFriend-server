@@ -23,20 +23,19 @@ router.get(
     const client = new StreamChat('', process.env.STREAM_CHAT_SECRET);
     const streamChatToken = client.createToken(user.id);
 
-    res.cookie('access-token', accessToken, {
-      // httpOnly: true,
-      domain: 'healthfriend.club',
-      maxAge: 1000 * 60 * 60 * 24, // 1 day
-    });
-    res.cookie('stream-chat-token', streamChatToken, {
-      // httpOnly: true,
-      domain: 'healthfriend.club',
-      maxAge: 1000 * 60 * 60 * 24, // 1 day
-    });
-    // eslint-disable-next-line no-nested-ternary
-    const redirectUrl = process.env.NODE_ENV === 'production'
-      ? 'https://healthfriend.club'
-      : 'http://localhost:3000';
+    const maxAge = 1000 * 60 * 60 * 24; // 1 day
+    let redirectUrl: string;
+    let domain: string;
+    if (process.env.NODE_ENV === 'production') {
+      redirectUrl = 'https://healthfriend.club';
+      domain = 'healthfriend.club';
+    } else {
+      redirectUrl = 'http://localhost:3000';
+      domain = 'localhost';
+    }
+
+    res.cookie('access-token', accessToken, { domain, maxAge });
+    res.cookie('stream-chat-token', streamChatToken, { domain, maxAge });
     return res.status(200).redirect(redirectUrl);
   },
 );
