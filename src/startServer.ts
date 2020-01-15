@@ -1,6 +1,12 @@
 import 'reflect-metadata';
+import http from 'http';
 import express from 'express';
-import { ApolloServer, makeExecutableSchema } from 'apollo-server-express';
+import {
+  ApolloServer,
+  makeExecutableSchema,
+  PubSub,
+  ApolloError,
+} from 'apollo-server-express';
 import passport from 'passport';
 import cookieParser from 'cookie-parser';
 import morgan from 'morgan';
@@ -15,10 +21,16 @@ import passportConfig from './auth';
 import { getUserInfoFromToken } from './utils/controllToken';
 import { TokenUserInfo } from './types/User.types';
 
+interface ConnectionParams {
+  Authorization: string;
+}
+
 export const startServer = async () => {
   try {
     await connectDB();
     passportConfig();
+
+    const pubsub = new PubSub();
 
     const schema: GraphQLSchema = makeExecutableSchema({
       typeDefs: schemas,
@@ -27,7 +39,11 @@ export const startServer = async () => {
 
     const server = new ApolloServer({
       schema,
-      context: ({ req }: any) => {
+      context: ({ req, connection }: any) => {
+        if (connection && connection.context.userInfo) {
+          const { userInfo } = connection.context;
+          return { userInfo, pubsub };
+        }
         if (!req.cookies['access-token'] && !req.headers.authorization) {
           return { userInfo: null };
         }
@@ -42,11 +58,22 @@ export const startServer = async () => {
         }
         // const token: string = req.headers.authorization ;
         // const userInfo = getUserInfoFromToken(token.substr(7));
-        return { userInfo };
+        return { userInfo, pubsub };
       },
       introspection: true,
       playground: true,
+      subscriptions: {
+        onConnect: async (connectionParams) => {
+          const { Authorization: token } = connectionParams as ConnectionParams;
+          if (!token) {
+            throw new ApolloError('Missing auth token!');
+          }
+          const userInfo = getUserInfoFromToken(token.substr(7));
+          return { userInfo };
+        },
+      },
     });
+    const PORT = 4000;
     const app = express();
 
     const corsOption = {
@@ -66,8 +93,14 @@ export const startServer = async () => {
     });
 
     server.applyMiddleware({ app, cors: false });
-    app.listen({ port: 4000 }, () => {
-      console.log('Server running at 4000 port');
+
+    const httpServer = http.createServer(app);
+    server.installSubscriptionHandlers(httpServer);
+    httpServer.listen(PORT, () => {
+      console.log(`Server: http://localhost:${PORT}${server.graphqlPath}`);
+      console.log(
+        `Subscriptions: ws://localhost:${PORT}${server.subscriptionsPath}`,
+      );
     });
   } catch (error) {
     console.error(error);

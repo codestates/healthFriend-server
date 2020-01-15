@@ -1,4 +1,9 @@
-import { querySchema, mutationSchema, enumSchema } from './modules/shared';
+import {
+  querySchema,
+  mutationSchema,
+  subscriptionSchema,
+  enumSchema,
+} from './modules/shared';
 import { ableDistrictsSchema } from './modules/ableDistricts';
 import { districtSchema } from './modules/district';
 import { exerciseAbleDaysSchema } from './modules/exerciseAbleDays';
@@ -8,6 +13,7 @@ import { userSchema } from './modules/user';
 const schemas = [
   querySchema,
   mutationSchema,
+  subscriptionSchema,
   enumSchema,
   ableDistrictsSchema,
   districtSchema,

@@ -133,7 +133,7 @@ export class UserRepository extends Repository<User> {
       const followingIds: Array<string> = me.following.map((f) => f.id);
       if (followingIds.includes(userId)) {
         // console.log('FollowingUser - alreay exist: ', me);
-        return me;
+        return null;
       }
 
       const user = await this.findOne({ id: userId });
@@ -141,7 +141,7 @@ export class UserRepository extends Repository<User> {
         me.following.push(user);
         return await this.save(me);
       }
-      return me;
+      return null;
     } catch (error) {
       throw new ApolloError('Following error.', 'SERVER_ERROR');
     }
