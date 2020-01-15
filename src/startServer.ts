@@ -1,14 +1,13 @@
 import 'reflect-metadata';
 import express from 'express';
-import { ApolloServer } from 'apollo-server-express';
+import { ApolloServer, makeExecutableSchema } from 'apollo-server-express';
 import passport from 'passport';
 import cookieParser from 'cookie-parser';
 import morgan from 'morgan';
 import cors from 'cors';
 import { GraphQLSchema } from 'graphql';
-import { mergeSchemas } from 'graphql-tools';
 
-import schemas from './schema';
+import schemas from './schemas';
 import resolvers from './resolvers';
 import connectDB from './database';
 import authRouter from './auth/routes';
@@ -21,8 +20,8 @@ export const startServer = async () => {
     await connectDB();
     passportConfig();
 
-    const schema: GraphQLSchema = mergeSchemas({
-      schemas,
+    const schema: GraphQLSchema = makeExecutableSchema({
+      typeDefs: schemas,
       resolvers,
     });
 
