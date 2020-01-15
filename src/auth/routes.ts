@@ -25,10 +25,12 @@ router.get(
 
     res.cookie('access-token', accessToken, {
       // httpOnly: true,
+      domain: 'healthfriend.club',
       maxAge: 1000 * 60 * 60 * 24, // 1 day
     });
     res.cookie('stream-chat-token', streamChatToken, {
       // httpOnly: true,
+      domain: 'healthfriend.club',
       maxAge: 1000 * 60 * 60 * 24, // 1 day
     });
     // eslint-disable-next-line no-nested-ternary
