@@ -32,13 +32,13 @@ export class FriendsRepository extends Repository<Friends> {
     }
     if (await this.isFriend(meId, friendId)) {
       // console.log('Add friend - aleady exist: ', me);
-      return me;
+      return null;
     }
     const followerIdsOfMe: Array<string> = me.followers.map((f) => f.id);
     if (!followerIdsOfMe.includes(friendId)) {
       // console.log('Add friend - not follower: ', me);
       // console.log(friendId, followerIdsOfMe);
-      return me;
+      return null;
     }
     const friend = await getUserRepository().findOne({ id: friendId });
     // Friends에서 검색
