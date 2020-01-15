@@ -1,4 +1,4 @@
-import { AuthenticationError } from 'apollo-server-express';
+import { AuthenticationError, PubSub } from 'apollo-server-express';
 import Dataloader from 'dataloader';
 
 import { UserQueryCondition, LoginInfo } from '../../types/User.types';
@@ -10,8 +10,19 @@ import {
 import { Motivations } from '../../database/entity/Motivations';
 import { ExerciseAbleDays } from '../../database/entity/ExerciseAbleDays';
 
+const CHECK_FOLLOW = 'CHECK_FOLLOW';
+
 interface UserId {
   userId: string;
+}
+
+interface UserInfo {
+  id: string;
+}
+
+interface PubSubContext {
+  userInfo: UserInfo;
+  pubsub: PubSub;
 }
 
 const motivationLoader = new Dataloader<string, Motivations[]>(
@@ -68,9 +79,20 @@ const userResolver = {
   },
 
   Mutation: {
-    followingUser: async (_: any, args: UserId, { userInfo }: any) => {
+    followingUser: async (_: any, args: UserId, context: PubSubContext) => {
+      const { userInfo, pubsub } = context;
       if (!userInfo) throw new AuthenticationError('Not authenticated.');
-      return getUserRepository().followingUser(userInfo.id, args.userId);
+      const me = await getUserRepository().followingUser(
+        userInfo.id,
+        args.userId,
+      );
+      if (me) {
+        pubsub.publish(`${CHECK_FOLLOW}_${args.userId}`, {
+          subscribeRequestFriend: me,
+        });
+        return me;
+      }
+      return null;
     },
     deleteFollowing: async (_: any, args: UserId, { userInfo }: any) => {
       if (!userInfo) throw new AuthenticationError('Not authenticated.');
@@ -87,6 +109,16 @@ const userResolver = {
     deleteFriend: async (_: any, args: UserId, { userInfo }: any) => {
       if (!userInfo) throw new AuthenticationError('Not authenticated.');
       return getFriendsRepository().deleteFriend(userInfo.id, args.userId);
+    },
+  },
+
+  Subscription: {
+    subscribeRequestFriend: {
+      subscribe(_: any, __: any, context: PubSubContext) {
+        const { userInfo, pubsub } = context;
+        if (!userInfo) throw new AuthenticationError('Not authenticated.');
+        return pubsub.asyncIterator(`${CHECK_FOLLOW}_${userInfo.id}`);
+      },
     },
   },
 };
