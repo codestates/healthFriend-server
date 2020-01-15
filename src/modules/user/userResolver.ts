@@ -11,6 +11,7 @@ import { Motivations } from '../../database/entity/Motivations';
 import { ExerciseAbleDays } from '../../database/entity/ExerciseAbleDays';
 
 const CHECK_FOLLOW = 'CHECK_FOLLOW';
+const ADD_FRIEND = 'ADD_FRIEND';
 
 interface UserId {
   userId: string;
@@ -102,9 +103,20 @@ const userResolver = {
       if (!userInfo) throw new AuthenticationError('Not authenticated.');
       return getUserRepository().deleteFollowers(userInfo.id, args.userId);
     },
-    addFriend: async (_: any, args: UserId, { userInfo }: any) => {
+    addFriend: async (_: any, args: UserId, context: PubSubContext) => {
+      const { userInfo, pubsub } = context;
       if (!userInfo) throw new AuthenticationError('Not authenticated.');
-      return getFriendsRepository().addFriend(userInfo.id, args.userId);
+      const me = await getFriendsRepository().addFriend(
+        userInfo.id,
+        args.userId,
+      );
+      if (me) {
+        pubsub.publish(`${ADD_FRIEND}_${args.userId}`, {
+          subscribeAddFriend: me,
+        });
+        return me;
+      }
+      return null;
     },
     deleteFriend: async (_: any, args: UserId, { userInfo }: any) => {
       if (!userInfo) throw new AuthenticationError('Not authenticated.');
@@ -118,6 +130,13 @@ const userResolver = {
         const { userInfo, pubsub } = context;
         if (!userInfo) throw new AuthenticationError('Not authenticated.');
         return pubsub.asyncIterator(`${CHECK_FOLLOW}_${userInfo.id}`);
+      },
+    },
+    subscribeAddFriend: {
+      subscribe(_: any, __: any, context: PubSubContext) {
+        const { userInfo: me, pubsub } = context;
+        if (!me) throw new AuthenticationError('Not authenticated.');
+        return pubsub.asyncIterator(`${ADD_FRIEND}_${me.id}`);
       },
     },
   },
