@@ -25,18 +25,25 @@ router.get(
 
     res.cookie('access-token', accessToken, {
       // httpOnly: true,
-      domain: 'healthfriend.club',
+      domain:
+        process.env.NODE_ENV === 'production'
+          ? 'healthfriend.club'
+          : 'localhost',
       maxAge: 1000 * 60 * 60 * 24, // 1 day
     });
     res.cookie('stream-chat-token', streamChatToken, {
       // httpOnly: true,
-      domain: 'healthfriend.club',
+      domain:
+        process.env.NODE_ENV === 'production'
+          ? 'healthfriend.club'
+          : 'localhost',
       maxAge: 1000 * 60 * 60 * 24, // 1 day
     });
     // eslint-disable-next-line no-nested-ternary
-    const redirectUrl = process.env.NODE_ENV === 'production'
-      ? 'https://healthfriend.club'
-      : 'http://localhost:3000';
+    const redirectUrl =
+      process.env.NODE_ENV === 'production'
+        ? 'https://healthfriend.club'
+        : 'http://localhost:3000';
     return res.status(200).redirect(redirectUrl);
   },
 );
