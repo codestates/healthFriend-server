@@ -10,6 +10,7 @@ const querySchema = gql`
     test: User
     user(userId: String): User
     users: [User]!
+    userCount: Int!
     me: User
     motivations(input: [MotivationEnum]): [Motivation]
     exerciseAbleDays(input: [WeekdayEnum]): [ExerciseAbleDay]

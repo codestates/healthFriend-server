@@ -41,6 +41,7 @@ const userResolver = {
       if (!userInfo) throw new AuthenticationError('Not authenticated.');
       return getUserRepository().getAllUser();
     },
+    userCount: async () => getUserRepository().getUserCount(),
     filterUsers: async (
       _: any,
       args: UserQueryCondition,
