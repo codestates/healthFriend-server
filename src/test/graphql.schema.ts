@@ -1,4 +1,4 @@
-import { DetailedUserInfo } from '../types/User.types';
+import { DetailedUserInfo } from '../types/types';
 
 export const registerMutation = (email: string, password: string) => `
 mutation {

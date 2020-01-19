@@ -1,0 +1,1 @@
+export { MotivationsRepository } from './MotivationsRepository';

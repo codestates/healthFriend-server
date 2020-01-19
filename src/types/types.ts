@@ -9,7 +9,6 @@ import {
 export interface TokenUserInfo {
   id: string;
   email: string;
-  nickname: string;
   role: Role;
 }
 
@@ -41,4 +40,15 @@ export interface UserQueryCondition {
 export interface LoginInfo {
   email: string;
   password: string;
+}
+
+export interface UserId {
+  userId: string;
+}
+
+export interface UserInfo {
+  id: string;
+}
+export interface UserInfoContext {
+  userInfo: UserInfo;
 }

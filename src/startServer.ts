@@ -13,13 +13,12 @@ import morgan from 'morgan';
 import cors from 'cors';
 import { GraphQLSchema } from 'graphql';
 
-import schemas from './schemas';
-import resolvers from './resolvers';
+import { schemas, resolvers } from './modules';
 import connectDB from './database';
 import authRouter from './auth/routes';
 import passportConfig from './auth';
 import { getUserInfoFromToken } from './utils/controllToken';
-import { TokenUserInfo } from './types/User.types';
+import { TokenUserInfo } from './types/types';
 
 interface ConnectionParams {
   Authorization: string;
@@ -52,6 +51,7 @@ export const startServer = async () => {
         if (req.headers.authorization) {
           token = req.headers.authorization;
           userInfo = getUserInfoFromToken(token.substr(7));
+          // console.log(userInfo);
         } else {
           token = req.cookies['access-token'];
           userInfo = getUserInfoFromToken(token);

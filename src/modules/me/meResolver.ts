@@ -1,5 +1,6 @@
 import { AuthenticationError } from 'apollo-server-express';
-import { DetailedUserInfo } from '../../types/User.types';
+import { UserInfoContext, DetailedUserInfo } from '../../types/types';
+
 import {
   getUserRepository,
   // getMotivationRepository,
@@ -33,20 +34,28 @@ const meResolver = {
   },
 
   Query: {
-    me: async (_: any, __: any, { userInfo }: any) => {
-      if (!userInfo) throw new AuthenticationError('not authenticated');
-      return getUserRepository().findByUserId(userInfo.id);
+    me: async (_: any, __: any, context: UserInfoContext) => {
+      const { userInfo } = context;
+      if (!userInfo) throw new AuthenticationError('Not authenticated.');
+      // console.log('ME resolver: ', userInfo.id);
+      return getUserRepository().getUserInfoById(userInfo.id);
     },
   },
 
   Mutation: {
-    me: async (_: any, args: DetailedUserInfo, { userInfo }: any) => {
-      if (!userInfo) throw new AuthenticationError('not authenticated');
-      const user = await getUserRepository().updateUserInfo(
-        userInfo.id,
-        args,
-      );
-        // console.log(user);
+    me: async (_: any, args: DetailedUserInfo, context: UserInfoContext) => {
+      const { userInfo } = context;
+      if (!userInfo) throw new AuthenticationError('Not authenticated.');
+      const updateUser = getUserRepository().create({
+        id: userInfo.id,
+        nickname: args.nickname,
+        gender: args.gender,
+        openImageChoice: args.openImageChoice,
+        levelOf3Dae: args.levelOf3Dae,
+        messageToFriend: args.messageToFriend,
+      });
+      const user = await getUserRepository().updateUserInfo(updateUser);
+      // console.log(user);
       return user;
     },
   },

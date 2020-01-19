@@ -2,7 +2,7 @@ import express from 'express';
 import passport from 'passport';
 import { StreamChat } from 'stream-chat';
 
-import { TokenUserInfo } from '../types/User.types';
+import { TokenUserInfo } from '../types/types';
 import { createToken } from '../utils/controllToken';
 
 const router = express.Router();

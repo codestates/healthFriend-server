@@ -1,8 +1,8 @@
 import { EntityRepository, Repository } from 'typeorm';
 
-import { AbleDistricts } from '../entity/AbleDistricts';
-import { getUserRepository, getDistrictRepository } from '..';
-import { User } from '../entity/User';
+import { AbleDistricts } from '../../entity/AbleDistricts';
+import { getUserRepository, getDistrictRepository } from '../..';
+import { User } from '../../entity/User';
 
 @EntityRepository(AbleDistricts)
 export class AbleDistrictsRepository extends Repository<AbleDistricts> {

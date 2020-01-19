@@ -1,6 +1,6 @@
 import { EntityRepository, Repository } from 'typeorm';
 
-import { Districts } from '../entity/Districts';
+import { Districts } from '../../entity/Districts';
 
 interface DongInfo {
   nameOfDong: string;

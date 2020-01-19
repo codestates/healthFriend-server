@@ -16,9 +16,9 @@ const userSchema = gql`
     motivations: [Motivation]
     weekdays: [ExerciseAbleDay]
     ableDistricts: [AbleDistrict]
-    following: [User]
-    followers: [User]
-    friends: [User]
+    following: [Follow]
+    followers: [Follow]
+    friends: [Friends]
     createdAt: DateTime!
   }
 `;

@@ -2,7 +2,7 @@ import { request } from 'graphql-request';
 import axios from 'axios';
 import { Connection } from 'typeorm';
 import { AuthenticationError } from 'apollo-server-express';
-import { DetailedUserInfo } from '../../types/User.types';
+import { DetailedUserInfo } from '../../types/types';
 import connectDB, { getUserRepository } from '../../database';
 import {
   Gender,

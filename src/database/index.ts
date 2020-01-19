@@ -1,12 +1,11 @@
 import { getConnectionOptions, createConnection, Connection } from 'typeorm';
-// eslint-disable-next-line max-len
-import { ExerciseAbleDaysRepository } from './repositories/ExerciseAbleDaysRepository';
-import { MotivationsRepository } from './repositories/MotivationsRepository';
-import { UserRepository } from './repositories/UserRepository';
-import { DistrictRepository } from './repositories/DistrictRepository';
-// eslint-disable-next-line max-len
-import { AbleDistrictsRepository } from './repositories/AbleDistrictsRepository';
-import { FriendsRepository } from './repositories/FriendsRepository';
+import { ExerciseAbleDaysRepository } from './repositories/ExerciseAbleDays';
+import { MotivationsRepository } from './repositories/Motivations';
+import { UserRepository } from './repositories/User';
+import { DistrictRepository } from './repositories/District';
+import { AbleDistrictsRepository } from './repositories/AbleDistricts';
+import { FriendsRepository } from './repositories/Friends';
+import { FollowerRepository } from './repositories/Follow';
 
 let connection: Connection;
 
@@ -36,4 +35,8 @@ export const getAbleDistrictsRepository = (): AbleDistrictsRepository =>
 
 export const getFriendsRepository = (): FriendsRepository =>
   connection.getCustomRepository(FriendsRepository);
+
+export const getFollowRepository = (): FollowerRepository =>
+  connection.getCustomRepository(FollowerRepository);
+
 export default connectDB;
