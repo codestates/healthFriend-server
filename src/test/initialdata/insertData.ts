@@ -2,21 +2,16 @@ import connectDB, {
   getDistrictRepository,
   getUserRepository,
   getMotivationRepository,
-  // getExerciseAbleDaysRepository,
   getAbleDistrictsRepository,
   getExerciseAbleDaysRepository,
   getFollowRepository,
   getFriendsRepository,
-  // getFriendsRepository,
 } from '../../database';
 
-import gangnamgu from './districtGangnamgu';
-import yongsangu from './districtYongsangu';
-import songpagu from './districtSongpagu';
+import districtData from './districtData';
 import usersInfo from './usersInfo';
 import admin from './adminInfo';
 import {
-  // User,
   Gender,
   OpenImageChoice,
   LevelOf3Dae,
@@ -24,12 +19,9 @@ import {
   Provider,
 } from '../../database/entity/User';
 import { Districts } from '../../database/entity/Districts';
-// import { RegisterUserInfo } from '../../types/types';
 
 const districtInitialData = async () => {
-  await getDistrictRepository().saveDongInfos(gangnamgu);
-  await getDistrictRepository().saveDongInfos(yongsangu);
-  await getDistrictRepository().saveDongInfos(songpagu);
+  await getDistrictRepository().saveDongInfos(districtData);
 };
 
 interface DistrictInput {
@@ -116,111 +108,3 @@ export const run = async (users: InputUserValue[]) => {
 };
 
 run(usersInfo);
-
-// const userInitialData = async (users: Array<RegisterUserInfo>) => {
-//   await getUserRepository().saveUsersInfo(users);
-// };
-
-// const updateUserInfo = async (users: any) => {
-//   users.forEach(async (m: any) => {
-//     const user = (await getUserRepository().findOne({
-//       where: { email: m.email },
-//     })) as User;
-//     const expectUserData = getUserRepository().create({
-//       id: aaa.id,
-//       nickname: 'abc',
-//       gender: Gender.FEMALE,
-//       openImageChoice: OpenImageChoice.CLOSE,
-//       levelOf3Dae: LevelOf3Dae.L2,
-//       messageToFriend: 'hello',
-//     });
-//     const detailedUserInfo = {
-//       nickname: m.nickname,
-//       gender: m.gender,
-//       openImageChoice: m.openImageChoice,
-//       levelOf3Dae: m.levelOf3Dae,
-//       messageToFriend: '',
-//     };
-//     await getUserRepository().updateUserInfo(user.id, detailedUserInfo);
-//   });
-// };
-
-// const motivationInitialData = async (users: any) => {
-//   users.forEach(async (m: any) => {
-//     const user = (await getUserRepository().findOne({
-//       where: { email: m.email },
-//     })) as User;
-//     await getMotivationRepository().saveByUserId(user.id, m.motivations);
-//   });
-// };
-
-// const exerciseAbleDaysInitialData = async (users: any) => {
-//   users.forEach(async (m: any) => {
-//     const user = (await getUserRepository().findOne({
-//       where: { email: m.email },
-//     })) as User;
-//     await getExerciseAbleDaysRepository().saveByUserId(user.id, m.ableDays);
-//   });
-// };
-
-// const ableDistrictsInitialData = async (users: any) => {
-//   users.forEach(async (m: any) => {
-//     const user = (await getUserRepository().findOne({
-//       where: { email: m.email },
-//     })) as User;
-
-//     const dongIds: Array<string> = await Promise.all(
-//       m.districts.map(async (d: any) => {
-//         const result = (await getDistrictRepository().findOne({
-//           where: { nameOfDong: d.nameOfDong, idOfGu: d.idOfGu },
-//         })) as Districts;
-//         return result.idOfDong;
-//       }),
-//     );
-
-//     await getAbleDistrictsRepository().saveByDongId(user.id, dongIds);
-//   });
-// };
-
-// const addfriendToYgKwon = async () => {
-//   const me = await getUserRepository().findOne({
-//     where: {
-//       email: 'bfsudong@gmail.com',
-//     },
-//   });
-
-//   if (!me) return;
-
-//   const friends = await getUserRepository().find({
-//     where: [
-//       { email: 'aaa@gmail.com' },
-//       { email: 'bbb@gmail.com' },
-//       { email: 'ccc@gmail.com' },
-//     ],
-//   });
-//   console.log(friends);
-//   // friends.forEach(async (f) =>
-//   //   getFriendsRepository().addFriend(me.id, f.id));
-//   await getUserRepository().followingUser(friends[0].id, me.id);
-//   await getUserRepository().followingUser(friends[1].id, me.id);
-//   await getUserRepository().followingUser(friends[2].id, me.id);
-//   await getFriendsRepository().addFriend(me.id, friends[0].id);
-//   await getFriendsRepository().addFriend(me.id, friends[1].id);
-//   await getFriendsRepository().addFriend(me.id, friends[2].id);
-// };
-
-
-// export const run = async (users: any) => {
-//   await connectDB();
-//   await districtInitialData();
-//   await userInitialData(users);
-//   await updateUserInfo(users);
-//   await motivationInitialData(users);
-//   await exerciseAbleDaysInitialData(users);
-//   await ableDistrictsInitialData(users);
-//   await addFollowingRandomly();
-//   await addfriendToYgKwon();
-//   await adminInitialData();
-// };
-
-// run(usersInfo);

@@ -49,10 +49,10 @@ const usersInfo = [
     ],
     ableDays: ['MONDAY', 'WEDNESDAY', 'THURSDAY', 'SATURDAY', 'SUNDAY'],
     districts: [
-      { nameOfDong: '거여1동', idOfGu: 3, nameOfGu: '송파구' },
-      { nameOfDong: '거여2동', idOfGu: 3, nameOfGu: '송파구' },
-      { nameOfDong: '마천1동', idOfGu: 3, nameOfGu: '송파구' },
-      { nameOfDong: '마천2동', idOfGu: 3, nameOfGu: '송파구' },
+      { nameOfDong: '거여1동', idOfGu: 18, nameOfGu: '송파구' },
+      { nameOfDong: '거여2동', idOfGu: 18, nameOfGu: '송파구' },
+      { nameOfDong: '마천1동', idOfGu: 18, nameOfGu: '송파구' },
+      { nameOfDong: '마천2동', idOfGu: 18, nameOfGu: '송파구' },
     ],
   },
   {
@@ -80,10 +80,10 @@ const usersInfo = [
       'SUNDAY',
     ],
     districts: [
-      { nameOfDong: '거여1동', idOfGu: 3, nameOfGu: '송파구' },
-      { nameOfDong: '거여2동', idOfGu: 3, nameOfGu: '송파구' },
-      { nameOfDong: '마천1동', idOfGu: 3, nameOfGu: '송파구' },
-      { nameOfDong: '마천2동', idOfGu: 3, nameOfGu: '송파구' },
+      { nameOfDong: '거여1동', idOfGu: 18, nameOfGu: '송파구' },
+      { nameOfDong: '거여2동', idOfGu: 18, nameOfGu: '송파구' },
+      { nameOfDong: '마천1동', idOfGu: 18, nameOfGu: '송파구' },
+      { nameOfDong: '마천2동', idOfGu: 18, nameOfGu: '송파구' },
     ],
   },
   {
@@ -98,10 +98,10 @@ const usersInfo = [
     motivations: ['WEIGHT_LOSS', 'FIND_FRIEND', 'LONELINESS'],
     ableDays: ['MONDAY', 'WEDNESDAY', 'FRIDAY'],
     districts: [
-      { nameOfDong: '거여1동', idOfGu: 3, nameOfGu: '송파구' },
-      { nameOfDong: '거여2동', idOfGu: 3, nameOfGu: '송파구' },
-      { nameOfDong: '마천1동', idOfGu: 3, nameOfGu: '송파구' },
-      { nameOfDong: '마천2동', idOfGu: 3, nameOfGu: '송파구' },
+      { nameOfDong: '거여1동', idOfGu: 18, nameOfGu: '송파구' },
+      { nameOfDong: '거여2동', idOfGu: 18, nameOfGu: '송파구' },
+      { nameOfDong: '마천1동', idOfGu: 18, nameOfGu: '송파구' },
+      { nameOfDong: '마천2동', idOfGu: 18, nameOfGu: '송파구' },
     ],
   },
   {
@@ -116,8 +116,8 @@ const usersInfo = [
     motivations: ['WEIGHT_INCREASE', 'FIND_FRIEND', 'LONELINESS'],
     ableDays: ['MONDAY', 'WEDNESDAY', 'FRIDAY'],
     districts: [
-      { nameOfDong: '이태원1동', idOfGu: 2, nameOfGu: '용산구' },
-      { nameOfDong: '이태원2동', idOfGu: 2, nameOfGu: '용산구' },
+      { nameOfDong: '이태원1동', idOfGu: 21, nameOfGu: '용산구' },
+      { nameOfDong: '이태원2동', idOfGu: 21, nameOfGu: '용산구' },
     ],
   },
   {
@@ -132,8 +132,8 @@ const usersInfo = [
     motivations: ['WEIGHT_INCREASE', 'WEIGHT_LOSS', 'LONELINESS'],
     ableDays: ['MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY'],
     districts: [
-      { nameOfDong: '이태원1동', idOfGu: 2, nameOfGu: '용산구' },
-      { nameOfDong: '이태원2동', idOfGu: 2, nameOfGu: '용산구' },
+      { nameOfDong: '이태원1동', idOfGu: 21, nameOfGu: '용산구' },
+      { nameOfDong: '이태원2동', idOfGu: 21, nameOfGu: '용산구' },
     ],
   },
   {
@@ -148,8 +148,8 @@ const usersInfo = [
     motivations: ['WEIGHT_INCREASE', 'WEIGHT_LOSS', 'FIND_FRIEND'],
     ableDays: ['MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY'],
     districts: [
-      { nameOfDong: '이태원1동', idOfGu: 2, nameOfGu: '용산구' },
-      { nameOfDong: '이태원2동', idOfGu: 2, nameOfGu: '용산구' },
+      { nameOfDong: '이태원1동', idOfGu: 21, nameOfGu: '용산구' },
+      { nameOfDong: '이태원2동', idOfGu: 21, nameOfGu: '용산구' },
     ],
   },
   {
@@ -164,9 +164,9 @@ const usersInfo = [
     motivations: ['WEIGHT_INCREASE', 'FIND_FRIEND', 'LONELINESS'],
     ableDays: ['MONDAY', 'TUESDAY', 'THURSDAY', 'FRIDAY', 'SATURDAY', 'SUNDAY'],
     districts: [
-      { nameOfDong: '송파1동', idOfGu: 3, nameOfGu: '송파구' },
-      { nameOfDong: '송파2동', idOfGu: 3, nameOfGu: '송파구' },
-      { nameOfDong: '잠실4동', idOfGu: 3, nameOfGu: '송파구' },
+      { nameOfDong: '송파1동', idOfGu: 18, nameOfGu: '송파구' },
+      { nameOfDong: '송파2동', idOfGu: 18, nameOfGu: '송파구' },
+      { nameOfDong: '잠실4동', idOfGu: 18, nameOfGu: '송파구' },
     ],
   },
   {
@@ -188,9 +188,9 @@ const usersInfo = [
       'SUNDAY',
     ],
     districts: [
-      { nameOfDong: '송파1동', idOfGu: 3, nameOfGu: '송파구' },
-      { nameOfDong: '송파2동', idOfGu: 3, nameOfGu: '송파구' },
-      { nameOfDong: '잠실4동', idOfGu: 3, nameOfGu: '송파구' },
+      { nameOfDong: '송파1동', idOfGu: 18, nameOfGu: '송파구' },
+      { nameOfDong: '송파2동', idOfGu: 18, nameOfGu: '송파구' },
+      { nameOfDong: '잠실4동', idOfGu: 18, nameOfGu: '송파구' },
     ],
   },
   {
