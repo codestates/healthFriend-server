@@ -46,6 +46,12 @@ export class UserRepository extends Repository<User> {
     }
   }
 
+  async getUserCount() {
+    const count = await this.count();
+    // console.log(count);
+    return count;
+  }
+
   async validateUserId(userId: string) {
     const user = await this.findOne({ id: userId });
     if (!user) {
