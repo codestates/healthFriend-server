@@ -16,6 +16,9 @@ const querySchema = gql`
     ableDistricts(dongIds: [String]): [AbleDistrict]
     allDistricts: [District]!
     login(email: String, password: String): AuthPayload
+    getFollowers(userId: ID): Follow
+    getFollowing(userId: ID): Follow
+    getFriends(userId: ID): Friends
     filterUsers(
       openImageChoice: [OpenImageChoiceEnum]
       gender: [GenderEnum]

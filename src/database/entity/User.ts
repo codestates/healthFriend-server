@@ -5,13 +5,14 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
   OneToMany,
-  ManyToMany,
-  JoinTable,
+  // ManyToMany,
+  // JoinTable,
 } from 'typeorm';
 import { Motivations } from './Motivations';
 import { ExerciseAbleDays } from './ExerciseAbleDays';
 import { AbleDistricts } from './AbleDistricts';
 import { Friends } from './Friends';
+import { Follow } from './Follow';
 
 export enum Role {
   USER = 'USER',
@@ -106,28 +107,31 @@ export class User {
   )
   ableDistricts: AbleDistricts[];
 
-  @ManyToMany(
-    () => User,
-    (user) => user.following,
-  )
-  @JoinTable({
-    name: 'friend_request',
-    joinColumn: {
-      name: 'followers',
-      referencedColumnName: 'id',
-    },
-    inverseJoinColumn: {
-      name: 'following',
-      referencedColumnName: 'id',
-    },
-  })
-  followers: User[];
+  // @ManyToMany(
+  //   () => User,
+  //   (user) => user.following,
+  // )
+  // @JoinTable({
+  //   name: 'friend_request',
+  //   joinColumn: {
+  //     name: 'followers',
+  //     referencedColumnName: 'id',
+  //   },
+  //   inverseJoinColumn: {
+  //     name: 'following',
+  //     referencedColumnName: 'id',
+  //   },
+  // })
+  // followers: User[];
 
-  @ManyToMany(
-    () => User,
-    (user) => user.followers,
-  )
-  following: User[];
+  // @ManyToMany(
+  //   () => User,
+  //   (user) => user.followers,
+  // )
+  // following: User[];
+
+  @OneToMany(() => Follow, (follow) => follow.following)
+  followers: Follow[];
 
   @OneToMany(() => Friends, (friends) => friends.me)
   friends: Friends[];

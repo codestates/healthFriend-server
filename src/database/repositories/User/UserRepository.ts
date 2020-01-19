@@ -1,16 +1,15 @@
 import { EntityRepository, Repository } from 'typeorm';
 import { ApolloError } from 'apollo-server-express';
 
-import { createToken } from '../../utils/controllToken';
+import { createToken } from '../../../utils';
 import {
-  DetailedUserInfo,
   RegisterUserInfo,
   UserQueryCondition,
   LoginInfo,
-} from '../../types/User.types';
-import { User } from '../entity/User';
-import { Motivations } from '../entity/Motivations';
-import { ExerciseAbleDays } from '../entity/ExerciseAbleDays';
+} from '../../../types/types';
+import { User } from '../../entity/User';
+import { Motivations } from '../../entity/Motivations';
+import { ExerciseAbleDays } from '../../entity/ExerciseAbleDays';
 
 @EntityRepository(User)
 export class UserRepository extends Repository<User> {
@@ -18,39 +17,48 @@ export class UserRepository extends Repository<User> {
     throw new ApolloError('User select error.', 'SERVER_ERROR');
   }
 
-  async findByUserId(userId: string) {
+  async getUserInfo(user: User) {
     try {
-      const result = await this.findOne({
-        where: { id: userId },
-        relations: ['following', 'followers', 'friends'],
-      });
+      const result = await this.findOne({ id: user.id });
+      if (!result) {
+        throw new ApolloError('User select error.', 'SERVER_ERROR');
+      }
       return result;
     } catch (error) {
       throw new ApolloError('User select error.', 'SERVER_ERROR');
     }
   }
 
+  async getUserInfoById(userId: string) {
+    const result = await this.findOne({ id: userId });
+    console.log('getUserInfoById: ', result);
+    if (!result) {
+      throw new ApolloError('User select error.', 'SERVER_ERROR');
+    }
+    return result;
+  }
+
   async getAllUser() {
     try {
-      return this.find({ relations: ['following', 'followers', 'friends'] });
+      return await this.find();
     } catch (error) {
       throw new ApolloError('User select error.', 'SERVER_ERROR');
     }
   }
 
-  async updateUserInfo(userId: string, detailedUserInfo: DetailedUserInfo) {
+  async validateUserId(userId: string) {
+    const user = await this.findOne({ id: userId });
+    if (!user) {
+      throw new ApolloError('No user', 'NO_USER');
+    }
+    return user;
+  }
+
+  async updateUserInfo(user: User) {
     try {
-      const user = this.create({
-        id: userId,
-        nickname: detailedUserInfo.nickname,
-        gender: detailedUserInfo.gender,
-        openImageChoice: detailedUserInfo.openImageChoice,
-        levelOf3Dae: detailedUserInfo.levelOf3Dae,
-        messageToFriend: detailedUserInfo.messageToFriend,
-      });
+      // update 한 정보만 return 한다. select가 필요하다.
       await this.save(user);
-      const updatedUser = (await this.findByUserId(userId)) as User;
-      return updatedUser;
+      return await this.getUserInfo(user);
     } catch (error) {
       throw new ApolloError('User update error.', 'SERVER_ERROR');
     }
@@ -118,62 +126,8 @@ export class UserRepository extends Repository<User> {
     }
   }
 
-  async followingUser(meId: string, userId: string) {
-    try {
-      if (meId === userId) {
-        return null;
-      }
-
-      const me = await this.findByUserId(meId);
-      if (!me) {
-        // console.log('FollowingUser - Not exist ME!!!');
-        return null;
-      }
-
-      const followingIds: Array<string> = me.following.map((f) => f.id);
-      if (followingIds.includes(userId)) {
-        // console.log('FollowingUser - alreay exist: ', me);
-        return null;
-      }
-
-      const user = await this.findOne({ id: userId });
-      if (user) {
-        me.following.push(user);
-        return await this.save(me);
-      }
-      return null;
-    } catch (error) {
-      throw new ApolloError('Following error.', 'SERVER_ERROR');
-    }
-  }
-
-  async deleteFollowing(meId: string, userId: string) {
-    try {
-      const me = await this.findByUserId(meId);
-      if (!me) {
-        return null;
-      }
-      me.following = me.following.filter((f) => f.id !== userId);
-      return await this.save(me);
-    } catch (error) {
-      throw new ApolloError('Following delete error.', 'SERVER_ERROR');
-    }
-  }
-
-  async deleteFollowers(meId: string, userId: string) {
-    try {
-      const me = await this.findByUserId(meId);
-      if (!me) {
-        return null;
-      }
-      me.followers = me.followers.filter((f) => f.id !== userId);
-      return await this.save(me);
-    } catch (error) {
-      throw new ApolloError('Follow delete error.', 'SERVER_ERROR');
-    }
-  }
-
   async saveUserInfo(UserInfo: RegisterUserInfo) {
+    // 테스트 용도로만 사용
     try {
       return await this.save(UserInfo);
     } catch (error) {

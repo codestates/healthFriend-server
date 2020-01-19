@@ -7,8 +7,8 @@ const mutationSchema = gql`
     setAbleDistrict(dongIds: [String]): [AbleDistrict]
     followingUser(userId: String!): User
     deleteFollowing(userId: String!): User
-    deleteFollowers(userId: String!): User
-    addFriend(userId: String!): User
+    deleteFollower(userId: String!): User
+    addFriend(userId: String!): Friends
     deleteFriend(userId: String!): User
     registerForTest(email: String!, password: String!): AuthPayload!
     me(

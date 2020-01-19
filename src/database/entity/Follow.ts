@@ -2,26 +2,22 @@ import {
   Entity,
   PrimaryGeneratedColumn,
   ManyToOne,
-  // JoinColumn,
   CreateDateColumn,
-  UpdateDateColumn,
   Column,
+  UpdateDateColumn,
 } from 'typeorm';
 import { User } from './User';
 
 @Entity()
-export class Friends {
+export class Follow {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @ManyToOne(
-    () => User,
-    (user) => user.friends,
-  )
-  me: User;
+  @ManyToOne(() => User, (user) => user.followers)
+  following: User;
 
   @ManyToOne(() => User)
-  friend: User;
+  follower: User;
 
   @Column({ type: Boolean, default: false })
   checked: Boolean;

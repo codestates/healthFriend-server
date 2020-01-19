@@ -1,18 +1,18 @@
 import 'dotenv/config';
 import jwt from 'jsonwebtoken';
-import { TokenUserInfo } from '../types/User.types';
+import { TokenUserInfo } from '../types/types';
 
 export const createToken = (userInfo: TokenUserInfo) => {
   // console.log('createToken: ', userInfo);
-  const {
-    id, email, nickname, role,
-  } = userInfo;
-  if (!id || !email || !nickname || !role) {
+  const { id, email, role } = userInfo;
+  if (!id || !email || !role) {
     return null;
   }
   const token = jwt.sign(
     {
-      id, email, nickname, role,
+      id,
+      email,
+      role,
     },
     process.env.JWT_SECRET as string,
     {

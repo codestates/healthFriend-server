@@ -4,7 +4,7 @@ import { Provider, User, Role } from '../../database/entity/User';
 import {
   RegisterUserInfo,
   LoginInfo,
-} from '../../types/User.types';
+} from '../../types/types';
 
 const registerResolver = {
   Mutation: {
