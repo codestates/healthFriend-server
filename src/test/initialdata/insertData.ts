@@ -10,7 +10,7 @@ import connectDB, {
 
 import districtData from './districtData';
 import usersInfo from './usersInfo';
-import admin from './adminInfo';
+import adminInfo from './adminInfo';
 import {
   Gender,
   OpenImageChoice,
@@ -57,6 +57,7 @@ const insertUser = async (args: InputUserValue) => {
     messageToFriend: 'hello',
   });
   const savedUser = await getUserRepository().save(user);
+  // console.log(savedUser);
 
   const motivationInstance = args.motivations.map((m) => ({
     owner: savedUser,
@@ -82,29 +83,34 @@ const insertUser = async (args: InputUserValue) => {
 
 const addFollowingRandomly = async () => {
   const allUsers = await getUserRepository().find();
-  await Promise.all(allUsers.map(async (u) => {
-    const followingNumbers = Array.from({ length: 3 }, () =>
-      Math.floor(Math.random() * allUsers.length));
-    const following = followingNumbers.map((f) => allUsers[f]);
-    await getFollowRepository().followingUser(u, following[0]);
-    await getFollowRepository().followingUser(u, following[1]);
-    await getFollowRepository().followingUser(u, following[2]);
-    await getFriendsRepository().addFriend(following[0], u);
-  }));
+  try {
+    await Promise.all(
+      allUsers.map(async (u) => {
+        const followingNumbers = Array.from({ length: 3 }, () =>
+          Math.floor(Math.random() * allUsers.length));
+        const following = followingNumbers.map((f) => allUsers[f]);
+        await getFollowRepository().followingUser(u, following[0]);
+        await getFollowRepository().followingUser(u, following[1]);
+        await getFollowRepository().followingUser(u, following[2]);
+        await getFriendsRepository().addFriend(following[0], u);
+      }),
+    );
+  } catch (error) {
+    console.log(error);
+  }
 };
 
-const adminInitialData = async () => {
-  await getUserRepository().saveUsersInfo(admin);
-};
-
-export const run = async (users: InputUserValue[]) => {
+export const run = async (users: InputUserValue[], admin: InputUserValue) => {
   await connectDB();
   await districtInitialData();
-  await Promise.all(users.map(async (u: InputUserValue) => {
-    await insertUser(u);
-  }));
+  await Promise.all(
+    users.map(async (u: InputUserValue) => {
+      await insertUser(u);
+    }),
+  );
   await addFollowingRandomly();
-  await adminInitialData();
+  await insertUser(admin);
 };
 
-run(usersInfo);
+run(usersInfo, adminInfo);
+// run(adminInfo);
