@@ -39,6 +39,37 @@ export const userQuery = (userId: string) => `
         nameOfDong
       }
     }
+    following {
+      id
+      checked
+      following {
+        nickname
+      }
+      follower {
+        nickname
+      }
+    }
+    followers {
+      id
+      checked
+      following {
+        nickname
+      }
+      follower {
+        nickname
+      }
+    }
+    friends {
+      id
+      me {
+        id
+        nickname
+      }
+      friend {
+        nickname
+      }
+    }
+    createdAt
   }
 }
 `;
