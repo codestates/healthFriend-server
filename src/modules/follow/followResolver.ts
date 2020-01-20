@@ -47,8 +47,9 @@ const followResolver = {
       const me = await getUserRepository().validateUserId(userInfo.id);
       const { userId } = args;
       const following = await getUserRepository().validateUserId(userId);
-      const meFollow = await getFollowRepository().followingUser(me, following);
-      return meFollow;
+      await getFollowRepository().followingUser(me, following);
+      const newMe = await getUserRepository().getUserInfo(me);
+      return newMe;
     },
 
     checkFollower: async (_: any, args: UserIds, context: UserInfoContext) => {
@@ -59,8 +60,8 @@ const followResolver = {
       const { userIds } = args;
       const following = await getUserRepository().validateUserIds(userIds);
       await getFollowRepository().checkFollowers(me, following);
-      const user = await getUserRepository().getUserInfo(me);
-      return user;
+      const newMe = await getUserRepository().getUserInfo(me);
+      return newMe;
     },
 
     deleteFollowing: async (_: any, args: UserId, context: UserInfoContext) => {
@@ -70,8 +71,9 @@ const followResolver = {
       const me = await getUserRepository().validateUserId(userInfo.id);
       const { userId } = args;
       const following = await getUserRepository().validateUserId(userId);
-      const meFollow = await getFollowRepository().followingUser(me, following);
-      return meFollow;
+      await getFollowRepository().followingUser(me, following);
+      const newMe = await getUserRepository().getUserInfo(me);
+      return newMe;
     },
     deleteFollower: async (_: any, args: UserId, context: UserInfoContext) => {
       const { userInfo } = context;
@@ -80,8 +82,9 @@ const followResolver = {
       const me = await getUserRepository().validateUserId(userInfo.id);
       const { userId } = args;
       const follower = await getUserRepository().validateUserId(userId);
-      const meFollow = await getFollowRepository().deleteFollower(me, follower);
-      return meFollow;
+      await getFollowRepository().deleteFollower(me, follower);
+      const newMe = await getUserRepository().getUserInfo(me);
+      return newMe;
     },
   },
 
