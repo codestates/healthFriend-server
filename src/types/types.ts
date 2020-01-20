@@ -46,6 +46,10 @@ export interface UserId {
   userId: string;
 }
 
+export interface UserIds {
+  userIds: string[];
+}
+
 export interface UserInfo {
   id: string;
 }

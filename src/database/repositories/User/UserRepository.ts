@@ -66,6 +66,14 @@ export class UserRepository extends Repository<User> {
     return user;
   }
 
+  async validateUserIds(userIds: string[]) {
+    const users = await this.findByIds(userIds);
+    if (!users) {
+      throw new ApolloError('No user', 'NO_USER');
+    }
+    return users;
+  }
+
   async updateUserInfo(user: User) {
     try {
       // update 한 정보만 return 한다. select가 필요하다.
