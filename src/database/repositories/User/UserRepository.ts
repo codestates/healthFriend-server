@@ -14,7 +14,10 @@ import { ExerciseAbleDays } from '../../entity/ExerciseAbleDays';
 @EntityRepository(User)
 export class UserRepository extends Repository<User> {
   async test() {
-    throw new ApolloError('User select error.', 'SERVER_ERROR');
+    throw new ApolloError(
+      '**TEST** User select error. **TEST**',
+      'SERVER_ERROR',
+    );
   }
 
   async getUserInfo(user: User) {
@@ -31,7 +34,7 @@ export class UserRepository extends Repository<User> {
 
   async getUserInfoById(userId: string) {
     const result = await this.findOne({ id: userId });
-    console.log('getUserInfoById: ', result);
+    // console.log('getUserInfoById: ', result);
     if (!result) {
       throw new ApolloError('User select error.', 'SERVER_ERROR');
     }
