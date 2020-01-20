@@ -130,8 +130,11 @@ export class User {
   // )
   // following: User[];
 
-  @OneToMany(() => Follow, (follow) => follow.following)
+  @OneToMany(() => Follow, (follow) => follow.follower)
   followers: Follow[];
+
+  @OneToMany(() => Follow, (follow) => follow.following)
+  following: Follow[];
 
   @OneToMany(() => Friends, (friends) => friends.me)
   friends: Friends[];

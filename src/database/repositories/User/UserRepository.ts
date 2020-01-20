@@ -10,6 +10,9 @@ import {
 import { User } from '../../entity/User';
 import { Motivations } from '../../entity/Motivations';
 import { ExerciseAbleDays } from '../../entity/ExerciseAbleDays';
+import { AbleDistricts } from '../../entity/AbleDistricts';
+import { Follow } from '../../entity/Follow';
+import { Friends } from '../../entity/Friends';
 
 @EntityRepository(User)
 export class UserRepository extends Repository<User> {
@@ -194,5 +197,58 @@ export class UserRepository extends Repository<User> {
       userMap[u.id] = u.ableDays;
     });
     return userIds.map((id) => userMap[id]);
+  }
+
+  async batchAbleDistricts(userIds: readonly string[]) {
+    const users = await this.createQueryBuilder('user')
+      .leftJoinAndSelect('user.ableDistricts', 'ableDistricts')
+      .where('user.id IN (:...userIds)', { userIds })
+      .getMany();
+    const userMap: { [key: string]: AbleDistricts[] } = {};
+    users.forEach((u) => {
+      userMap[u.id] = u.ableDistricts;
+    });
+    return userIds.map((id) => userMap[id]);
+  }
+
+  async batchFriends(userIds: readonly string[]) {
+    const users = await this.createQueryBuilder('user')
+      .leftJoinAndSelect('user.friends', 'friends')
+      .where('user.id IN (:...userIds)', { userIds })
+      .getMany();
+    const userMap: { [key: string]: Friends[] } = {};
+    users.forEach((u) => {
+      userMap[u.id] = u.friends;
+    });
+    const result = userIds.map((id) => userMap[id]);
+    return result;
+  }
+
+  // 내가 following 하고 있는 사람들
+  async batchFollowing(userIds: readonly string[]) {
+    const users = await this.createQueryBuilder('user')
+      .leftJoinAndSelect('user.following', 'follow')
+      .where('user.id IN (:...userIds)', { userIds })
+      .getMany();
+    const userMap: { [key: string]: Follow[] } = {};
+    users.forEach((u) => {
+      userMap[u.id] = u.following;
+    });
+    const result = userIds.map((id) => userMap[id]);
+    return result;
+  }
+
+  // 나의 follower들, 나를 following하고 있는 사람들
+  async batchFollowers(userIds: readonly string[]) {
+    const users = await this.createQueryBuilder('user')
+      .leftJoinAndSelect('user.followers', 'follow')
+      .where('user.id IN (:...userIds)', { userIds })
+      .getMany();
+    const userMap: { [key: string]: Follow[] } = {};
+    users.forEach((u) => {
+      userMap[u.id] = u.followers;
+    });
+    const result = userIds.map((id) => userMap[id]);
+    return result;
   }
 }

@@ -4,12 +4,12 @@ import Dataloader from 'dataloader';
 import { UserQueryCondition, LoginInfo, UserInfo } from '../../types/types';
 import {
   getUserRepository,
-  getAbleDistrictsRepository,
-  getFollowRepository,
-  getFriendsRepository,
 } from '../../database';
 import { Motivations } from '../../database/entity/Motivations';
 import { ExerciseAbleDays } from '../../database/entity/ExerciseAbleDays';
+import { AbleDistricts } from '../../database/entity/AbleDistricts';
+import { Follow } from '../../database/entity/Follow';
+import { Friends } from '../../database/entity/Friends';
 
 // const CHECK_FOLLOW = 'CHECK_FOLLOW';
 // const ADD_FRIEND = 'ADD_FRIEND';
@@ -27,6 +27,29 @@ const motivationLoader = new Dataloader<string, Motivations[]>(
 const weekdaysLoader = new Dataloader<string, ExerciseAbleDays[]>(
   (userIds: readonly string[]) =>
     getUserRepository().batchExerciseAbleDays(userIds),
+  { cache: false },
+);
+
+const districtsLoader = new Dataloader<string, AbleDistricts[]>(
+  (userIds: readonly string[]) =>
+    getUserRepository().batchAbleDistricts(userIds),
+  { cache: false },
+);
+
+// 내가 following 하고 있는 사람들
+const followingLoader = new Dataloader<string, Follow[]>(
+  (userIds: readonly string[]) => getUserRepository().batchFollowing(userIds),
+  { cache: false },
+);
+
+// 나의 follower들, 나를 following하고 있는 사람들
+const followersLoader = new Dataloader<string, Follow[]>(
+  (userIds: readonly string[]) => getUserRepository().batchFollowers(userIds),
+  { cache: false },
+);
+
+const friendsLoader = new Dataloader<string, Friends[]>(
+  (userIds: readonly string[]) => getUserRepository().batchFriends(userIds),
   { cache: false },
 );
 
@@ -70,17 +93,21 @@ const userResolver = {
     weekdays: async (user: any) => weekdaysLoader.load(user.id),
     // getExerciseAbleDaysRepository().findByUserId(user.id),
 
-    ableDistricts: async (user: any) =>
-      getAbleDistrictsRepository().findByUserId(user.id),
+    ableDistricts: async (user: any) => districtsLoader.load(user.id),
+    // getAbleDistrictsRepository().findByUserId(user.id),
 
+    // 내가 following 하고 있는 사람들
     following: async (user: any) =>
-      getFollowRepository().getFollowingById(user.id),
+      followingLoader.load(user.id),
+    // getFollowRepository().getFollowingById(user.id),
 
+    // 나의 follower들, 나를 following하고 있는 사람들
     followers: async (user: any) =>
-      getFollowRepository().getFollowersById(user.id),
+      followersLoader.load(user.id),
+    // getFollowRepository().getFollowersById(user.id),
 
-    friends: async (user: any) =>
-      getFriendsRepository().getFriendsById(user.id),
+    friends: async (user: any) => friendsLoader.load(user.id),
+    // getFriendsRepository().getFriendsById(user.id),
   },
 
   // Subscription: {

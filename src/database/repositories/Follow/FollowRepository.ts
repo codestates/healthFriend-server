@@ -142,4 +142,32 @@ export class FollowerRepository extends Repository<Follow> {
     }
     return follow.follower;
   }
+
+  // 내가 following 하고 있는 사람들
+  async batchFollowingUsers(followIds: readonly string[]) {
+    const follows = await this.createQueryBuilder('follow')
+      .leftJoinAndSelect('follow.follower', 'user')
+      .where('follow.id IN (:...followIds)', { followIds })
+      .getMany();
+    const followMap: { [key: string]: User } = {};
+    follows.forEach((u) => {
+      followMap[u.id] = u.follower;
+    });
+    const result = followIds.map((id) => followMap[id]);
+    return result;
+  }
+
+  // 나의 follower들, 나를 following하고 있는 사람들
+  async batchFollowerUsers(followIds: readonly string[]) {
+    const follows = await this.createQueryBuilder('follow')
+      .leftJoinAndSelect('follow.following', 'user')
+      .where('follow.id IN (:...followIds)', { followIds })
+      .getMany();
+    const followMap: { [key: string]: User } = {};
+    follows.forEach((u) => {
+      followMap[u.id] = u.following;
+    });
+    const result = followIds.map((id) => followMap[id]);
+    return result;
+  }
 }

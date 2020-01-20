@@ -1,6 +1,20 @@
 import { AuthenticationError } from 'apollo-server-express';
+import Dataloader from 'dataloader';
 import { UserInfoContext, UserId } from '../../types/types';
 import { getUserRepository, getFriendsRepository } from '../../database';
+import { User } from '../../database/entity/User';
+
+const meUserLoader = new Dataloader<string, User>(
+  (friendIds: readonly string[]) =>
+    getFriendsRepository().batchMeUsers(friendIds),
+  { cache: false },
+);
+
+const friendUserLoader = new Dataloader<string, User>(
+  (friendIds: readonly string[]) =>
+    getFriendsRepository().batchFriendUsers(friendIds),
+  { cache: false },
+);
 
 const friendsResolver = {
   Query: {
@@ -20,11 +34,11 @@ const friendsResolver = {
       if (!userInfo) throw new AuthenticationError('Not authenticated.');
 
       const me = await getUserRepository().validateUserId(userInfo.id);
-      console.log('addFriend - me: ', me);
+      // console.log('addFriend - me: ', me);
       const { userId } = args;
-      console.log('addFriend - userId: ', userId);
+      // console.log('addFriend - userId: ', userId);
       const friend = await getUserRepository().validateUserId(userId);
-      console.log('addFriend - friend: ', friend);
+      // console.log('addFriend - friend: ', friend);
       const meFriend = await getFriendsRepository().addFriend(me, friend);
       return meFriend;
     },
@@ -41,18 +55,21 @@ const friendsResolver = {
   },
 
   Friends: {
-    me: async (friends: any) => {
-      const meUser = await getFriendsRepository().getMeUserByFriendsId(
-        friends.id,
-      );
-      return meUser;
-    },
-    friend: async (friends: any) => {
-      const friendUser = await getFriendsRepository().getFriendUserByFriendsId(
-        friends.id,
-      );
-      return friendUser;
-    },
+    me: async (friends: any) => meUserLoader.load(friends.id),
+    // {
+    //   const meUser = await getFriendsRepository().getMeUserByFriendsId(
+    //     friends.id,
+    //   );
+    //   return meUser;
+    // },
+    friend: async (friends: any) => friendUserLoader.load(friends.id),
+    // {
+    //   const friendUser =
+    // await getFriendsRepository().getFriendUserByFriendsId(
+    //     friends.id,
+    //   );
+    //   return friendUser;
+    // },
   },
 
   Subscription: {
