@@ -130,6 +130,8 @@ export class User {
   // )
   // following: User[];
 
+  // 내가 follower에 저장되어 있는 follow를 찾으면 내 following을 찾을 수 있다.
+  // 내가 following인 것을 찾으면 follower를 찾을 수 있다.
   @OneToMany(() => Follow, (follow) => follow.follower)
   followers: Follow[];
 

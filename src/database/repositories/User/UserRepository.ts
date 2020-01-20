@@ -233,21 +233,8 @@ export class UserRepository extends Repository<User> {
   }
 
   // 내가 following 하고 있는 사람들
+  // 내가 follower에 저장되어 있는 follow를 찾으면 내 following을 찾을 수 있다.
   async batchFollowing(userIds: readonly string[]) {
-    const users = await this.createQueryBuilder('user')
-      .leftJoinAndSelect('user.following', 'follow')
-      .where('user.id IN (:...userIds)', { userIds })
-      .getMany();
-    const userMap: { [key: string]: Follow[] } = {};
-    users.forEach((u) => {
-      userMap[u.id] = u.following;
-    });
-    const result = userIds.map((id) => userMap[id]);
-    return result;
-  }
-
-  // 나의 follower들, 나를 following하고 있는 사람들
-  async batchFollowers(userIds: readonly string[]) {
     const users = await this.createQueryBuilder('user')
       .leftJoinAndSelect('user.followers', 'follow')
       .where('user.id IN (:...userIds)', { userIds })
@@ -255,6 +242,21 @@ export class UserRepository extends Repository<User> {
     const userMap: { [key: string]: Follow[] } = {};
     users.forEach((u) => {
       userMap[u.id] = u.followers;
+    });
+    const result = userIds.map((id) => userMap[id]);
+    return result;
+  }
+
+  // 나의 follower들, 나를 following하고 있는 사람들
+  // 내가 following인 것을 찾으면 follower를 찾을 수 있다.
+  async batchFollowers(userIds: readonly string[]) {
+    const users = await this.createQueryBuilder('user')
+      .leftJoinAndSelect('user.following', 'follow')
+      .where('user.id IN (:...userIds)', { userIds })
+      .getMany();
+    const userMap: { [key: string]: Follow[] } = {};
+    users.forEach((u) => {
+      userMap[u.id] = u.following;
     });
     const result = userIds.map((id) => userMap[id]);
     return result;

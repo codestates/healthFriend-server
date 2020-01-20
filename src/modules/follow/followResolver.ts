@@ -58,11 +58,9 @@ const followResolver = {
       const me = await getUserRepository().validateUserId(userInfo.id);
       const { userIds } = args;
       const following = await getUserRepository().validateUserIds(userIds);
-      const meFollow = await getFollowRepository().checkFollowers(
-        me,
-        following,
-      );
-      return meFollow;
+      await getFollowRepository().checkFollowers(me, following);
+      const user = await getUserRepository().getUserInfo(me);
+      return user;
     },
 
     deleteFollowing: async (_: any, args: UserId, context: UserInfoContext) => {
