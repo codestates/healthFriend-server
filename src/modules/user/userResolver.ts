@@ -21,11 +21,13 @@ export interface PubSubContext {
 
 const motivationLoader = new Dataloader<string, Motivations[]>(
   (userIds: readonly string[]) => getUserRepository().batchMotivations(userIds),
+  { cache: false },
 );
 
 const weekdaysLoader = new Dataloader<string, ExerciseAbleDays[]>(
   (userIds: readonly string[]) =>
     getUserRepository().batchExerciseAbleDays(userIds),
+  { cache: false },
 );
 
 const userResolver = {
