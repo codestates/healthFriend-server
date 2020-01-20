@@ -1,7 +1,8 @@
 import { EntityRepository, Repository } from 'typeorm';
 
-import { AbleDistricts } from '../../entity/AbleDistricts';
 import { getUserRepository, getDistrictRepository } from '../..';
+import { AbleDistricts } from '../../entity/AbleDistricts';
+import { Districts } from '../../entity/Districts';
 import { User } from '../../entity/User';
 
 @EntityRepository(AbleDistricts)
@@ -69,5 +70,17 @@ export class AbleDistrictsRepository extends Repository<AbleDistricts> {
     });
     // console.log('findDistrictByAbleDistrictId: ', result);
     return result?.district;
+  }
+
+  async batchDistricts(ableDistrictIds: readonly string[]) {
+    const users = await this.createQueryBuilder('ableDistricts')
+      .leftJoinAndSelect('ableDistricts.district', 'districts')
+      .where('ableDistricts.id IN (:...ableDistrictIds)', { ableDistrictIds })
+      .getMany();
+    const ableDistrictMap: { [key: string]: Districts } = {};
+    users.forEach((u) => {
+      ableDistrictMap[u.id] = u.district;
+    });
+    return ableDistrictIds.map((id) => ableDistrictMap[id]);
   }
 }

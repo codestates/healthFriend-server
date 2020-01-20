@@ -110,4 +110,28 @@ export class FriendsRepository extends Repository<Friends> {
     }
     return friends.friend;
   }
+
+  async batchMeUsers(friendIds: readonly string[]) {
+    const friends = await this.createQueryBuilder('friends')
+      .leftJoinAndSelect('friends.me', 'user')
+      .where('friends.id IN (:...friendIds)', { friendIds })
+      .getMany();
+    const friendsMap: { [key: string]: User } = {};
+    friends.forEach((u) => {
+      friendsMap[u.id] = u.me;
+    });
+    return friendIds.map((id) => friendsMap[id]);
+  }
+
+  async batchFriendUsers(friendIds: readonly string[]) {
+    const friends = await this.createQueryBuilder('friends')
+      .leftJoinAndSelect('friends.friend', 'user')
+      .where('friends.id IN (:...friendIds)', { friendIds })
+      .getMany();
+    const friendsMap: { [key: string]: User } = {};
+    friends.forEach((u) => {
+      friendsMap[u.id] = u.friend;
+    });
+    return friendIds.map((id) => friendsMap[id]);
+  }
 }

@@ -1,7 +1,13 @@
 import { AuthenticationError } from 'apollo-server-express';
-import {
-  getAbleDistrictsRepository,
-} from '../../database';
+import Dataloader from 'dataloader';
+import { getAbleDistrictsRepository } from '../../database';
+import { Districts } from '../../database/entity/Districts';
+
+const districtsLoader = new Dataloader<string, Districts>(
+  (ableDistrictIds: readonly string[]) =>
+    getAbleDistrictsRepository().batchDistricts(ableDistrictIds),
+  { cache: false },
+);
 
 const ableDistrictsResolvers = {
   Query: {
@@ -17,9 +23,11 @@ const ableDistrictsResolvers = {
   AbleDistrict: {
     user: async (parent: any) =>
       getAbleDistrictsRepository().findUserByAbleDistrictId(parent.id),
-    district: async (parent: any) =>
-      getAbleDistrictsRepository().findDistrictByAbleDistrictId(parent.id),
-
+    district: async (ableDistrict: any) =>
+      districtsLoader.load(ableDistrict.id),
+    // getAbleDistrictsRepository().findDistrictByAbleDistrictId(
+    //   ableDistrict.id,
+    // ),
   },
 
   Mutation: {
