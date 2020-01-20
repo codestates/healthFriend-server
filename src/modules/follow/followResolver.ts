@@ -1,6 +1,6 @@
 import { AuthenticationError } from 'apollo-server-express';
 import Dataloader from 'dataloader';
-import { UserId, UserInfoContext } from '../../types/types';
+import { UserId, UserInfoContext, UserIds } from '../../types/types';
 import { getUserRepository, getFollowRepository } from '../../database';
 import { User } from '../../database/entity/User';
 
@@ -50,6 +50,21 @@ const followResolver = {
       const meFollow = await getFollowRepository().followingUser(me, following);
       return meFollow;
     },
+
+    checkFollower: async (_: any, args: UserIds, context: UserInfoContext) => {
+      const { userInfo } = context;
+      if (!userInfo) throw new AuthenticationError('Not authenticated.');
+
+      const me = await getUserRepository().validateUserId(userInfo.id);
+      const { userIds } = args;
+      const following = await getUserRepository().validateUserIds(userIds);
+      const meFollow = await getFollowRepository().checkFollowers(
+        me,
+        following,
+      );
+      return meFollow;
+    },
+
     deleteFollowing: async (_: any, args: UserId, context: UserInfoContext) => {
       const { userInfo } = context;
       if (!userInfo) throw new AuthenticationError('Not authenticated.');
