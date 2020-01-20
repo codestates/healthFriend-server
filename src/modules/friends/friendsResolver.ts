@@ -1,6 +1,6 @@
 import { AuthenticationError } from 'apollo-server-express';
 import Dataloader from 'dataloader';
-import { UserInfoContext, UserId } from '../../types/types';
+import { UserInfoContext, UserId, UserIds } from '../../types/types';
 import { getUserRepository, getFriendsRepository } from '../../database';
 import { User } from '../../database/entity/User';
 
@@ -42,6 +42,19 @@ const friendsResolver = {
       const meFriend = await getFriendsRepository().addFriend(me, friend);
       return meFriend;
     },
+
+    checkFriends: async (_: any, args: UserIds, context: UserInfoContext) => {
+      const { userInfo } = context;
+      if (!userInfo) throw new AuthenticationError('Not authenticated.');
+
+      const me = await getUserRepository().validateUserId(userInfo.id);
+      const { userIds } = args;
+      const friends = await getUserRepository().validateUserIds(userIds);
+      await getFriendsRepository().checkFriends(me, friends);
+      const newMe = await getUserRepository().getUserInfo(me);
+      return newMe;
+    },
+
     deleteFriend: async (_: any, args: UserId, context: UserInfoContext) => {
       const { userInfo } = context;
       if (!userInfo) throw new AuthenticationError('Not authenticated.');

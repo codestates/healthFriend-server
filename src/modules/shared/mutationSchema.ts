@@ -6,10 +6,11 @@ const mutationSchema = gql`
     setExerciseAbleDay(input: [WeekdayEnum]): [ExerciseAbleDay]
     setAbleDistrict(dongIds: [String]): [AbleDistrict]
     followingUser(userId: String!): User
-    checkFollower(userIds: [String]!): User
+    checkFollowers(userIds: [String]!): User
     deleteFollowing(userId: String!): User
     deleteFollower(userId: String!): User
     addFriend(userId: String!): Friends
+    checkFriends(userIds: [String]!): User
     deleteFriend(userId: String!): User
     registerForTest(email: String!, password: String!): AuthPayload!
     me(

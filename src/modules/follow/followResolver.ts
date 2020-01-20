@@ -52,7 +52,7 @@ const followResolver = {
       return newMe;
     },
 
-    checkFollower: async (_: any, args: UserIds, context: UserInfoContext) => {
+    checkFollowers: async (_: any, args: UserIds, context: UserInfoContext) => {
       const { userInfo } = context;
       if (!userInfo) throw new AuthenticationError('Not authenticated.');
 
