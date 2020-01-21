@@ -1,7 +1,21 @@
 import { gql } from 'apollo-server-express';
 
 const userSchema = gql`
-  scalar DateTime
+  extend type Query {
+    test: User
+    user(userId: String): User
+    users: [User]!
+    userCount: Int!
+    login(email: String, password: String): AuthPayload
+    filterUsers(
+      openImageChoice: [OpenImageChoiceEnum]
+      gender: [GenderEnum]
+      levelOf3Dae: [LevelOf3DaeEnum]
+      motivations: [MotivationEnum]
+      weekdays: [WeekdayEnum]
+      districts: [String]
+    ): [User]
+  }
 
   type User {
     id: ID!
@@ -21,6 +35,13 @@ const userSchema = gql`
     friends: [Friends]
     createdAt: DateTime!
   }
+
+  type AuthPayload {
+    user: User
+    token: String
+  }
+
+  scalar DateTime
 `;
 
 export { userSchema };

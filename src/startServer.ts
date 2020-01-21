@@ -1,17 +1,11 @@
 import 'reflect-metadata';
 import http from 'http';
 import express from 'express';
-import {
-  ApolloServer,
-  makeExecutableSchema,
-  PubSub,
-  ApolloError,
-} from 'apollo-server-express';
+import { ApolloServer, PubSub, ApolloError } from 'apollo-server-express';
 import passport from 'passport';
 import cookieParser from 'cookie-parser';
 import morgan from 'morgan';
 import cors from 'cors';
-import { GraphQLSchema } from 'graphql';
 
 import { schemas, resolvers } from './modules';
 import connectDB from './database';
@@ -31,13 +25,9 @@ export const startServer = async () => {
 
     const pubsub = new PubSub();
 
-    const schema: GraphQLSchema = makeExecutableSchema({
+    const server = new ApolloServer({
       typeDefs: schemas,
       resolvers,
-    });
-
-    const server = new ApolloServer({
-      schema,
       context: ({ req, connection }: any) => {
         if (connection && connection.context.userInfo) {
           const { userInfo } = connection.context;

@@ -1,13 +1,9 @@
-import {
-  querySchema,
-  mutationSchema,
-  subscriptionSchema,
-  enumSchema,
-} from './shared';
+import { gql } from 'apollo-server-express';
+import { enumSchema } from './shared';
 import { userSchema, userResolver } from './user';
-import { registerResolver } from './register';
+import { registerResolver, registerSchema } from './register';
 import { motivationResolver, motivationSchema } from './motivation';
-import { meResolver } from './me';
+import { meResolver, meSchema } from './me';
 import { friendsResolver, friendsSchema } from './friends';
 import { followResolver, followSchema } from './follow';
 import {
@@ -29,16 +25,28 @@ const resolvers = [
   followResolver,
 ];
 
+const linkSchema = gql`
+  type Query {
+    _: Boolean
+  }
+  type Mutation {
+    _: Boolean
+  }
+  type Subscription {
+    _: Boolean
+  }
+`;
+
 const schemas = [
-  querySchema,
-  mutationSchema,
-  subscriptionSchema,
+  linkSchema,
   enumSchema,
   ableDistrictsSchema,
   districtSchema,
   exerciseAbleDaysSchema,
   motivationSchema,
+  meSchema,
   userSchema,
+  registerSchema,
   friendsSchema,
   followSchema,
 ];
