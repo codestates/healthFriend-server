@@ -7,7 +7,7 @@ import cookieParser from 'cookie-parser';
 import morgan from 'morgan';
 import cors from 'cors';
 
-import { schemas, resolvers } from './modules';
+import { schemas, resolvers } from './graphql';
 import connectDB from './database';
 import authRouter from './auth/routes';
 import passportConfig from './auth';
