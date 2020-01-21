@@ -17,6 +17,7 @@ import {
   LevelOf3Dae,
   Role,
   Provider,
+  User,
 } from '../../database/entity/User';
 import { Districts } from '../../database/entity/Districts';
 
@@ -100,6 +101,16 @@ const addFollowingRandomly = async () => {
   }
 };
 
+const addSpecialUserTestData = async (email: string) => {
+  const specialUser = (await getUserRepository().findOne({ email })) as User;
+  const allUser = await getUserRepository().find();
+  await Promise.all(allUser.map(async (u, index) => {
+    if (!(index % 3) && (u.id !== specialUser.id)) {
+      await getFollowRepository().followingUser(u, specialUser);
+    }
+  }));
+};
+
 export const run = async (users: InputUserValue[], admin: InputUserValue) => {
   await connectDB();
   await districtInitialData();
@@ -108,6 +119,7 @@ export const run = async (users: InputUserValue[], admin: InputUserValue) => {
       await insertUser(u);
     }),
   );
+  await addSpecialUserTestData('bfsudong@gmail.com');
   await addFollowingRandomly();
   await insertUser(admin);
 };
