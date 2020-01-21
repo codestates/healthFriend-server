@@ -1,10 +1,8 @@
-import { AuthenticationError } from 'apollo-server-express';
-import { UserInfoContext, DetailedUserInfo } from '../../types/types';
+import { combineResolvers } from 'graphql-resolvers';
+import { DetailedUserInfo } from '../../types/types';
 
-import {
-  getUserRepository,
-  // getMotivationRepository,
-} from '../../database';
+import { getUserRepository } from '../../database';
+import { isAuthenticated } from '../auth';
 
 const meResolver = {
   GenderEnum: {
@@ -34,30 +32,30 @@ const meResolver = {
   },
 
   Query: {
-    me: async (_: any, __: any, context: UserInfoContext) => {
-      const { userInfo } = context;
-      if (!userInfo) throw new AuthenticationError('Not authenticated.');
-      // console.log('ME resolver: ', userInfo.id);
-      return getUserRepository().getUserInfoById(userInfo.id);
-    },
+    me: combineResolvers(
+      isAuthenticated,
+      async (_: any, __: any, { userInfo }) =>
+        getUserRepository().getUserInfoById(userInfo.id),
+    ),
   },
 
   Mutation: {
-    me: async (_: any, args: DetailedUserInfo, context: UserInfoContext) => {
-      const { userInfo } = context;
-      if (!userInfo) throw new AuthenticationError('Not authenticated.');
-      const updateUser = getUserRepository().create({
-        id: userInfo.id,
-        nickname: args.nickname,
-        gender: args.gender,
-        openImageChoice: args.openImageChoice,
-        levelOf3Dae: args.levelOf3Dae,
-        messageToFriend: args.messageToFriend,
-      });
-      const user = await getUserRepository().updateUserInfo(updateUser);
-      // console.log(user);
-      return user;
-    },
+    me: combineResolvers(
+      isAuthenticated,
+      async (_: any, args: DetailedUserInfo, { userInfo }) => {
+        const updateUser = getUserRepository().create({
+          id: userInfo.id,
+          nickname: args.nickname,
+          gender: args.gender,
+          openImageChoice: args.openImageChoice,
+          levelOf3Dae: args.levelOf3Dae,
+          messageToFriend: args.messageToFriend,
+        });
+        const user = await getUserRepository().updateUserInfo(updateUser);
+        // console.log(user);
+        return user;
+      },
+    ),
   },
 };
 

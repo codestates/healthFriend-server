@@ -1,5 +1,5 @@
-import { AuthenticationError } from 'apollo-server-express';
 import Dataloader from 'dataloader';
+import { combineResolvers } from 'graphql-resolvers';
 
 import { UserQueryCondition, LoginInfo } from '../../types/types';
 import { getUserRepository } from '../../database';
@@ -8,6 +8,7 @@ import { ExerciseAbleDays } from '../../database/entity/ExerciseAbleDays';
 import { AbleDistricts } from '../../database/entity/AbleDistricts';
 import { Follow } from '../../database/entity/Follow';
 import { Friends } from '../../database/entity/Friends';
+import { isAuthenticated } from '../auth';
 
 const motivationLoader = new Dataloader<string, Motivations[]>(
   (userIds: readonly string[]) => getUserRepository().batchMotivations(userIds),
@@ -46,33 +47,33 @@ const friendsLoader = new Dataloader<string, Friends[]>(
 const userResolver = {
   Query: {
     test: async () => getUserRepository().test(),
-    user: async (_: any, args: any, { userInfo }: any) => {
-      if (!userInfo) throw new AuthenticationError('Not authenticated.');
+
+    user: combineResolvers(isAuthenticated, async (_: any, args: any) => {
       const user = await getUserRepository().validateUserId(args.userId);
       // console.log('userResolver - user: ', user);
       return getUserRepository().getUserInfo(user);
-    },
-    users: async (_: any, __: any, { userInfo }: any) => {
-      if (!userInfo) throw new AuthenticationError('Not authenticated.');
-      return getUserRepository().getAllUser();
-    },
+    }),
+
+    users: combineResolvers(isAuthenticated, async () =>
+      getUserRepository().getAllUser()),
+
     userCount: async () => getUserRepository().getUserCount(),
-    filterUsers: async (
-      _: any,
-      args: UserQueryCondition,
-      { userInfo }: any,
-    ) => {
-      if (!userInfo) throw new AuthenticationError('Not authenticated.');
-      const whereObject: UserQueryCondition = {
-        gender: args.gender || [],
-        openImageChoice: args.openImageChoice || [],
-        levelOf3Dae: args.levelOf3Dae || [],
-        motivations: args.motivations || [],
-        weekdays: args.weekdays || [],
-        districts: args.districts || [],
-      };
-      return getUserRepository().filterUsers(whereObject);
-    },
+
+    filterUsers: combineResolvers(
+      isAuthenticated,
+      async (_: any, args: UserQueryCondition) => {
+        const whereObject: UserQueryCondition = {
+          gender: args.gender || [],
+          openImageChoice: args.openImageChoice || [],
+          levelOf3Dae: args.levelOf3Dae || [],
+          motivations: args.motivations || [],
+          weekdays: args.weekdays || [],
+          districts: args.districts || [],
+        };
+        return getUserRepository().filterUsers(whereObject);
+      },
+    ),
+
     login: async (_: any, args: LoginInfo) => getUserRepository().login(args),
   },
 

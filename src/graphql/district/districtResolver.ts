@@ -1,12 +1,11 @@
-import { AuthenticationError } from 'apollo-server-express';
+import { combineResolvers } from 'graphql-resolvers';
 import { getDistrictRepository } from '../../database';
+import { isAuthenticated } from '../auth';
 
 const districtResolver = {
   Query: {
-    allDistricts: async (_: any, __: any, { userInfo }: any) => {
-      if (!userInfo) throw new AuthenticationError('Not authenticated.');
-      return getDistrictRepository().getAllDistrict();
-    },
+    allDistricts: combineResolvers(isAuthenticated, async () =>
+      getDistrictRepository().getAllDistrict()),
   },
 };
 
