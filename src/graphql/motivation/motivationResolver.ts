@@ -1,5 +1,6 @@
-import { AuthenticationError } from 'apollo-server-express';
+import { combineResolvers } from 'graphql-resolvers';
 import { getMotivationRepository } from '../../database';
+import { isAuthenticated } from '../auth';
 
 const motivationResolver = {
   MotivationEnum: {
@@ -10,24 +11,28 @@ const motivationResolver = {
   },
 
   Query: {
-    motivations: async (_: any, args: any, { userInfo }: any) => {
-      if (!userInfo) throw new AuthenticationError('Not authenticated.');
-      if (!args.input) {
-        return getMotivationRepository().find();
-      }
-      return getMotivationRepository().findByMotivation(args.input);
-    },
+    motivations: combineResolvers(
+      isAuthenticated,
+      async (_: any, args: any) => {
+        if (!args.input) {
+          return getMotivationRepository().find();
+        }
+        return getMotivationRepository().findByMotivation(args.input);
+      },
+    ),
   },
 
   Mutation: {
-    setMotivation: async (_: any, args: any, { userInfo }: any) => {
-      if (!userInfo) throw new AuthenticationError('Not authenticated.');
-      const motivations = await getMotivationRepository().saveByUserId(
-        userInfo.id,
-        args.input,
-      );
-      return motivations;
-    },
+    setMotivation: combineResolvers(
+      isAuthenticated,
+      async (_: any, args: any, { userInfo }) => {
+        const motivations = await getMotivationRepository().saveByUserId(
+          userInfo.id,
+          args.input,
+        );
+        return motivations;
+      },
+    ),
   },
 
   Motivation: {

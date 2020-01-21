@@ -1,7 +1,8 @@
-import { AuthenticationError } from 'apollo-server-express';
+import { combineResolvers } from 'graphql-resolvers';
 import Dataloader from 'dataloader';
 import { getAbleDistrictsRepository } from '../../database';
 import { Districts } from '../../database/entity/Districts';
+import { isAuthenticated } from '../auth';
 
 const districtsLoader = new Dataloader<string, Districts>(
   (ableDistrictIds: readonly string[]) =>
@@ -11,13 +12,15 @@ const districtsLoader = new Dataloader<string, Districts>(
 
 const ableDistrictsResolvers = {
   Query: {
-    ableDistricts: async (_: any, args: any, { userInfo }: any) => {
-      if (!userInfo) throw new AuthenticationError('Not authenticated.');
-      if (!args.dongIds) {
-        return getAbleDistrictsRepository().find();
-      }
-      return getAbleDistrictsRepository().findByDongIds(args.dongIds);
-    },
+    ableDistricts: combineResolvers(
+      isAuthenticated,
+      async (_: any, args: any) => {
+        if (!args.dongIds) {
+          return getAbleDistrictsRepository().find();
+        }
+        return getAbleDistrictsRepository().findByDongIds(args.dongIds);
+      },
+    ),
   },
 
   AbleDistrict: {
@@ -31,14 +34,16 @@ const ableDistrictsResolvers = {
   },
 
   Mutation: {
-    setAbleDistrict: async (_: any, args: any, { userInfo }: any) => {
-      if (!userInfo) throw new AuthenticationError('Not authenticated.');
-      const ableDistricts = await getAbleDistrictsRepository().saveByDongId(
-        userInfo.id,
-        args.dongIds,
-      );
-      return ableDistricts;
-    },
+    setAbleDistrict: combineResolvers(
+      isAuthenticated,
+      async (_: any, args: any, { userInfo }) => {
+        const ableDistricts = await getAbleDistrictsRepository().saveByDongId(
+          userInfo.id,
+          args.dongIds,
+        );
+        return ableDistricts;
+      },
+    ),
   },
 };
 

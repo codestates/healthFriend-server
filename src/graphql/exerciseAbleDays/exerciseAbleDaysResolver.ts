@@ -1,5 +1,6 @@
-import { AuthenticationError } from 'apollo-server-express';
+import { combineResolvers } from 'graphql-resolvers';
 import { getExerciseAbleDaysRepository } from '../../database';
+import { isAuthenticated } from '../auth';
 
 const exerciseAbleDaysResolver = {
   WeekdayEnum: {
@@ -13,13 +14,15 @@ const exerciseAbleDaysResolver = {
   },
 
   Query: {
-    exerciseAbleDays: async (_: any, args: any, { userInfo }: any) => {
-      if (!userInfo) throw new AuthenticationError('Not authenticated.');
-      if (!args.input) {
-        return getExerciseAbleDaysRepository().find();
-      }
-      return getExerciseAbleDaysRepository().findByWeekday(args.input);
-    },
+    exerciseAbleDays: combineResolvers(
+      isAuthenticated,
+      async (_: any, args: any) => {
+        if (!args.input) {
+          return getExerciseAbleDaysRepository().find();
+        }
+        return getExerciseAbleDaysRepository().findByWeekday(args.input);
+      },
+    ),
   },
 
   ExerciseAbleDay: {
@@ -28,14 +31,16 @@ const exerciseAbleDaysResolver = {
   },
 
   Mutation: {
-    setExerciseAbleDay: async (_: any, args: any, { userInfo }: any) => {
-      if (!userInfo) throw new AuthenticationError('Not authenticated.');
-      const ableDays = await getExerciseAbleDaysRepository().saveByUserId(
-        userInfo.id,
-        args.input,
-      );
-      return ableDays;
-    },
+    setExerciseAbleDay: combineResolvers(
+      isAuthenticated,
+      async (_: any, args: any, { userInfo }) => {
+        const ableDays = await getExerciseAbleDaysRepository().saveByUserId(
+          userInfo.id,
+          args.input,
+        );
+        return ableDays;
+      },
+    ),
   },
 };
 

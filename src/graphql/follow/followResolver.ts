@@ -1,10 +1,13 @@
-import { AuthenticationError } from 'apollo-server-express';
+import { combineResolvers } from 'graphql-resolvers';
 import Dataloader from 'dataloader';
 import {
-  UserId, UserInfoContext, UserIds, PubSubContext,
+  UserId,
+  UserIds,
+  PubSubContext,
 } from '../../types/types';
 import { getUserRepository, getFollowRepository } from '../../database';
 import { User } from '../../database/entity/User';
+import { isAuthenticated } from '../auth';
 
 const CHECK_FOLLOW = 'CHECK_FOLLOW';
 
@@ -23,78 +26,81 @@ const followerUsersLoader = new Dataloader<string, User>(
 
 const followResolver = {
   Query: {
-    getFollowers: async (_: any, args: UserId, context: UserInfoContext) => {
-      const { userInfo } = context;
-      if (!userInfo) throw new AuthenticationError('Not authenticated.');
+    getFollowers: combineResolvers(
+      isAuthenticated,
+      async (_: any, args: UserId) => {
+        const { userId } = args;
+        const user = await getUserRepository().validateUserId(userId);
+        const followers = await getFollowRepository().getFollowers(user);
+        return followers;
+      },
+    ),
 
-      const { userId } = args;
-      const user = await getUserRepository().validateUserId(userId);
-      const followers = await getFollowRepository().getFollowers(user);
-      return followers;
-    },
-    getFollowing: async (_: any, args: UserId, context: UserInfoContext) => {
-      const { userInfo } = context;
-      if (!userInfo) throw new AuthenticationError('Not authenticated.');
-
-      const { userId } = args;
-      const user = await getUserRepository().validateUserId(userId);
-      const following = await getFollowRepository().getFollowing(user);
-      return following;
-    },
+    getFollowing: combineResolvers(
+      isAuthenticated,
+      async (_: any, args: UserId) => {
+        const { userId } = args;
+        const user = await getUserRepository().validateUserId(userId);
+        const following = await getFollowRepository().getFollowing(user);
+        return following;
+      },
+    ),
   },
 
   Mutation: {
-    followingUser: async (_: any, args: UserId, context: PubSubContext) => {
-      const { userInfo, pubsub } = context;
-      if (!userInfo) throw new AuthenticationError('Not authenticated.');
+    followingUser: combineResolvers(
+      isAuthenticated,
+      async (_: any, args: UserId, context: PubSubContext) => {
+        const { userInfo, pubsub } = context;
+        const me = await getUserRepository().validateUserId(userInfo.id);
+        const { userId } = args;
+        const following = await getUserRepository().validateUserId(userId);
+        const result = await getFollowRepository().followingUser(me, following);
+        const newMe = await getUserRepository().getUserInfo(me);
+        if (result) {
+          pubsub.publish(`${CHECK_FOLLOW}_${args.userId}`, {
+            subscribeRequestFriend: newMe,
+          });
+        }
+        return newMe;
+      },
+    ),
 
-      const me = await getUserRepository().validateUserId(userInfo.id);
-      const { userId } = args;
-      const following = await getUserRepository().validateUserId(userId);
-      const result = await getFollowRepository().followingUser(me, following);
-      const newMe = await getUserRepository().getUserInfo(me);
-      if (result) {
-        pubsub.publish(`${CHECK_FOLLOW}_${args.userId}`, {
-          subscribeRequestFriend: newMe,
-        });
-      }
-      return newMe;
-    },
+    checkFollowers: combineResolvers(
+      isAuthenticated,
+      async (_: any, args: UserIds, { userInfo }) => {
+        const me = await getUserRepository().validateUserId(userInfo.id);
+        const { userIds } = args;
+        const following = await getUserRepository().validateUserIds(userIds);
+        await getFollowRepository().checkFollowers(me, following);
+        const newMe = await getUserRepository().getUserInfo(me);
+        return newMe;
+      },
+    ),
 
-    checkFollowers: async (_: any, args: UserIds, context: UserInfoContext) => {
-      const { userInfo } = context;
-      if (!userInfo) throw new AuthenticationError('Not authenticated.');
+    deleteFollowing: combineResolvers(
+      isAuthenticated,
+      async (_: any, args: UserId, { userInfo }) => {
+        const me = await getUserRepository().validateUserId(userInfo.id);
+        const { userId } = args;
+        const following = await getUserRepository().validateUserId(userId);
+        await getFollowRepository().deleteFollowing(me, following);
+        const newMe = await getUserRepository().getUserInfo(me);
+        return newMe;
+      },
+    ),
 
-      const me = await getUserRepository().validateUserId(userInfo.id);
-      const { userIds } = args;
-      const following = await getUserRepository().validateUserIds(userIds);
-      await getFollowRepository().checkFollowers(me, following);
-      const newMe = await getUserRepository().getUserInfo(me);
-      return newMe;
-    },
-
-    deleteFollowing: async (_: any, args: UserId, context: UserInfoContext) => {
-      const { userInfo } = context;
-      if (!userInfo) throw new AuthenticationError('Not authenticated.');
-
-      const me = await getUserRepository().validateUserId(userInfo.id);
-      const { userId } = args;
-      const following = await getUserRepository().validateUserId(userId);
-      await getFollowRepository().deleteFollowing(me, following);
-      const newMe = await getUserRepository().getUserInfo(me);
-      return newMe;
-    },
-    deleteFollower: async (_: any, args: UserId, context: UserInfoContext) => {
-      const { userInfo } = context;
-      if (!userInfo) throw new AuthenticationError('Not authenticated.');
-
-      const me = await getUserRepository().validateUserId(userInfo.id);
-      const { userId } = args;
-      const follower = await getUserRepository().validateUserId(userId);
-      await getFollowRepository().deleteFollower(me, follower);
-      const newMe = await getUserRepository().getUserInfo(me);
-      return newMe;
-    },
+    deleteFollower: combineResolvers(
+      isAuthenticated,
+      async (_: any, args: UserId, { userInfo }) => {
+        const me = await getUserRepository().validateUserId(userInfo.id);
+        const { userId } = args;
+        const follower = await getUserRepository().validateUserId(userId);
+        await getFollowRepository().deleteFollower(me, follower);
+        const newMe = await getUserRepository().getUserInfo(me);
+        return newMe;
+      },
+    ),
   },
 
   Follow: {
@@ -123,13 +129,14 @@ const followResolver = {
 
   Subscription: {
     subscribeRequestFriend: {
-      subscribe(_: any, __: any, context: PubSubContext) {
-        const { userInfo, pubsub } = context;
-        if (!userInfo) throw new AuthenticationError('Not authenticated.');
-        return pubsub.asyncIterator(`${CHECK_FOLLOW}_${userInfo.id}`);
-      },
+      subscribe: combineResolvers(
+        isAuthenticated,
+        (_: any, __: any, context: PubSubContext) => {
+          const { userInfo, pubsub } = context;
+          return pubsub.asyncIterator(`${CHECK_FOLLOW}_${userInfo.id}`);
+        },
+      ),
     },
-
   },
 };
 

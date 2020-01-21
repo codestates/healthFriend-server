@@ -1,13 +1,9 @@
-import { AuthenticationError } from 'apollo-server-express';
+import { combineResolvers } from 'graphql-resolvers';
 import Dataloader from 'dataloader';
-import {
-  UserInfoContext,
-  UserId,
-  UserIds,
-  PubSubContext,
-} from '../../types/types';
+import { UserId, UserIds, PubSubContext } from '../../types/types';
 import { getUserRepository, getFriendsRepository } from '../../database';
 import { User } from '../../database/entity/User';
+import { isAuthenticated } from '../auth';
 
 const ADD_FRIEND = 'ADD_FRIEND';
 
@@ -25,60 +21,62 @@ const friendUserLoader = new Dataloader<string, User>(
 
 const friendsResolver = {
   Query: {
-    getFriends: async (_: any, __: any, context: UserInfoContext) => {
-      const { userInfo } = context;
-      if (!userInfo) throw new AuthenticationError('Not authenticated.');
-
-      const user = await getUserRepository().validateUserId(userInfo.id);
-      const friends = await getFriendsRepository().getFriends(user);
-      return friends;
-    },
+    getFriends: combineResolvers(
+      isAuthenticated,
+      async (_: any, __: any, { userInfo }) => {
+        const user = await getUserRepository().validateUserId(userInfo.id);
+        const friends = await getFriendsRepository().getFriends(user);
+        return friends;
+      },
+    ),
   },
 
   Mutation: {
-    addFriend: async (_: any, args: UserId, context: PubSubContext) => {
-      const { userInfo, pubsub } = context;
-      if (!userInfo) throw new AuthenticationError('Not authenticated.');
+    addFriend: combineResolvers(
+      isAuthenticated,
+      async (_: any, args: UserId, context: PubSubContext) => {
+        const { userInfo, pubsub } = context;
 
-      const me = await getUserRepository().validateUserId(userInfo.id);
-      // console.log('addFriend - me: ', me);
-      const { userId } = args;
-      // console.log('addFriend - userId: ', userId);
-      const friend = await getUserRepository().validateUserId(userId);
-      // console.log('addFriend - friend: ', friend);
-      const meFriend = await getFriendsRepository().addFriend(me, friend);
-      const newMe = await getUserRepository().getUserInfo(me);
-      if (meFriend) {
-        pubsub.publish(`${ADD_FRIEND}_${args.userId}`, {
-          subscribeAddFriend: newMe,
-        });
-      }
-      return newMe;
-    },
+        const me = await getUserRepository().validateUserId(userInfo.id);
+        // console.log('addFriend - me: ', me);
+        const { userId } = args;
+        // console.log('addFriend - userId: ', userId);
+        const friend = await getUserRepository().validateUserId(userId);
+        // console.log('addFriend - friend: ', friend);
+        const meFriend = await getFriendsRepository().addFriend(me, friend);
+        const newMe = await getUserRepository().getUserInfo(me);
+        if (meFriend) {
+          pubsub.publish(`${ADD_FRIEND}_${args.userId}`, {
+            subscribeAddFriend: newMe,
+          });
+        }
+        return newMe;
+      },
+    ),
 
-    checkFriends: async (_: any, args: UserIds, context: UserInfoContext) => {
-      const { userInfo } = context;
-      if (!userInfo) throw new AuthenticationError('Not authenticated.');
+    checkFriends: combineResolvers(
+      isAuthenticated,
+      async (_: any, args: UserIds, { userInfo }) => {
+        const me = await getUserRepository().validateUserId(userInfo.id);
+        const { userIds } = args;
+        const friends = await getUserRepository().validateUserIds(userIds);
+        await getFriendsRepository().checkFriends(me, friends);
+        const newMe = await getUserRepository().getUserInfo(me);
+        return newMe;
+      },
+    ),
 
-      const me = await getUserRepository().validateUserId(userInfo.id);
-      const { userIds } = args;
-      const friends = await getUserRepository().validateUserIds(userIds);
-      await getFriendsRepository().checkFriends(me, friends);
-      const newMe = await getUserRepository().getUserInfo(me);
-      return newMe;
-    },
-
-    deleteFriend: async (_: any, args: UserId, context: UserInfoContext) => {
-      const { userInfo } = context;
-      if (!userInfo) throw new AuthenticationError('Not authenticated.');
-
-      const me = await getUserRepository().validateUserId(userInfo.id);
-      const { userId } = args;
-      const friend = await getUserRepository().validateUserId(userId);
-      await getFriendsRepository().deleteFriend(me, friend);
-      const newMe = await getUserRepository().getUserInfo(me);
-      return newMe;
-    },
+    deleteFriend: combineResolvers(
+      isAuthenticated,
+      async (_: any, args: UserId, { userInfo }) => {
+        const me = await getUserRepository().validateUserId(userInfo.id);
+        const { userId } = args;
+        const friend = await getUserRepository().validateUserId(userId);
+        await getFriendsRepository().deleteFriend(me, friend);
+        const newMe = await getUserRepository().getUserInfo(me);
+        return newMe;
+      },
+    ),
   },
 
   Friends: {
@@ -101,11 +99,13 @@ const friendsResolver = {
 
   Subscription: {
     subscribeAddFriend: {
-      subscribe(_: any, __: any, context: PubSubContext) {
-        const { userInfo: me, pubsub } = context;
-        if (!me) throw new AuthenticationError('Not authenticated.');
-        return pubsub.asyncIterator(`${ADD_FRIEND}_${me.id}`);
-      },
+      subscribe: combineResolvers(
+        isAuthenticated,
+        (_: any, __: any, context: PubSubContext) => {
+          const { userInfo: me, pubsub } = context;
+          return pubsub.asyncIterator(`${ADD_FRIEND}_${me.id}`);
+        },
+      ),
     },
   },
 };
