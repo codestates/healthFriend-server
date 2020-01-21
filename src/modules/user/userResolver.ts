@@ -1,23 +1,13 @@
-import { AuthenticationError, PubSub } from 'apollo-server-express';
+import { AuthenticationError } from 'apollo-server-express';
 import Dataloader from 'dataloader';
 
-import { UserQueryCondition, LoginInfo, UserInfo } from '../../types/types';
-import {
-  getUserRepository,
-} from '../../database';
+import { UserQueryCondition, LoginInfo } from '../../types/types';
+import { getUserRepository } from '../../database';
 import { Motivations } from '../../database/entity/Motivations';
 import { ExerciseAbleDays } from '../../database/entity/ExerciseAbleDays';
 import { AbleDistricts } from '../../database/entity/AbleDistricts';
 import { Follow } from '../../database/entity/Follow';
 import { Friends } from '../../database/entity/Friends';
-
-// const CHECK_FOLLOW = 'CHECK_FOLLOW';
-// const ADD_FRIEND = 'ADD_FRIEND';
-
-export interface PubSubContext {
-  userInfo: UserInfo;
-  pubsub: PubSub;
-}
 
 const motivationLoader = new Dataloader<string, Motivations[]>(
   (userIds: readonly string[]) => getUserRepository().batchMotivations(userIds),
@@ -97,35 +87,16 @@ const userResolver = {
     // getAbleDistrictsRepository().findByUserId(user.id),
 
     // 내가 following 하고 있는 사람들
-    following: async (user: any) =>
-      followingLoader.load(user.id),
+    following: async (user: any) => followingLoader.load(user.id),
     // getFollowRepository().getFollowingById(user.id),
 
     // 나의 follower들, 나를 following하고 있는 사람들
-    followers: async (user: any) =>
-      followersLoader.load(user.id),
+    followers: async (user: any) => followersLoader.load(user.id),
     // getFollowRepository().getFollowersById(user.id),
 
     friends: async (user: any) => friendsLoader.load(user.id),
     // getFriendsRepository().getFriendsById(user.id),
   },
-
-  // Subscription: {
-  //   subscribeRequestFriend: {
-  //     subscribe(_: any, __: any, context: PubSubContext) {
-  //       const { userInfo, pubsub } = context;
-  //       if (!userInfo) throw new AuthenticationError('Not authenticated.');
-  //       return pubsub.asyncIterator(`${CHECK_FOLLOW}_${userInfo.id}`);
-  //     },
-  //   },
-  //   subscribeAddFriend: {
-  //     subscribe(_: any, __: any, context: PubSubContext) {
-  //       const { userInfo: me, pubsub } = context;
-  //       if (!me) throw new AuthenticationError('Not authenticated.');
-  //       return pubsub.asyncIterator(`${ADD_FRIEND}_${me.id}`);
-  //     },
-  //   },
-  // },
 };
 
 export { userResolver };

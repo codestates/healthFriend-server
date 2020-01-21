@@ -1,8 +1,12 @@
 import { AuthenticationError } from 'apollo-server-express';
 import Dataloader from 'dataloader';
-import { UserId, UserInfoContext, UserIds } from '../../types/types';
+import {
+  UserId, UserInfoContext, UserIds, PubSubContext,
+} from '../../types/types';
 import { getUserRepository, getFollowRepository } from '../../database';
 import { User } from '../../database/entity/User';
+
+const CHECK_FOLLOW = 'CHECK_FOLLOW';
 
 const followingUsersLoader = new Dataloader<string, User>(
   (followIds: readonly string[]) =>
@@ -40,15 +44,20 @@ const followResolver = {
   },
 
   Mutation: {
-    followingUser: async (_: any, args: UserId, context: UserInfoContext) => {
-      const { userInfo } = context;
+    followingUser: async (_: any, args: UserId, context: PubSubContext) => {
+      const { userInfo, pubsub } = context;
       if (!userInfo) throw new AuthenticationError('Not authenticated.');
 
       const me = await getUserRepository().validateUserId(userInfo.id);
       const { userId } = args;
       const following = await getUserRepository().validateUserId(userId);
-      await getFollowRepository().followingUser(me, following);
+      const result = await getFollowRepository().followingUser(me, following);
       const newMe = await getUserRepository().getUserInfo(me);
+      if (result) {
+        pubsub.publish(`${CHECK_FOLLOW}_${args.userId}`, {
+          subscribeRequestFriend: newMe,
+        });
+      }
       return newMe;
     },
 
@@ -113,7 +122,14 @@ const followResolver = {
   },
 
   Subscription: {
-    subscribeRequestFriend: () => {},
+    subscribeRequestFriend: {
+      subscribe(_: any, __: any, context: PubSubContext) {
+        const { userInfo, pubsub } = context;
+        if (!userInfo) throw new AuthenticationError('Not authenticated.');
+        return pubsub.asyncIterator(`${CHECK_FOLLOW}_${userInfo.id}`);
+      },
+    },
+
   },
 };
 

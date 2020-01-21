@@ -1,8 +1,15 @@
 import { AuthenticationError } from 'apollo-server-express';
 import Dataloader from 'dataloader';
-import { UserInfoContext, UserId, UserIds } from '../../types/types';
+import {
+  UserInfoContext,
+  UserId,
+  UserIds,
+  PubSubContext,
+} from '../../types/types';
 import { getUserRepository, getFriendsRepository } from '../../database';
 import { User } from '../../database/entity/User';
+
+const ADD_FRIEND = 'ADD_FRIEND';
 
 const meUserLoader = new Dataloader<string, User>(
   (friendIds: readonly string[]) =>
@@ -29,8 +36,8 @@ const friendsResolver = {
   },
 
   Mutation: {
-    addFriend: async (_: any, args: UserId, context: UserInfoContext) => {
-      const { userInfo } = context;
+    addFriend: async (_: any, args: UserId, context: PubSubContext) => {
+      const { userInfo, pubsub } = context;
       if (!userInfo) throw new AuthenticationError('Not authenticated.');
 
       const me = await getUserRepository().validateUserId(userInfo.id);
@@ -40,7 +47,13 @@ const friendsResolver = {
       const friend = await getUserRepository().validateUserId(userId);
       // console.log('addFriend - friend: ', friend);
       const meFriend = await getFriendsRepository().addFriend(me, friend);
-      return meFriend;
+      const newMe = await getUserRepository().getUserInfo(me);
+      if (meFriend) {
+        pubsub.publish(`${ADD_FRIEND}_${args.userId}`, {
+          subscribeAddFriend: newMe,
+        });
+      }
+      return newMe;
     },
 
     checkFriends: async (_: any, args: UserIds, context: UserInfoContext) => {
@@ -62,8 +75,9 @@ const friendsResolver = {
       const me = await getUserRepository().validateUserId(userInfo.id);
       const { userId } = args;
       const friend = await getUserRepository().validateUserId(userId);
-      const meFriend = await getFriendsRepository().deleteFriend(me, friend);
-      return meFriend;
+      await getFriendsRepository().deleteFriend(me, friend);
+      const newMe = await getUserRepository().getUserInfo(me);
+      return newMe;
     },
   },
 
@@ -86,7 +100,13 @@ const friendsResolver = {
   },
 
   Subscription: {
-    subscribeAddFriend: () => {},
+    subscribeAddFriend: {
+      subscribe(_: any, __: any, context: PubSubContext) {
+        const { userInfo: me, pubsub } = context;
+        if (!me) throw new AuthenticationError('Not authenticated.');
+        return pubsub.asyncIterator(`${ADD_FRIEND}_${me.id}`);
+      },
+    },
   },
 };
 

@@ -9,7 +9,7 @@ const mutationSchema = gql`
     checkFollowers(userIds: [String]!): User
     deleteFollowing(userId: String!): User
     deleteFollower(userId: String!): User
-    addFriend(userId: String!): Friends
+    addFriend(userId: String!): User
     checkFriends(userIds: [String]!): User
     deleteFriend(userId: String!): User
     registerForTest(email: String!, password: String!): AuthPayload!

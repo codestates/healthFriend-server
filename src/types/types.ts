@@ -1,3 +1,4 @@
+import { PubSub } from 'apollo-server-express';
 import {
   OpenImageChoice,
   LevelOf3Dae,
@@ -55,4 +56,9 @@ export interface UserInfo {
 }
 export interface UserInfoContext {
   userInfo: UserInfo;
+}
+
+export interface PubSubContext {
+  userInfo: UserInfo;
+  pubsub: PubSub;
 }
