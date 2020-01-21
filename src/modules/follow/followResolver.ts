@@ -71,7 +71,7 @@ const followResolver = {
       const me = await getUserRepository().validateUserId(userInfo.id);
       const { userId } = args;
       const following = await getUserRepository().validateUserId(userId);
-      await getFollowRepository().followingUser(me, following);
+      await getFollowRepository().deleteFollowing(me, following);
       const newMe = await getUserRepository().getUserInfo(me);
       return newMe;
     },
