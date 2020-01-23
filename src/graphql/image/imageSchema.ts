@@ -16,6 +16,7 @@ const imageSchema = gql`
 
   extend type Mutation {
     profileImageUpload(file: Upload!): S3Object
+    deleteProfileImage(url: String!): Boolean!
   }
 `;
 

@@ -1,5 +1,6 @@
 import { EntityRepository, Repository } from 'typeorm';
 import AWS from 'aws-sdk';
+import { ApolloError } from 'apollo-server-express';
 import { User } from '../../entity/User';
 import { Image } from '../../entity/Image';
 
@@ -22,47 +23,59 @@ interface DeleteParam {
 @EntityRepository(Image)
 export class ImageRepository extends Repository<Image> {
   async saveImages(me: User, image: any) {
-    // const { filename } = image;
-    const { createReadStream, filename } = image;
-    const fileStream = createReadStream();
+    try {
+      const { createReadStream, filename } = image;
+      const fileStream = createReadStream();
 
-    const currentDate = new Date().toISOString().slice(0, 7);
-    const s3Filename = `${s3Folder}/${currentDate}/${
-      me.id
-    }_${+new Date()}_${filename}`;
-    // console.log('S3 Filename: ', s3Filename);
+      const currentDate = new Date().toISOString().slice(0, 7);
+      const s3Filename = `${s3Folder}/${currentDate}/${
+        me.id
+      }_${+new Date()}_${filename}`;
 
-    const uploadParams = {
-      ACL: 'public-read',
-      Bucket: process.env.S3_BUCKET as string,
-      Key: s3Filename,
-      Body: fileStream,
-      Conditions: [
-        ['content-length-range', 0, process.env.S3_FILE_SIZE], // 10 Mb
-        { acl: 'public-read' },
-      ],
-    };
-    const result = await s3.upload(uploadParams).promise();
-    if (result && result.Location) {
-      await this.saveImageAddress(me, result.Location);
+      const uploadParams = {
+        ACL: 'public-read',
+        Bucket: process.env.S3_BUCKET as string,
+        Key: s3Filename,
+        Body: fileStream,
+        Conditions: [
+          ['content-length-range', 0, process.env.S3_FILE_SIZE], // 10 Mb
+          { acl: 'public-read' },
+        ],
+      };
+      const result = await s3.upload(uploadParams).promise();
+      if (result && result.Location) {
+        await this.saveImageAddress(me, result.Location);
+      }
+      return result;
+    } catch (error) {
+      throw new ApolloError(
+        'Profile image save error.',
+        'PROFILE_IMAGE_SAVE_ERROR',
+      );
     }
-    return result;
   }
 
-  async deleteImage(filename: string) {
-    const filePath = filename.match(`(${s3Folder}).+`);
-    if (filePath) {
-      // console.log('FILE PATH', filePath[0]);
-      const deleteFile = [{ Key: filePath[0] }];
-      const deleteParams: DeleteParam = {
-        Bucket: process.env.S3_BUCKET as string,
-        Delete: {
-          Objects: deleteFile,
-        },
-      };
-      // 로그 필요함
-      await s3.deleteObjects(deleteParams).promise();
-      // console.log(result);
+  async deleteImage(me: User, url: string) {
+    try {
+      const filePath = url.match(`(${s3Folder}).+`);
+      if (filePath) {
+        // console.log('FILE PATH', filePath[0]);
+        const deleteFile = [{ Key: filePath[0] }];
+        const deleteParams: DeleteParam = {
+          Bucket: process.env.S3_BUCKET as string,
+          Delete: {
+            Objects: deleteFile,
+          },
+        };
+        const result = await s3.deleteObjects(deleteParams).promise();
+        if (result) await this.deleteImageAddress(me);
+      }
+      return true;
+    } catch (error) {
+      throw new ApolloError(
+        'Profile image delete error.',
+        'PROFILE_IMAGE_DELETE_ERROR',
+      );
     }
   }
 
@@ -74,8 +87,7 @@ export class ImageRepository extends Repository<Image> {
     // transaction 추가
     const savedImageAddress = await this.findOne({ user: me });
     if (savedImageAddress) {
-      await this.deleteImage(savedImageAddress.filename);
-      await this.deleteImageAddress(me);
+      await this.deleteImage(me, savedImageAddress.filename);
     }
     await this.save({ user: me, filename: location });
   }
