@@ -11,6 +11,7 @@ import { User } from '../../entity/User';
 import { Motivations } from '../../entity/Motivations';
 import { ExerciseAbleDays } from '../../entity/ExerciseAbleDays';
 import { AbleDistricts } from '../../entity/AbleDistricts';
+import { Image } from '../../entity/Image';
 import { Follow } from '../../entity/Follow';
 import { Friends } from '../../entity/Friends';
 
@@ -215,6 +216,18 @@ export class UserRepository extends Repository<User> {
     const userMap: { [key: string]: AbleDistricts[] } = {};
     users.forEach((u) => {
       userMap[u.id] = u.ableDistricts;
+    });
+    return userIds.map((id) => userMap[id]);
+  }
+
+  async batchImages(userIds: readonly string[]) {
+    const users = await this.createQueryBuilder('user')
+      .leftJoinAndSelect('user.images', 'image')
+      .where('user.id IN (:...userIds)', { userIds })
+      .getMany();
+    const userMap: { [key: string]: Image[] } = {};
+    users.forEach((u) => {
+      userMap[u.id] = u.images;
     });
     return userIds.map((id) => userMap[id]);
   }

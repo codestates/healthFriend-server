@@ -1,11 +1,12 @@
 import Dataloader from 'dataloader';
 import { combineResolvers } from 'graphql-resolvers';
 
-import { UserQueryCondition, LoginInfo } from '../../types/types';
+import { UserQueryCondition, LoginInfo, UserInfo } from '../../types/types';
 import { getUserRepository } from '../../database';
 import { Motivations } from '../../database/entity/Motivations';
 import { ExerciseAbleDays } from '../../database/entity/ExerciseAbleDays';
 import { AbleDistricts } from '../../database/entity/AbleDistricts';
+import { Image } from '../../database/entity/Image';
 import { Follow } from '../../database/entity/Follow';
 import { Friends } from '../../database/entity/Friends';
 import { isAuthenticated } from '../auth';
@@ -24,6 +25,12 @@ const weekdaysLoader = new Dataloader<string, ExerciseAbleDays[]>(
 const districtsLoader = new Dataloader<string, AbleDistricts[]>(
   (userIds: readonly string[]) =>
     getUserRepository().batchAbleDistricts(userIds),
+  { cache: false },
+);
+
+const imagesLoader = new Dataloader<string, Image[]>(
+  (userIds: readonly string[]) =>
+    getUserRepository().batchImages(userIds),
   { cache: false },
 );
 
@@ -86,6 +93,8 @@ const userResolver = {
 
     ableDistricts: async (user: any) => districtsLoader.load(user.id),
     // getAbleDistrictsRepository().findByUserId(user.id),
+
+    profileImage: async (user: UserInfo) => imagesLoader.load(user.id),
 
     // 내가 following 하고 있는 사람들
     following: async (user: any) => followingLoader.load(user.id),
