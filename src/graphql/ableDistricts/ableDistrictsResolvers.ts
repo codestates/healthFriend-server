@@ -2,11 +2,18 @@ import { combineResolvers } from 'graphql-resolvers';
 import Dataloader from 'dataloader';
 import { getAbleDistrictsRepository } from '../../database';
 import { Districts } from '../../database/entity/Districts';
+import { User } from '../../database/entity/User';
 import { isAuthenticated } from '../auth';
 
 const districtsLoader = new Dataloader<string, Districts>(
   (ableDistrictIds: readonly string[]) =>
     getAbleDistrictsRepository().batchDistricts(ableDistrictIds),
+  { cache: false },
+);
+
+const usersLoader = new Dataloader<string, User>(
+  (ableDistrictIds: readonly string[]) =>
+    getAbleDistrictsRepository().batchUsers(ableDistrictIds),
   { cache: false },
 );
 
@@ -24,13 +31,10 @@ const ableDistrictsResolvers = {
   },
 
   AbleDistrict: {
-    user: async (parent: any) =>
-      getAbleDistrictsRepository().findUserByAbleDistrictId(parent.id),
+    user: async (ableDistrict: any) => usersLoader.load(ableDistrict.id),
+
     district: async (ableDistrict: any) =>
       districtsLoader.load(ableDistrict.id),
-    // getAbleDistrictsRepository().findDistrictByAbleDistrictId(
-    //   ableDistrict.id,
-    // ),
   },
 
   Mutation: {
