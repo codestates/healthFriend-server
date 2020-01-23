@@ -13,6 +13,7 @@ import { ExerciseAbleDays } from './ExerciseAbleDays';
 import { AbleDistricts } from './AbleDistricts';
 import { Friends } from './Friends';
 import { Follow } from './Follow';
+import { Image } from './Image';
 
 export enum Role {
   USER = 'USER',
@@ -140,6 +141,9 @@ export class User {
 
   @OneToMany(() => Friends, (friends) => friends.me)
   friends: Friends[];
+
+  @OneToMany(() => Image, (image) => image.user)
+  images: Image[];
 
   @CreateDateColumn()
   createdAt: Date;

@@ -1,5 +1,6 @@
 import 'dotenv/config';
 import jwt from 'jsonwebtoken';
+import { ApolloError } from 'apollo-server-express';
 import { TokenUserInfo } from '../types/types';
 
 export const createToken = (userInfo: TokenUserInfo) => {
@@ -24,10 +25,14 @@ export const createToken = (userInfo: TokenUserInfo) => {
 };
 
 export const getUserInfoFromToken = (token: string) => {
-  const user = jwt.verify(
-    token,
+  try {
+    const user = jwt.verify(
+      token,
     process.env.JWT_SECRET as string,
-  ) as TokenUserInfo;
-  // console.log('getUserInfoFromToken: ', user);
-  return user;
+    ) as TokenUserInfo;
+    return user;
+  } catch (error) {
+    console.log(error);
+    throw new ApolloError('JWT error', 'JWT_ERROR');
+  }
 };
