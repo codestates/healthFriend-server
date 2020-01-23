@@ -30,6 +30,7 @@ const userSchema = gql`
     motivations: [Motivation]
     weekdays: [ExerciseAbleDay]
     ableDistricts: [AbleDistrict]
+    profileImage: [ProfileImage]
     following: [Follow]
     followers: [Follow]
     friends: [Friends]
@@ -39,6 +40,11 @@ const userSchema = gql`
   type AuthPayload {
     user: User
     token: String
+  }
+
+  type ProfileImage {
+    id: ID!
+    filename: String!
   }
 
   scalar DateTime
