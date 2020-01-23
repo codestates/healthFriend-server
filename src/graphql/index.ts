@@ -12,6 +12,7 @@ import {
 } from './exerciseAbleDays';
 import { districtResolver, districtSchema } from './district';
 import { ableDistrictsResolvers, ableDistrictsSchema } from './ableDistricts';
+import { imageResolver, imageSchema } from './image';
 
 const resolvers = [
   ableDistrictsResolvers,
@@ -23,6 +24,7 @@ const resolvers = [
   registerResolver,
   friendsResolver,
   followResolver,
+  imageResolver,
 ];
 
 const linkSchema = gql`
@@ -49,6 +51,7 @@ const schemas = [
   registerSchema,
   friendsSchema,
   followSchema,
+  imageSchema,
 ];
 
 export { resolvers, schemas };

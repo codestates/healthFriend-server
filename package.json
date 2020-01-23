@@ -27,6 +27,7 @@
    "dependencies": {
       "apollo-server-express": "^2.9.14",
       "apollo-server-testing": "^2.9.16",
+      "aws-sdk": "^2.608.0",
       "cookie-parser": "^1.4.4",
       "dataloader": "^2.0.0",
       "dotenv": "^8.2.0",

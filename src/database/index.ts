@@ -6,6 +6,7 @@ import { DistrictRepository } from './repositories/District';
 import { AbleDistrictsRepository } from './repositories/AbleDistricts';
 import { FriendsRepository } from './repositories/Friends';
 import { FollowerRepository } from './repositories/Follow';
+import { ImageRepository } from './repositories/Image';
 
 let connection: Connection;
 
@@ -38,5 +39,8 @@ export const getFriendsRepository = (): FriendsRepository =>
 
 export const getFollowRepository = (): FollowerRepository =>
   connection.getCustomRepository(FollowerRepository);
+
+export const getImageRepo = (): ImageRepository =>
+  connection.getCustomRepository(ImageRepository);
 
 export default connectDB;
