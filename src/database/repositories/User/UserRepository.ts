@@ -1,5 +1,6 @@
 import { EntityRepository, Repository } from 'typeorm';
 import { ApolloError } from 'apollo-server-express';
+import { StreamChat } from 'stream-chat';
 
 import { createToken } from '../../../utils';
 import {
@@ -176,8 +177,10 @@ export class UserRepository extends Repository<User> {
         return null;
       }
       // console.log('LOGIN: ', user);
-      const token = createToken(user);
-      return { token, user };
+      const loginToken = createToken(user);
+      const client = new StreamChat('', process.env.STREAM_CHAT_SECRET);
+      const chatToken = client.createToken(user.id);
+      return { user, loginToken, chatToken };
     } catch (error) {
       throw new ApolloError('User login error.', 'SERVER_ERROR');
     }

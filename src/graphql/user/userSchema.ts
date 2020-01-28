@@ -39,7 +39,8 @@ const userSchema = gql`
 
   type AuthPayload {
     user: User
-    token: String
+    loginToken: String
+    chatToken: String
   }
 
   type ProfileImage {
