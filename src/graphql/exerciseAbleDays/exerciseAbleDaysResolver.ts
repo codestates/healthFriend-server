@@ -1,6 +1,17 @@
 import { combineResolvers } from 'graphql-resolvers';
-import { getExerciseAbleDaysRepository } from '../../database';
+import Dataloader from 'dataloader';
+import {
+  getExerciseAbleDaysRepository,
+  getUserRepository,
+} from '../../database';
 import { isAuthenticated } from '../auth';
+import { User } from '../../database/entity/User';
+
+const usersLoader = new Dataloader<string, User>(
+  (exerciseAbleDaysIds: readonly string[]) =>
+    getExerciseAbleDaysRepository().batchUsers(exerciseAbleDaysIds),
+  { cache: false },
+);
 
 const exerciseAbleDaysResolver = {
   WeekdayEnum: {
@@ -26,16 +37,18 @@ const exerciseAbleDaysResolver = {
   },
 
   ExerciseAbleDay: {
-    user: async (parent: any) =>
-      getExerciseAbleDaysRepository().findUserByExerciseAbleDaysId(parent.id),
+    user: async (exerciseAbleDay: any) =>
+      usersLoader.load(exerciseAbleDay.id),
+    // getExerciseAbleDaysRepository().findUserByExerciseAbleDaysId(parent.id),
   },
 
   Mutation: {
     setExerciseAbleDay: combineResolvers(
       isAuthenticated,
       async (_: any, args: any, { userInfo }) => {
-        const ableDays = await getExerciseAbleDaysRepository().saveByUserId(
-          userInfo.id,
+        const user = await getUserRepository().validateUserId(userInfo.id);
+        const ableDays = await getExerciseAbleDaysRepository().saveByUser(
+          user,
           args.input,
         );
         return ableDays;
