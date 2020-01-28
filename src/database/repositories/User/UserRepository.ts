@@ -96,7 +96,8 @@ export class UserRepository extends Repository<User> {
           nickname: user.nickname,
           provider: user.provider,
           snsId: user.snsId,
-        }));
+        }),
+      );
       return this.save(objects);
     } catch (error) {
       throw new ApolloError('User info save error.', 'SERVER_ERROR');
@@ -178,7 +179,10 @@ export class UserRepository extends Repository<User> {
       }
       // console.log('LOGIN: ', user);
       const loginToken = createToken(user);
-      const client = new StreamChat('', process.env.STREAM_CHAT_SECRET);
+      const client = new StreamChat(
+        '',
+        'ncgv6qpcn8k9msm2hjd5duxt8jychy5cyhr99xrwgkb2bqqyjqrexuhwcgqfuexv',
+      );
       const chatToken = client.createToken(user.id);
       return { user, loginToken, chatToken };
     } catch (error) {
