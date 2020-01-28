@@ -1,6 +1,27 @@
 import { combineResolvers } from 'graphql-resolvers';
-import { getMotivationRepository } from '../../database';
+import Dataloader from 'dataloader';
+import { getMotivationRepository, getUserRepository } from '../../database';
 import { isAuthenticated } from '../auth';
+import { User } from '../../database/entity/User';
+import { Motivation } from '../../database/entity/Motivations';
+
+interface MotivationInput {
+  input: Motivation;
+}
+
+interface MotivationsInput {
+  input: Array<Motivation>;
+}
+
+interface MotivationId {
+  id: string;
+}
+
+const usersLoader = new Dataloader<string, User>(
+  (motivationIds: readonly string[]) =>
+    getMotivationRepository().batchUsers(motivationIds),
+  { cache: false },
+);
 
 const motivationResolver = {
   MotivationEnum: {
@@ -13,7 +34,7 @@ const motivationResolver = {
   Query: {
     motivations: combineResolvers(
       isAuthenticated,
-      async (_: any, args: any) => {
+      async (_: any, args: MotivationInput) => {
         if (!args.input) {
           return getMotivationRepository().find();
         }
@@ -25,9 +46,10 @@ const motivationResolver = {
   Mutation: {
     setMotivation: combineResolvers(
       isAuthenticated,
-      async (_: any, args: any, { userInfo }) => {
-        const motivations = await getMotivationRepository().saveByUserId(
-          userInfo.id,
+      async (_: any, args: MotivationsInput, { userInfo }) => {
+        const user = await getUserRepository().validateUserId(userInfo.id);
+        const motivations = await getMotivationRepository().saveByUser(
+          user,
           args.input,
         );
         return motivations;
@@ -36,8 +58,7 @@ const motivationResolver = {
   },
 
   Motivation: {
-    owner: async (parent: any) =>
-      getMotivationRepository().findUserByMotivationId(parent.id),
+    owner: async (motivation: MotivationId) => usersLoader.load(motivation.id),
   },
 };
 
