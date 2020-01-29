@@ -20,6 +20,8 @@ const adminInfo = {
   districts: [
     { nameOfDong: '대치1동', idOfGu: 1, nameOfGu: '강남구' },
   ],
+  messageToFriend: '',
+  profileImage: '',
 };
 
 export default adminInfo;
