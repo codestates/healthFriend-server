@@ -64,6 +64,9 @@ const userResolver = {
     users: combineResolvers(isAuthenticated, async () =>
       getUserRepository().getAllUser()),
 
+    randomUsers: combineResolvers(isAuthenticated, async () =>
+      getUserRepository().getRandomUsers()),
+
     userCount: async () => getUserRepository().getUserCount(),
 
     filterUsers: combineResolvers(
