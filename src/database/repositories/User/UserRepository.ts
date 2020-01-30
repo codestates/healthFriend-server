@@ -54,6 +54,21 @@ export class UserRepository extends Repository<User> {
     }
   }
 
+  async getRandomUsers() {
+    try {
+      const randomUsers = await this.createQueryBuilder('user')
+        .orderBy('RAND()')
+        .limit(6)
+        .getMany();
+      return randomUsers;
+    } catch (error) {
+      throw new ApolloError(
+        'Random user select error.',
+        'RANDOM_USER_SELECT_ERROR',
+      );
+    }
+  }
+
   async getUserCount() {
     const count = await this.count();
     // console.log(count);
@@ -96,8 +111,7 @@ export class UserRepository extends Repository<User> {
           nickname: user.nickname,
           provider: user.provider,
           snsId: user.snsId,
-        }),
-      );
+        }));
       return this.save(objects);
     } catch (error) {
       throw new ApolloError('User info save error.', 'SERVER_ERROR');

@@ -4,6 +4,7 @@ const userSchema = gql`
   extend type Query {
     test: User
     user(userId: String): User
+    randomUsers: [User]!
     users: [User]!
     userCount: Int!
     login(email: String, password: String): AuthPayload
