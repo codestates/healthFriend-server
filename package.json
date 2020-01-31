@@ -25,6 +25,7 @@
       "typescript": "^3.7.3"
    },
    "dependencies": {
+      "@pusher/chatkit-server": "^2.4.0",
       "apollo-server-express": "^2.9.14",
       "apollo-server-testing": "^2.9.16",
       "aws-sdk": "^2.608.0",
