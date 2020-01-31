@@ -6,6 +6,7 @@ import passport from 'passport';
 import cookieParser from 'cookie-parser';
 import morgan from 'morgan';
 import cors from 'cors';
+import Chatkit from '@pusher/chatkit-server';
 
 import { schemas, resolvers } from './graphql';
 import connectDB from './database';
@@ -24,6 +25,11 @@ export const startServer = async () => {
     passportConfig();
 
     const pubsub = new PubSub();
+
+    const chatkit = new Chatkit({
+      instanceLocator: process.env.CHATKIT_INSTANCE_LOCATOR as string,
+      key: process.env.CHATKIT_SECRET_KEY as string,
+    });
 
     const server = new ApolloServer({
       typeDefs: schemas,
@@ -77,7 +83,36 @@ export const startServer = async () => {
     app.use(cors(corsOption));
     app.use(morgan('dev'));
     app.use(cookieParser());
+    app.use(express.json());
+    app.use(express.urlencoded({ extended: true }));
     app.use('/auth', authRouter);
+    app.post('/users', (req, res) => {
+      const { userId } = req.body;
+
+      chatkit
+        .createUser({ id: userId, name: userId })
+        .then(() => {
+          console.log('chatkit Create User Success.');
+          res.sendStatus(201);
+        })
+        .catch((err) => {
+          if (err.error === 'services/chatkit/user_already_exists') {
+            console.log(`User already exists: ${userId}`);
+            res.sendStatus(200);
+          } else {
+            res.status(err.status).json(err);
+          }
+        });
+    });
+
+    app.post('/authenticate', (req, res) => {
+      const authData = chatkit.authenticate({
+        userId: req.query.user_id,
+      });
+      // 여기서 request validation 하고, token을 return해야 함.
+      res.status(authData.status).send(authData.body);
+    });
+
     app.use('/health', (_, res) => {
       res.status(200).send('health check');
     });
