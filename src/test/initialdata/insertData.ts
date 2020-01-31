@@ -142,13 +142,13 @@ const addSpecialUserTestData = async (email: string) => {
 };
 
 const makeRandomArray = (data: string[]) => {
-  const randomLength = Math.ceil(Math.random() * (data.length - 1));
+  const randomLength = Math.ceil(Math.random() * data.length);
   const arrayOfRandomNumber: number[] = [];
 
   while (arrayOfRandomNumber.length < randomLength) {
-    const randonNumber = Math.floor(Math.random() * (data.length - 1));
-    if (!arrayOfRandomNumber.includes(randonNumber)) {
-      arrayOfRandomNumber.push(randonNumber);
+    const randomNumber = Math.floor(Math.random() * data.length);
+    if (!arrayOfRandomNumber.includes(randomNumber)) {
+      arrayOfRandomNumber.push(randomNumber);
     }
   }
   return arrayOfRandomNumber.map((n) => data[n]);
