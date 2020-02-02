@@ -16,6 +16,8 @@ import { Image } from '../../entity/Image';
 import { Follow } from '../../entity/Follow';
 import { Friends } from '../../entity/Friends';
 
+const RANDOM_USER_NUMBER: number = 8 as const;
+
 @EntityRepository(User)
 export class UserRepository extends Repository<User> {
   async test() {
@@ -58,7 +60,7 @@ export class UserRepository extends Repository<User> {
     try {
       const randomUsers = await this.createQueryBuilder('user')
         .orderBy('RAND()')
-        .limit(6)
+        .limit(RANDOM_USER_NUMBER)
         .getMany();
       return randomUsers;
     } catch (error) {
