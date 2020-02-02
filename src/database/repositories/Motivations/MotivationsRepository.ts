@@ -16,7 +16,7 @@ export class MotivationsRepository extends Repository<Motivations> {
         this.create({ owner: user, motivation: m }));
       return await getManager().transaction(
         async (transactionalEntityManager) => {
-          await transactionalEntityManager.delete(Motivations, { user });
+          await transactionalEntityManager.delete(Motivations, { owner: user });
           await transactionalEntityManager.save(objects);
         },
       );
