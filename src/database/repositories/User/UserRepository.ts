@@ -7,6 +7,7 @@ import {
   RegisterUserInfo,
   UserQueryCondition,
   LoginInfo,
+  Pagination,
 } from '../../../types/types';
 import { User } from '../../entity/User';
 import { Motivations } from '../../entity/Motivations';
@@ -20,6 +21,20 @@ const RANDOM_USER_NUMBER: number = 8 as const;
 
 @EntityRepository(User)
 export class UserRepository extends Repository<User> {
+  async getSomeUsers({ limit, offset }: Pagination) {
+    if (limit === 0) {
+      throw new ApolloError(
+        'Get user info error: limit cannot be zero.',
+        'LIMIT_NOT_ZERO',
+      );
+    }
+    const results = await this.createQueryBuilder('users')
+      .skip(offset)
+      .take(limit)
+      .getMany();
+    return results;
+  }
+
   async test() {
     throw new ApolloError(
       '**TEST** User select error. **TEST**',

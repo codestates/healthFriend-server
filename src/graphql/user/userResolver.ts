@@ -1,7 +1,9 @@
 import Dataloader from 'dataloader';
 import { combineResolvers } from 'graphql-resolvers';
 
-import { UserQueryCondition, LoginInfo, UserInfo } from '../../types/types';
+import {
+  UserQueryCondition, LoginInfo, UserInfo, Pagination,
+} from '../../types/types';
 import { getUserRepository } from '../../database';
 import { Motivations } from '../../database/entity/Motivations';
 import { ExerciseAbleDays } from '../../database/entity/ExerciseAbleDays';
@@ -63,6 +65,10 @@ const userResolver = {
 
     users: combineResolvers(isAuthenticated, async () =>
       getUserRepository().getAllUser()),
+
+    someUsers: combineResolvers(isAuthenticated,
+      async (_: any, args: Pagination) =>
+        getUserRepository().getSomeUsers(args)),
 
     randomUsers: async () => getUserRepository().getRandomUsers(),
 

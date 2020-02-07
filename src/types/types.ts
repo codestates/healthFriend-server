@@ -62,3 +62,8 @@ export interface PubSubContext {
   userInfo: UserInfo;
   pubsub: PubSub;
 }
+
+export interface Pagination {
+  limit: number;
+  offset: number;
+}
