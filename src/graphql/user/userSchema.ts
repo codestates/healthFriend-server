@@ -6,6 +6,7 @@ const userSchema = gql`
     user(userId: String): User
     randomUsers: [User]!
     users: [User]!
+    someUsers(limit: Int!, offset: Int!): [User]!
     userCount: Int!
     login(email: String, password: String): AuthPayload
     filterUsers(
