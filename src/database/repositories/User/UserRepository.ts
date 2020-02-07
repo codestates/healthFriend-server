@@ -210,10 +210,7 @@ export class UserRepository extends Repository<User> {
       }
       // console.log('LOGIN: ', user);
       const loginToken = createToken(user);
-      const client = new StreamChat(
-        '',
-        'ncgv6qpcn8k9msm2hjd5duxt8jychy5cyhr99xrwgkb2bqqyjqrexuhwcgqfuexv',
-      );
+      const client = new StreamChat('', process.env.STREAM_CHAT_SECRET);
       const chatToken = client.createToken(user.id);
       return { user, loginToken, chatToken };
     } catch (error) {
