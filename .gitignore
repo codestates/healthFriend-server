@@ -19,3 +19,6 @@ ormconfig.json
 
 ## script
 *.sh
+
+## key
+*.key
